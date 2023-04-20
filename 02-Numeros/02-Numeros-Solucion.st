@@ -523,51 +523,51 @@ Entero class
 negativeFibonacciErrorDescription
 	^ ' Fibonacci no está definido aquí para Enteros Negativos!!!!!!'! !
 
-!Entero class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:18:32'!
+!Entero class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 15:27:23'!
 with: aValue 
 	
 	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
 	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger"' ].
 
-	aValue negative ifTrue: [^Negativo withNegativo: aValue].
-	aValue > 1 ifTrue: [^MayorAUno withMayorAUno: aValue].
-	^ aValue = 0 ifTrue: [ Binario cero ] ifFalse: [ Binario uno ].! !
+	aValue negative ifTrue: [^EnteroNegativo withNegativo: aValue].
+	aValue > 1 ifTrue: [^EnteroMayorAUno withMayorAUno: aValue].
+	^ aValue = 0 ifTrue: [ EnteroBinario cero ] ifFalse: [ EnteroBinario uno ].! !
 
 
-!classDefinition: #Binario category: 'Numero-Exercise'!
-Entero subclass: #Binario
+!classDefinition: #EnteroBinario category: 'Numero-Exercise'!
+Entero subclass: #EnteroBinario
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Binario methodsFor: 'arithmetic operations' stamp: 'JT 4/20/2023 01:17:39'!
+!EnteroBinario methodsFor: 'arithmetic operations' stamp: 'JT 4/20/2023 01:17:39'!
 fibonacci
 	^ Entero with: 1! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Binario class' category: 'Numero-Exercise'!
-Binario class
+!classDefinition: 'EnteroBinario class' category: 'Numero-Exercise'!
+EnteroBinario class
 	instanceVariableNames: ''!
 
-!Binario class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:16:18'!
+!EnteroBinario class methodsFor: 'private methods' stamp: 'JT 4/20/2023 01:16:18'!
 cero
 	^ self new initalizeWith: 0.! !
 
-!Binario class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:16:12'!
+!EnteroBinario class methodsFor: 'private methods' stamp: 'JT 4/20/2023 01:16:12'!
 uno
 	^ self new initalizeWith: 1.! !
 
 
-!classDefinition: #MayorAUno category: 'Numero-Exercise'!
-Entero subclass: #MayorAUno
+!classDefinition: #EnteroMayorAUno category: 'Numero-Exercise'!
+Entero subclass: #EnteroMayorAUno
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!MayorAUno methodsFor: 'arithmetic operations' stamp: 'JT 4/20/2023 01:17:40'!
+!EnteroMayorAUno methodsFor: 'arithmetic operations' stamp: 'JT 4/20/2023 01:17:40'!
 fibonacci
 	|one two|
 	one := Entero with: 1.
@@ -577,46 +577,39 @@ fibonacci
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'MayorAUno class' category: 'Numero-Exercise'!
-MayorAUno class
+!classDefinition: 'EnteroMayorAUno class' category: 'Numero-Exercise'!
+EnteroMayorAUno class
 	instanceVariableNames: ''!
 
-!MayorAUno class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:16:59'!
+!EnteroMayorAUno class methodsFor: 'private methods' stamp: 'JT 4/20/2023 15:28:31'!
 withMayorAUno: anIntegerOverOne
 
-	(anIntegerOverOne isInteger and: anIntegerOverOne > 1) ifFalse: [self error: 'Invalid integer over one'].
+	anIntegerOverOne > 1 ifFalse: [self error: 'anIntegerOverOne debe ser mayor a 1'].
 	
 	^ self new initalizeWith: anIntegerOverOne.! !
 
 
-!classDefinition: #Negativo category: 'Numero-Exercise'!
-Entero subclass: #Negativo
+!classDefinition: #EnteroNegativo category: 'Numero-Exercise'!
+Entero subclass: #EnteroNegativo
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Negativo methodsFor: 'arithmetic operations' stamp: 'JT 4/19/2023 19:01:34'!
+!EnteroNegativo methodsFor: 'arithmetic operations' stamp: 'JT 4/19/2023 19:01:34'!
 fibonacci
 	self error: Entero negativeFibonacciErrorDescription ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Negativo class' category: 'Numero-Exercise'!
-Negativo class
+!classDefinition: 'EnteroNegativo class' category: 'Numero-Exercise'!
+EnteroNegativo class
 	instanceVariableNames: ''!
 
-!Negativo class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:16:59'!
-withMayorAUno: aNegativeInteger
-
-	(aNegativeInteger isInteger and: aNegativeInteger negative) ifFalse: [ self error: 'Invalid negative value' ].
-	
-	^ self new initalizeWith: aNegativeInteger.! !
-
-!Negativo class methodsFor: 'instance creation' stamp: 'JT 4/20/2023 01:18:05'!
+!EnteroNegativo class methodsFor: 'private methods' stamp: 'JT 4/20/2023 15:28:57'!
 withNegativo: aNegativeInteger
 
-	(aNegativeInteger isInteger and: aNegativeInteger negative) ifFalse: [ self error: 'Invalid negative value' ].
+	aNegativeInteger negative ifFalse: [ self error: 'aNegativeInteger debe ser negativo' ].
 	
 	^ self new initalizeWith: aNegativeInteger.! !
 
