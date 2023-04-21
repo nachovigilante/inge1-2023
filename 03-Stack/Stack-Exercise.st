@@ -144,6 +144,9 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'IV 4/21/2023 17:08:31'!
+test01! !
+
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
@@ -152,29 +155,20 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'operations' stamp: 'IV 4/21/2023 13:28:50'!
+!OOStack methodsFor: 'mutations' stamp: 'IV 4/21/2023 16:50:17'!
 pop
-	| tail topElement |
+	| topElement |
 	
 	topElement := self top.
-	tail := state previousState.
-	state := tail.
+	state := state previousState.
 	
 	^topElement
 	! !
 
-!OOStack methodsFor: 'operations' stamp: 'IV 4/21/2023 13:16:09'!
-push: anElement
-	| newState |
+!OOStack methodsFor: 'mutations' stamp: 'IV 4/21/2023 16:34:54'!
+push: anElementToBePushed
+	state := OOStackNonEmptyState with: anElementToBePushed from: state
 	
-	newState := OOStackNonEmptyState with: anElement from: state.
-	state := newState
-	
-	! !
-
-!OOStack methodsFor: 'operations' stamp: 'IV 4/21/2023 13:16:40'!
-top
-	^state element
 	! !
 
 
@@ -183,13 +177,18 @@ initialize
 	state := OOStackEmptyState new! !
 
 
-!OOStack methodsFor: 'testing' stamp: 'IV 4/21/2023 12:51:15'!
+!OOStack methodsFor: 'queries' stamp: 'IV 4/21/2023 12:51:15'!
 isEmpty
 	^state isEmpty! !
 
-!OOStack methodsFor: 'testing' stamp: 'IV 4/21/2023 13:25:38'!
+!OOStack methodsFor: 'queries' stamp: 'IV 4/21/2023 16:41:44'!
 size
-	^state positionNumber! !
+	^state elementCount ! !
+
+!OOStack methodsFor: 'queries' stamp: 'IV 4/21/2023 16:31:31'!
+top
+	^state value
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -210,17 +209,16 @@ Object subclass: #OOStackState
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStackState methodsFor: 'testing' stamp: 'IV 4/21/2023 12:51:45'!
+!OOStackState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:45:10'!
+elementCount
+	self subclassResponsibility ! !
+
+!OOStackState methodsFor: 'queries' stamp: 'IV 4/21/2023 12:51:45'!
 isEmpty
 	self subclassResponsibility ! !
 
-
-!OOStackState methodsFor: 'operations' stamp: 'IV 4/21/2023 12:50:18'!
-element
-	self subclassResponsibility ! !
-
-!OOStackState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:35:24'!
-positionNumber
+!OOStackState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:31:19'!
+value
 	self subclassResponsibility ! !
 
 
@@ -231,52 +229,47 @@ OOStackState subclass: #OOStackEmptyState
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStackEmptyState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:30:56'!
-element
-	self error: OOStack stackEmptyErrorDescription! !
-
-!OOStackEmptyState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:26:09'!
-positionNumber
+!OOStackEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:41:26'!
+elementCount
 	^0! !
 
-
-!OOStackEmptyState methodsFor: 'testing' stamp: 'IV 4/21/2023 13:01:23'!
+!OOStackEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 13:01:23'!
 isEmpty
 	^true! !
+
+!OOStackEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:31:19'!
+value
+	self error: OOStack stackEmptyErrorDescription! !
 
 
 !classDefinition: #OOStackNonEmptyState category: 'Stack-Exercise'!
 OOStackState subclass: #OOStackNonEmptyState
-	instanceVariableNames: 'previousState element'
+	instanceVariableNames: 'previousState value'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStackNonEmptyState methodsFor: 'initialization' stamp: 'IV 4/21/2023 13:13:25'!
-element: anElement
-	element := anElement! !
-
-!OOStackNonEmptyState methodsFor: 'initialization' stamp: 'IV 4/21/2023 13:13:05'!
-previousState: aState
-	previousState := aState! !
+!OOStackNonEmptyState methodsFor: 'initialization' stamp: 'IV 4/21/2023 16:30:42'!
+initializeWith: anElementToBeSavedAsValue from: aPreviousState
+	value := anElementToBeSavedAsValue.
+	previousState := aPreviousState! !
 
 
-!OOStackNonEmptyState methodsFor: 'testing' stamp: 'IV 4/21/2023 13:01:19'!
+!OOStackNonEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:41:17'!
+elementCount
+	^previousState elementCount + 1! !
+
+!OOStackNonEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 13:01:19'!
 isEmpty
 	^false! !
 
-
-!OOStackNonEmptyState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:19:30'!
-element
-	^element! !
-
-!OOStackNonEmptyState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:26:27'!
-positionNumber
-	^previousState positionNumber + 1! !
-
-!OOStackNonEmptyState methodsFor: 'operations' stamp: 'IV 4/21/2023 13:21:05'!
+!OOStackNonEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 13:21:05'!
 previousState
 	^previousState! !
+
+!OOStackNonEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:31:19'!
+value
+	^value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -284,15 +277,9 @@ previousState
 OOStackNonEmptyState class
 	instanceVariableNames: ''!
 
-!OOStackNonEmptyState class methodsFor: 'instance creation' stamp: 'IV 4/21/2023 13:13:47'!
-with: anElement from: aState
-	| newState |
-	
-	newState := OOStackNonEmptyState new.
-	newState previousState: aState.
-	newState element: anElement.
-	
-	^newState! !
+!OOStackNonEmptyState class methodsFor: 'instance creation' stamp: 'IV 4/21/2023 16:33:16'!
+with: anElementToBoSavedAsValue from: aPreviousState
+	^OOStackNonEmptyState new initializeWith: anElementToBoSavedAsValue from: aPreviousState ! !
 
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
