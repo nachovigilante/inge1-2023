@@ -144,8 +144,121 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'IV 4/21/2023 17:08:31'!
-test01! !
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 18:01:57'!
+test01FindOnEmptyStackShouldReturnEmptyCollection
+	| anEmptyStack aSentenceFinder aPrefix |
+	
+	anEmptyStack := OOStack new.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	aPrefix := 'a'.
+	
+	aSentenceFinder find: aPrefix in: anEmptyStack.
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:26:53'!
+test02FindEmptyPrefixGivesError
+	| anEmptyStack aSentenceFinder |
+	
+	anEmptyStack := OOStack new.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	
+	self
+		should: [ aSentenceFinder find: '' in: anEmptyStack ]
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:27:43'!
+test03FindPrefixWithWhitespaceGivesError
+	| anEmptyStack aSentenceFinder |
+	
+	anEmptyStack := OOStack new.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	
+	self
+		should: [ aSentenceFinder find: 'a ' in: anEmptyStack ]
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixWithWhitespaceErrorDescription ]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:29:56'!
+test04EmptyStackRemainsEmpty
+	| anEmptyStack aSentenceFinder aPrefix |
+	
+	anEmptyStack := OOStack new.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	aPrefix := 'a'.
+	
+	aSentenceFinder find: aPrefix in: anEmptyStack.
+	
+	self assert: anEmptyStack isEmpty ! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:36:17'!
+test05StackWithOneSentenceKeepsSameSentence
+	| anEmptyStack aSentenceFinder aPrefix aSentence |
+	
+	anEmptyStack := OOStack new.
+	aSentence := 'hoy es viernes'.
+	anEmptyStack push: aSentence.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	aPrefix := 'a'.
+	
+	aSentenceFinder find: aPrefix in: anEmptyStack.
+	
+	self assert: anEmptyStack top equals: aSentence! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:37:53'!
+test06NonEmptyStackKeepsAllSentencesInSameOrder
+	| anEmptyStack aSentenceFinder aPrefix firstSentence secondSentence |
+	
+	anEmptyStack := OOStack new.
+	firstSentence := 'hoy es viernes'.
+	secondSentence := 'mañana es sabado'.
+	anEmptyStack push: firstSentence.
+	anEmptyStack push: secondSentence.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	aPrefix := 'a'.
+	
+	aSentenceFinder find: aPrefix in: anEmptyStack.
+	
+	self assert: anEmptyStack pop equals: secondSentence.
+	self assert: anEmptyStack pop equals: firstSentence.
+	self assert: anEmptyStack isEmpty.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 17:43:59'!
+test07FindPrefixMatchingOneSentenceReturnsCollectionWithThatSentence
+	| anEmptyStack aSentenceFinder firstSentence secondSentence result |
+	
+	anEmptyStack := OOStack new.
+	firstSentence := 'hoy es viernes'.
+	secondSentence := 'mañana es sabado'.
+	anEmptyStack push: firstSentence.
+	anEmptyStack push: secondSentence.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	
+	result := aSentenceFinder find: 'h' in: anEmptyStack.
+	
+	self assert: (result includes: firstSentence).
+	self assert: (result size) equals: 1! !
+
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'IV 4/21/2023 18:12:07'!
+test08FindPrefixMatchingMultipleSentencesReturnsCollectionWithThoseSentences
+	| anEmptyStack aSentenceFinder firstSentence secondSentence result thirdSentence |
+	
+	anEmptyStack := OOStack new.
+	firstSentence := 'hoy es viernes'.
+	secondSentence := 'mañana es sabado'.
+	thirdSentence := 'hoy no llueve'.
+	anEmptyStack push: firstSentence.
+	anEmptyStack push: secondSentence.
+	anEmptyStack push: thirdSentence.
+	aSentenceFinder := SentenceFinderByPrefix new.
+	
+	result := aSentenceFinder find: 'hoy' in: anEmptyStack.
+	
+	self assert: (result includes: firstSentence).
+	self assert: (result includes: thirdSentence).
+	self assert: (result size) equals: 2.! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -288,3 +401,45 @@ Object subclass: #SentenceFinderByPrefix
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'IV 4/21/2023 18:18:23'!
+find: aPrefixToMatch in: aSentencesStack
+	| sentenceToTest matches results |
+	
+	self verifyThatPrefixIsValid: aPrefixToMatch.	
+	
+	aSentencesStack isEmpty ifTrue: [^OrderedCollection new].	
+	
+	sentenceToTest := aSentencesStack pop.	
+	matches := sentenceToTest is: aPrefixToMatch substringAt: 1.
+	
+	results := self find: aPrefixToMatch in: aSentencesStack.	
+
+	matches ifTrue: [ results add: sentenceToTest ].
+	aSentencesStack push: sentenceToTest.
+	
+	^results
+	
+	
+	
+	! !
+
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'IV 4/21/2023 18:14:56'!
+verifyThatPrefixIsValid: aPrefixToMatch
+
+	aPrefixToMatch = '' ifTrue: [ self error: self class prefixEmptyErrorDescription ].
+	(aPrefixToMatch includesSubString: ' ') ifTrue: [ self error: self class prefixWithWhitespaceErrorDescription ]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'IV 4/21/2023 18:00:38'!
+prefixEmptyErrorDescription
+	^'Cannot find with empty prefix'! !
+
+!SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'IV 4/21/2023 18:06:42'!
+prefixWithWhitespaceErrorDescription
+	^'Cannot find with a prefix containing whitespaces'! !
