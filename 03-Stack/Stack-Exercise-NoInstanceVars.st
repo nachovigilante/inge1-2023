@@ -139,132 +139,107 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 !classDefinition: #SentenceFinderByPrefixTest category: 'Stack-Exercise'!
 TestCase subclass: #SentenceFinderByPrefixTest
-	instanceVariableNames: 'emptyStack firstSentence secondSentence thirdSentence prefixThatMatchesFirstAndThird prefixThatMatchesNone emptySentenceFinder badPrefixWithSpace sentenceFinderWithThreeSentences sentenceFinderWithOneSentence prefixThatMatchesFirst prefixWithUppercase sentenceFinderWithThreeUpperCaseSentences prefixWithLowerCase firstUpperCaseSentence secondUpperCaseSentence thirdUpperCaseSentence sentenceFinderWithAllSentences'
+	instanceVariableNames: 'emptyStack firstSentence secondSentence thirdSentence prefixThatMatchesFirstAndThird prefixThatMatchesNone sentenceFinder badPrefixWithSpace'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'setup' stamp: 'JT 4/22/2023 20:57:56'!
+!SentenceFinderByPrefixTest methodsFor: 'setup' stamp: 'JT 4/22/2023 18:27:57'!
 setUp
-	| allUpperCaseSentences allLowerCaseSentences allSentences oneSentence |
+
+	emptyStack := OOStack new.
+	sentenceFinder := SentenceFinderByPrefix new.
+
 	firstSentence := 'hoy es viernes'.
 	secondSentence := 'ayer fue jueves'.
-	thirdSentence := 'hola mundo'.
-	firstUpperCaseSentence := firstSentence asUppercase.
-	secondUpperCaseSentence := secondSentence asUppercase.
-	thirdUpperCaseSentence := thirdSentence asUppercase.
+	thirdSentence := 'hoy no llueve'.
 	
-	emptySentenceFinder := SentenceFinderByPrefix new.
-	allLowerCaseSentences := OrderedCollection with: firstSentence with: secondSentence with: thirdSentence.
-	allUpperCaseSentences := OrderedCollection with: firstUpperCaseSentence with: secondUpperCaseSentence with: thirdUpperCaseSentence.
-	oneSentence := OrderedCollection with: firstSentence.
-	allSentences := allLowerCaseSentences , allUpperCaseSentences.
-	
-	sentenceFinderWithThreeSentences := SentenceFinderByPrefix for: allLowerCaseSentences.
-	sentenceFinderWithAllSentences := SentenceFinderByPrefix for: allSentences.
-	sentenceFinderWithOneSentence := SentenceFinderByPrefix for: oneSentence.
-	
-	prefixThatMatchesFirst := 'hoy'.
-	prefixThatMatchesFirstAndThird := 'ho'.
+	prefixThatMatchesFirstAndThird := 'hoy'.
 	prefixThatMatchesNone := 'abcdefg'.
-	prefixWithUppercase := 'Ho'.
 	badPrefixWithSpace := 'bad '.! !
 
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 19:56:35'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:28:29'!
 test01FindOnEmptyStackShouldReturnEmptyCollection
 	| sentencesMatchingPrefix |
 
-	sentencesMatchingPrefix := emptySentenceFinder find: prefixThatMatchesNone.
+	sentencesMatchingPrefix := sentenceFinder find: prefixThatMatchesNone in: emptyStack.
 	
 	self assert: sentencesMatchingPrefix isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 19:57:16'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:17:55'!
 test02FindEmptyPrefixGivesError
 	
 	self
-		should: [ emptySentenceFinder find: '' ]
+		should: [ sentenceFinder find: '' in: emptyStack ]
 		raise: Error 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 19:57:23'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:20:09'!
 test03FindPrefixWithWhitespaceGivesError
 
 	self
-		should: [ emptySentenceFinder find: badPrefixWithSpace ]
+		should: [ sentenceFinder find: badPrefixWithSpace in: emptyStack ]
 		raise: Error 
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = SentenceFinderByPrefix prefixWithWhitespaceErrorDescription ]! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 19:58:51'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:19:19'!
 test04EmptyStackRemainsEmpty
 	
-	emptySentenceFinder find: prefixThatMatchesNone.
+	sentenceFinder find: prefixThatMatchesNone in: emptyStack.
 	
-	self assert: emptySentenceFinder sentenceStack isEmpty.! !
+	self assert: emptyStack isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 20:17:23'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:27:50'!
 test05StackWithOneSentenceKeepsSameSentence
-
-	sentenceFinderWithOneSentence find: prefixThatMatchesNone.
+	| sentenceStack |
 	
-	self assert: sentenceFinderWithOneSentence sentenceStack pop equals: firstSentence.
-	self assert: sentenceFinderWithOneSentence sentenceStack isEmpty.! !
+	sentenceStack := emptyStack push: firstSentence.
+	
+	sentenceFinder find: prefixThatMatchesNone in: sentenceStack.
+	
+	self assert: sentenceStack pop equals: firstSentence.
+	self assert: sentenceStack isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 20:18:11'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:27:54'!
 test06NonEmptyStackKeepsAllSentencesInSameOrder
-	sentenceFinderWithThreeSentences find: prefixThatMatchesNone.
+	| sentenceStack |
 	
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: thirdSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: secondSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: firstSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack isEmpty.! !
+	sentenceStack := emptyStack push: firstSentence.
+	sentenceStack push: secondSentence.
+	
+	sentenceFinder find: prefixThatMatchesNone in: sentenceStack.
+	
+	self assert: sentenceStack pop equals: secondSentence.
+	self assert: sentenceStack pop equals: firstSentence.
+	self assert: sentenceStack isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 20:20:51'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:27:54'!
 test07FindPrefixMatchingOneSentenceReturnsCollectionWithThatSentence
-	| sentencesMatchingPrefix |
+	| sentencesMatchingPrefix sentenceStack |
 	
-	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesFirst.
+	sentenceStack := emptyStack push: firstSentence.
+	sentenceStack push: secondSentence.
+	sentencesMatchingPrefix := sentenceFinder find: prefixThatMatchesFirstAndThird in: sentenceStack.
 	
 	self assert: (sentencesMatchingPrefix includes: firstSentence).
 	self assert: sentencesMatchingPrefix size equals: 1! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 20:21:14'!
+!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 18:27:57'!
 test08FindPrefixMatchingMultipleSentencesReturnsCollectionWithThoseSentences
-	| sentencesMatchingPrefix |
+	| sentenceStack sentencesMatchingPrefix |
 	
-	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesFirstAndThird.
+	sentenceStack := emptyStack push: firstSentence.
+	sentenceStack push: secondSentence.
+	sentenceStack push: thirdSentence.
+	
+	sentencesMatchingPrefix := sentenceFinder find: prefixThatMatchesFirstAndThird in: sentenceStack.
 	
 	self assert: (sentencesMatchingPrefix includes: firstSentence).
 	self assert: (sentencesMatchingPrefix includes: thirdSentence).
 	self assert: (sentencesMatchingPrefix size) equals: 2.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 20:21:30'!
-test09FindPrefixMatchingNoneReturnsEmptyCollection
-	| sentencesMatchingPrefix |
-	
-	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesNone.
-	
-	self assert: sentencesMatchingPrefix isEmpty.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 21:00:36'!
-test10PrefixWithLowerCaseDoesntMatchSentenceWithUpperCase
-	| sentencesMatchingPrefix |
-	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird .
-	
-	self assert: (sentencesMatchingPrefix includes: firstSentence).
-	self assert: (sentencesMatchingPrefix includes: thirdSentence).
-	self assert: sentencesMatchingPrefix size equals: 2.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test' stamp: 'JT 4/22/2023 21:02:43'!
-test11PrefixWithUpperCaseDoesntMatchSentenceWithLowerCase
-	| sentencesMatchingPrefix |
-	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird asUppercase.
-	
-	self assert: (sentencesMatchingPrefix includes: firstUpperCaseSentence).
-	self assert: (sentencesMatchingPrefix includes: thirdUpperCaseSentence).
-	self assert: sentencesMatchingPrefix size equals: 2.! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
@@ -294,11 +269,6 @@ push: anElementToBePushed
 !OOStack methodsFor: 'initialization' stamp: 'IV 4/21/2023 12:56:25'!
 initialize
 	state := OOStackEmptyState new! !
-
-
-!OOStack methodsFor: 'printing' stamp: 'JT 4/22/2023 20:53:33'!
-printOn: aStream
-	state printOn: aStream ! !
 
 
 !OOStack methodsFor: 'queries' stamp: 'IV 4/21/2023 12:51:15'!
@@ -345,11 +315,6 @@ isEmpty
 value
 	self subclassResponsibility ! !
 
-
-!OOStackState methodsFor: 'printing' stamp: 'JT 4/22/2023 20:40:45'!
-printOn: aStream
-	self subclassResponsibility ! !
-
 
 !classDefinition: #OOStackEmptyState category: 'Stack-Exercise'!
 OOStackState subclass: #OOStackEmptyState
@@ -370,11 +335,6 @@ isEmpty
 value
 	self error: OOStack stackEmptyErrorDescription! !
 
-
-!OOStackEmptyState methodsFor: 'printing' stamp: 'JT 4/22/2023 20:44:38'!
-printOn: aStream
-	aStream nextPutAll: '[]'.! !
-
 
 !classDefinition: #OOStackNonEmptyState category: 'Stack-Exercise'!
 OOStackState subclass: #OOStackNonEmptyState
@@ -387,15 +347,6 @@ OOStackState subclass: #OOStackNonEmptyState
 initializeWith: anElementToBeSavedAsValue from: aPreviousState
 	value := anElementToBeSavedAsValue.
 	previousState := aPreviousState! !
-
-
-!OOStackNonEmptyState methodsFor: 'printing' stamp: 'JT 4/22/2023 20:44:53'!
-printOn: aStream
-	aStream nextPut: $[;
-			nextPutAll: value;
-			nextPutAll: ']->'.
-		
-	previousState printOn: aStream.! !
 
 
 !OOStackNonEmptyState methodsFor: 'queries' stamp: 'IV 4/21/2023 16:41:17'!
@@ -427,37 +378,32 @@ with: anElementToBoSavedAsValue from: aPreviousState
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: 'sentenceStack'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'JT 4/22/2023 20:03:30'!
-find: aPrefixToMatch
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'JT 4/22/2023 18:12:11'!
+find: aPrefixToMatch in: aSentencesStack
 	| firstSentenceToTest firstSentenceHasPrefix restOfMatchingSentences |
 	
 	self verifyThatPrefixIsValid: aPrefixToMatch.	
 	
-	sentenceStack isEmpty ifTrue: [^OrderedCollection new].	
+	aSentencesStack isEmpty ifTrue: [^OrderedCollection new].	
 	
-	firstSentenceToTest := sentenceStack pop.	
+	firstSentenceToTest := aSentencesStack pop.	
 	firstSentenceHasPrefix := firstSentenceToTest is: aPrefixToMatch substringAt: 1.	
-	restOfMatchingSentences := self find: aPrefixToMatch.	
+	restOfMatchingSentences := self find: aPrefixToMatch in: aSentencesStack.	
 
 	firstSentenceHasPrefix ifTrue: [ restOfMatchingSentences add: firstSentenceToTest ].
 	
-	sentenceStack push: firstSentenceToTest.
+	aSentencesStack push: firstSentenceToTest.
 	
 	^restOfMatchingSentences
 	
 	
 	
 	! !
-
-
-!SentenceFinderByPrefix methodsFor: 'private-testing' stamp: 'JT 4/22/2023 19:58:27'!
-sentenceStack
-	^ sentenceStack ! !
 
 
 !SentenceFinderByPrefix methodsFor: 'preconditions' stamp: 'JT 4/22/2023 18:07:17'!
@@ -476,26 +422,11 @@ verifyThatPrefixIsWord: aPrefixToValidate
 
 	(aPrefixToValidate includesSubString: ' ') ifTrue: [ self error: self class prefixWithWhitespaceErrorDescription ]! !
 
-
-!SentenceFinderByPrefix methodsFor: 'initialization' stamp: 'JT 4/22/2023 19:51:21'!
-initialize
-	sentenceStack := OOStack new.! !
-
-!SentenceFinderByPrefix methodsFor: 'initialization' stamp: 'JT 4/22/2023 19:49:10'!
-initializeFor: aSentenceCollection
-
-	aSentenceCollection do: [:sentence | sentenceStack push: sentence].! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
 SentenceFinderByPrefix class
 	instanceVariableNames: ''!
-
-!SentenceFinderByPrefix class methodsFor: 'instance creation' stamp: 'JT 4/22/2023 20:03:08'!
-for: aSentenceCollection
-	^ self new initializeFor: aSentenceCollection.! !
-
 
 !SentenceFinderByPrefix class methodsFor: 'error descriptions' stamp: 'IV 4/21/2023 18:00:38'!
 prefixEmptyErrorDescription
