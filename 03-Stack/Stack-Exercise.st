@@ -168,112 +168,147 @@ setUp
 	badPrefixWithSpace := 'bad '.! !
 
 
-!SentenceFinderByPrefixTest methodsFor: 'test stack' stamp: 'JT 4/24/2023 12:55:47'!
-test03EmptyStackRemainsEmptyAfterFind
-	
-	emptySentenceFinder find: prefixThatMatchesNone.
-	
-	self assert: emptySentenceFinder sentenceStack isEmpty.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test stack' stamp: 'JT 4/24/2023 12:55:46'!
-test04StackWithOneSentenceKeepsSameSentenceAfterFind
-
-	sentenceFinderWithOneSentence find: prefixThatMatchesNone.
-	
-	self assert: sentenceFinderWithOneSentence sentenceStack pop equals: firstSentence.
-	self assert: sentenceFinderWithOneSentence sentenceStack isEmpty.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test stack' stamp: 'JT 4/24/2023 12:55:47'!
-test05StackWithMultipleSentencesKeepsAllSentencesInSameOrderAfterFind
-	sentenceFinderWithThreeSentences find: prefixThatMatchesNone.
-	
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: thirdSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: secondSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack pop equals: firstSentence.
-	self assert: sentenceFinderWithThreeSentences sentenceStack isEmpty.! !
-
-
-!SentenceFinderByPrefixTest methodsFor: 'test prefix' stamp: 'JT 4/24/2023 12:55:46'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - prefix' stamp: 'JT 4/24/2023 14:14:28'!
 test01CanNotSearchByEmptyPrefix
 	
 	self
 		should: [ emptySentenceFinder find: '' ]
-		raise: Error 
-		withExceptionDo: [ :anError |
-			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]! !
+		raiseErrorWithMessage: SentenceFinderByPrefix prefixEmptyErrorDescription.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test prefix' stamp: 'JT 4/24/2023 12:55:46'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - prefix' stamp: 'JT 4/24/2023 14:14:56'!
 test02CanNotSearchByPrefixWithWhitespace
 
-	self
-		should: [ emptySentenceFinder find: badPrefixWithSpace ]
-		raise: Error 
-		withExceptionDo: [ :anError |
-			self assert: anError messageText = SentenceFinderByPrefix prefixWithWhitespaceErrorDescription ]! !
+	self should: [ emptySentenceFinder find: badPrefixWithSpace ]
+		 raiseErrorWithMessage: SentenceFinderByPrefix prefixWithWhitespaceErrorDescription.! !
 
 
-!SentenceFinderByPrefixTest methodsFor: 'test case sensitivity' stamp: 'JT 4/24/2023 12:55:47'!
-test11PrefixWithUpperCaseDoesntMatchSentenceWithLowerCase
-	| sentencesMatchingPrefix |
-	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird asUppercase.
-	
-	self assert: (sentencesMatchingPrefix includes: firstSentence asUppercase).
-	self assert: (sentencesMatchingPrefix includes: thirdSentence asUppercase).
-	self assert: sentencesMatchingPrefix size equals: 2.! !
+!SentenceFinderByPrefixTest methodsFor: 'tests - stack order' stamp: 'JT 4/24/2023 14:41:14'!
+test03EmptyStackRemainsEmptyAfterFind
+	self assert: emptySentenceFinder
+		 afterFindHasStackSentencesInOrder: {}.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test case sensitivity' stamp: 'JT 4/24/2023 12:55:46'!
-test12PrefixWithLowerCaseDoesntMatchSentenceWithUpperCase
-	| sentencesMatchingPrefix |
-	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird .
-	
-	self assert: (sentencesMatchingPrefix includes: firstSentence).
-	self assert: (sentencesMatchingPrefix includes: thirdSentence).
-	self assert: sentencesMatchingPrefix size equals: 2.! !
+!SentenceFinderByPrefixTest methodsFor: 'tests - stack order' stamp: 'JT 4/24/2023 14:41:14'!
+test04StackWithOneSentenceKeepsSameSentenceAfterFind
+
+	self assert: sentenceFinderWithOneSentence
+		 afterFindHasStackSentencesInOrder: {firstSentence}.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests - stack order' stamp: 'JT 4/24/2023 14:41:14'!
+test05StackWithMultipleSentencesKeepsAllSentencesInSameOrderAfterFind
+	self assert: sentenceFinderWithThreeSentences
+		 afterFindHasStackSentencesInOrder: {thirdSentence. secondSentence. firstSentence}.! !
 
 
-!SentenceFinderByPrefixTest methodsFor: 'test find' stamp: 'JT 4/24/2023 12:55:47'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - find' stamp: 'JT 4/24/2023 14:41:21'!
 test06FindOnEmptyStackShouldReturnEmptyCollection
-	| sentencesMatchingPrefix |
+	self assert: emptySentenceFinder
+		 doesntFind:		 prefixThatMatchesNone.! !
 
-	sentencesMatchingPrefix := emptySentenceFinder find: prefixThatMatchesNone.
-	
-	self assert: sentencesMatchingPrefix isEmpty.! !
-
-!SentenceFinderByPrefixTest methodsFor: 'test find' stamp: 'JT 4/24/2023 12:55:47'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - find' stamp: 'JT 4/24/2023 14:41:07'!
 test07FindPrefixMatchingOneSentenceReturnsCollectionWithThatSentence
+
+	self assert: sentenceFinderWithThreeSentences
+	 	 finds: prefixThatMatchesFirst
+		 withResults: {firstSentence}.
+"
 	| sentencesMatchingPrefix |
 	
 	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesFirst.
 	
 	self assert: (sentencesMatchingPrefix includes: firstSentence).
-	self assert: sentencesMatchingPrefix size equals: 1! !
+	self assert: sentencesMatchingPrefix size equals: 1"! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test find' stamp: 'JT 4/24/2023 12:55:46'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - find' stamp: 'JT 4/24/2023 14:41:07'!
 test08FindPrefixMatchingMultipleSentencesReturnsCollectionWithThoseSentences
+	self assert: sentenceFinderWithThreeSentences
+	 	 finds: prefixThatMatchesFirstAndThird
+		 withResults: {firstSentence. thirdSentence}.
+"
 	| sentencesMatchingPrefix |
 	
 	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesFirstAndThird.
 	
 	self assert: (sentencesMatchingPrefix includes: firstSentence).
 	self assert: (sentencesMatchingPrefix includes: thirdSentence).
-	self assert: (sentencesMatchingPrefix size) equals: 2.! !
+	self assert: (sentencesMatchingPrefix size) equals: 2."! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test find' stamp: 'JT 4/24/2023 12:55:47'!
+!SentenceFinderByPrefixTest methodsFor: 'tests - find' stamp: 'JT 4/24/2023 14:41:21'!
 test09FindPrefixMatchingNoneReturnsEmptyCollection
-	| sentencesMatchingPrefix |
-	
-	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: prefixThatMatchesNone.
-	
-	self assert: sentencesMatchingPrefix isEmpty.! !
 
-!SentenceFinderByPrefixTest methodsFor: 'test find' stamp: 'JT 4/24/2023 12:55:47'!
+	self assert: sentenceFinderWithThreeSentences
+		 doesntFind: prefixThatMatchesNone.
+		" withResults: {}."! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests - find' stamp: 'JT 4/24/2023 14:41:21'!
 test10FindPrefixMatchingMidSentenceReturnsEmptyCollection
 
+	self assert: sentenceFinderWithThreeSentences
+		 doesntFind: substringThatMatchesMidSecondSentence.
+		" withResults: {}."
+"
 	| sentencesMatchingPrefix |
 	
 	sentencesMatchingPrefix := sentenceFinderWithThreeSentences find: substringThatMatchesMidSecondSentence.
 	
-	self assert: sentencesMatchingPrefix isEmpty.! !
+	self assert: sentencesMatchingPrefix isEmpty."! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'tests - case sensitivity' stamp: 'JT 4/24/2023 14:45:18'!
+test11PrefixWithUpperCaseDoesntMatchSentenceWithLowerCase
+
+	self assert: sentenceFinderWithAllSentences
+		 finds: prefixThatMatchesFirstAndThird asUppercase
+		 withResults: {firstSentence asUppercase. thirdSentence asUppercase}.
+"
+	| sentencesMatchingPrefix |
+	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird asUppercase.
+	
+	self assert: (sentencesMatchingPrefix includes: firstSentence asUppercase).
+	self assert: (sentencesMatchingPrefix includes: thirdSentence asUppercase).
+	self assert: sentencesMatchingPrefix size equals: 2."! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests - case sensitivity' stamp: 'JT 4/24/2023 14:45:54'!
+test12PrefixWithLowerCaseDoesntMatchSentenceWithUpperCase
+	self assert: sentenceFinderWithAllSentences
+		 finds: prefixThatMatchesFirstAndThird
+		 withResults: {firstSentence. thirdSentence}.
+"
+	| sentencesMatchingPrefix |
+	sentencesMatchingPrefix := sentenceFinderWithAllSentences find: prefixThatMatchesFirstAndThird .
+	
+	self assert: (sentencesMatchingPrefix includes: firstSentence).
+	self assert: (sentencesMatchingPrefix includes: thirdSentence).
+	self assert: sentencesMatchingPrefix size equals: 2."! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'assertions' stamp: 'JT 4/24/2023 14:41:48'!
+assert: aSentenceFinder afterFindHasStackSentencesInOrder: aSentenceOrderedCollectionInExpectedOrder
+	| sentenceFinderStack |
+	
+	aSentenceFinder find: prefixThatMatchesNone.
+	sentenceFinderStack := aSentenceFinder sentenceStack.
+	
+	aSentenceOrderedCollectionInExpectedOrder do: [:aSentence | self assert: sentenceFinderStack pop equals: aSentence].
+	self assert: sentenceFinderStack isEmpty.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'assertions' stamp: 'JT 4/24/2023 14:47:44'!
+assert: aSentenceFinder doesntFind: aPrefixToFind
+	self assert: (aSentenceFinder find: aPrefixToFind) isEmpty.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'assertions' stamp: 'JT 4/24/2023 14:47:09'!
+assert: aSentenceFinder finds: aPrefixToFind withResults: aNonEmptySentenceCollection
+	| sentencesMatchingPrefix |
+	
+	sentencesMatchingPrefix := aSentenceFinder find: aPrefixToFind.
+	self assert: sentencesMatchingPrefix asSet equals: aNonEmptySentenceCollection asSet.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'assertions' stamp: 'JT 4/24/2023 14:13:52'!
+should: aBlockExpectedToFail raiseErrorWithMessage: anErrorMessage
+	self
+		should: aBlockExpectedToFail 
+		raise: Error 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = anErrorMessage ]! !
 
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
