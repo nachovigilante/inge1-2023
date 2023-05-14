@@ -1,262 +1,386 @@
 !classDefinition: #MarsRoverTest category: 'MarsRover'!
 TestCase subclass: #MarsRoverTest
-	instanceVariableNames: 'marsRover marsRoverSouth'
+	instanceVariableNames: 'marsRoverPointingNorth marsRoverPointingSouth marsRoverPointingWest marsRoverPointingEast initialDefaultPosition'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRoverTest methodsFor: 'setup' stamp: 'JT 5/11/2023 21:06:25'!
-setUp
-	marsRover := MarsRover at: 0@0 pointingAt: North new.
-	marsRoverSouth := MarsRover at: 0@0 pointingAt: South new.! !
-
-
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:06:40'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:05'!
 test01CreatedAtOriginIsAtOrigin
 
-	self assert: 0@0 equals: marsRover position! !
+	self assert: initialDefaultPosition equals: marsRoverPointingNorth position! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:06:36'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 16:15:15'!
 test02CreatedFacingNorthFacesNorth
 
-	self assert: North new equals: marsRover direction! !
+	self assert: North new equals: marsRoverPointingNorth direction! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:06:49'!
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:14'!
 test03AfterEmptyCommandDoesNothing
 	
-	marsRover readCommands: ''.
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: '' 
+		 isAt: initialDefaultPosition 
+		 pointingTo: North new.! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:16'!
+test04FacingNorthAfterLeftCommandFacesWestAtSamePosition
 	
-	self assert: 0@0 equals: marsRover position.
-	self assert: North new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'l'
+		 isAt: initialDefaultPosition 
+		 pointingTo: West new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:06:59'!
-test04CreatedFacingNorthAfterLeftCommandFacesWestAtSamePosition
-
-	marsRover readCommands: 'l'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:18'!
+test05FacingNorthAfterRightCommandFacesEastAtSamePosition
 	
-	self assert: 0@0 equals: marsRover position.	
-	self assert: West new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'r'
+		 isAt: initialDefaultPosition 
+		 pointingTo: East new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:07:11'!
-test05CreatedFacingNorthAfterRightCommandFacesEastAtSamePosition
-
-	marsRover readCommands: 'r'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:21'!
+test06FacingSouthAfterLeftCommandFacesEastAtSamePosition
 	
-	self assert: 0@0 equals: marsRover position.	
-	self assert: East new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'l'
+		 isAt: initialDefaultPosition 
+		 pointingTo: East new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:09:40'!
-test06CreatedFacingSouthAfterLeftCommandFacesEastAtSamePosition
-
-	marsRoverSouth readCommands: 'l'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:24'!
+test07FacingSouthAfterRightCommandFacesWestAtSamePosition
 	
-	self assert: 0@0 equals: marsRoverSouth position.	
-	self assert: East new equals: marsRoverSouth direction.! !
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'r'
+		 isAt: initialDefaultPosition 
+		 pointingTo: West new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:09:59'!
-test07CreatedFacingSouthAfterRightCommandFacesWestAtSamePosition
-
-	marsRoverSouth readCommands: 'r'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:27'!
+test08FacingWestAfterRightCommandFacesNorthAtSamePosition
 	
-	self assert: 0@0 equals: marsRoverSouth position.	
-	self assert: West new equals: marsRoverSouth direction.! !
+	self assertThat: marsRoverPointingWest 
+		 afterReading: 'r'
+		 isAt: initialDefaultPosition 
+		 pointingTo: North new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:20:54'!
-test08CreatedFacingWestAfterLeftCommandFacesSouthAtSamePosition
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:29'!
+test09FacingWestAfterLeftCommandFacesSouthAtSamePosition
 
-	| marsRoverWest |
-	marsRoverWest := MarsRover at: 0@0 pointingAt: West new.
+	self assertThat: marsRoverPointingWest 
+		 afterReading: 'l'
+		 isAt: initialDefaultPosition 
+		 pointingTo: South new.! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:32'!
+test10FacingEastAfterRightCommandFacesSouthAtSamePosition
+
+	self assertThat: marsRoverPointingEast 
+		 afterReading: 'r'
+		 isAt: initialDefaultPosition 
+		 pointingTo: South new.! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:36'!
+test11FacingEastAfterLeftCommandFacesNorthAtSamePosition
 	
-	marsRoverWest readCommands: 'l'.
+	self assertThat: marsRoverPointingEast 
+		 afterReading: 'l'
+		 isAt: initialDefaultPosition 
+		 pointingTo: North new.! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:38'!
+test12FacingNorthAfterTwoRightCommandsFacesSouthAtSamePosition
 	
-	self assert: 0@0 equals: marsRoverWest position.	
-	self assert: South new equals: marsRoverWest direction.! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'rr'
+		 isAt: initialDefaultPosition 
+		 pointingTo: South new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:17:28'!
-test09CreatedFacingNorthAfterTwoRightCommandsFacesSouthAtSamePosition
-
-	marsRover readCommands: 'rr'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:00'!
+test13FacingSouthAfterThreeRightCommandsFacesEastAtSamePosition
 	
-	self assert: 0@0 equals: marsRover position.	
-	self assert: South new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'rrr'
+		 isAt: initialDefaultPosition 
+		 pointingTo: East new.! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:21:28'!
-test10CreatedFacingNorthAfterThreeRightCommandsFacesWestAtSamePosition
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:42'!
+test14CreatedFacingWestAfterRLRRCommandsFacesEastAtSamePosition
 
-	marsRover readCommands: 'rrr'.
+	self assertThat: marsRoverPointingWest 
+		 afterReading: 'rlrr'
+		 isAt: initialDefaultPosition 
+		 pointingTo: East new.! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:30:34'!
+test15FacingNorthAfterForwardMovesAStepNorth
 	
-	self assert: 0@0 equals: marsRover position.	
-	self assert: West new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'f'
+		 isAt: (Position x: 0 y: 1).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:24:51'!
-test11CreatedFacingNorthAfterRLRRCommandsFacesSouthAtSamePosition
-
-	marsRover readCommands: 'rlrr'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:30:50'!
+test16FacingSouthAfterForwardMovesAStepSouth
 	
-	self assert: 0@0 equals: marsRover position.	
-	self assert: South new equals: marsRover direction.! !
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'f'
+		 isAt: (Position x: 0 y: -1).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:27:16'!
-test12FacingNorthAfterForwardMovesAStepNorth
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:31:07'!
+test17FacingWestAfterForwardMovesAStepWest
 
-	marsRover readCommands: 'f'.
+	self assertThat: marsRoverPointingWest 
+		 afterReading: 'f'
+		 isAt: (Position x: -1 y: 0).! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:31:18'!
+test18FacingEastAfterForwardMovesAStepEast
 	
-	self assert: 0@1 equals: marsRover position.	! !
+	self assertThat: marsRoverPointingEast 
+		 afterReading: 'f'
+		 isAt: (Position x: 1 y: 0).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:33:01'!
-test13FacingNorthAfterFFMovesTwoStepsNorth
-
-	marsRover readCommands: 'ff'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:31:55'!
+test19FacingNorthAfterFFMovesTwoStepsNorth
 	
-	self assert: 0@2 equals: marsRover position.	! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'ff'
+		 isAt: (Position x: 0 y: 2).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:34:45'!
-test14FacingNorthAfterBackwardMovesAStepSouth
-
-	marsRover readCommands: 'b'.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:32:20'!
+test20FacingNorthAfterBackwardMovesAStepSouth
 	
-	self assert: 0@-1 equals: marsRover position.	! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'b'
+		 isAt: (Position x: 0 y: -1).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:37:03'!
-test15FacingNorthAfterLFMovesAStepWest
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:32:31'!
+test21FacingSouthAfterBackwardMovesAStepNorth
 
-	marsRover readCommands: 'lf'.
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'b'
+		 isAt: (Position x: 0 y: 1).! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:32:44'!
+test22FacingWestAfterBackwardMovesAStepEast
+
+	self assertThat: marsRoverPointingWest 
+		 afterReading: 'b'
+		 isAt: (Position x: 1 y: 0).! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:32:57'!
+test23FacingEastAfterBackwardMovesAStepWest
+
+	self assertThat: marsRoverPointingEast 
+		 afterReading: 'b'
+		 isAt: (Position x: -1 y: 0).! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:33:25'!
+test24FacingNorthAfterBBMovesTwoStepsSouth
 	
-	self assert: -1@0 equals: marsRover position.	! !
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'bb'
+		 isAt: (Position x: 0 y: -2).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:45:06'!
-test16FacingEastAfterRBMovesAStepNorth
-
-	| marsRoverEast |
-	marsRoverEast := MarsRover at: 0@0 pointingAt: East new.
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:33:52'!
+test25FacingNorthAfterLFMovesAStepWest
 	
-	marsRoverEast readCommands: 'rb'.
+	self assertThat: marsRoverPointingNorth 
+		 afterReading: 'lf'
+		 isAt: (Position x: -1 y: 0).! !
+
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:34:16'!
+test26FacingEastAfterRBMovesAStepNorth
 	
-	self assert: 0@1 equals: marsRoverEast position.	! !
+	self assertThat: marsRoverPointingEast 
+		 afterReading: 'rb'
+		 isAt: (Position x: 0 y: 1).! !
 
-!MarsRoverTest methodsFor: 'tests' stamp: 'JT 5/11/2023 21:59:04'!
-test17ReadingInvalidCommandOnFirstCharThrowsErrorAndDoesNothing
-
-	self should: [ marsRover readCommands: 'a' ]
-		 raise: Error
-		 withExceptionDo: [:anError | anError		 ]
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:52'!
+test27FacingSouthAfterLRFBEndsUpFacingSouthAtSamePosition
+	
+	self assertThat: marsRoverPointingSouth 
+		 afterReading: 'lrfb'
+		 isAt: initialDefaultPosition 
+		 pointingTo: South new.
 	! !
 
+!MarsRoverTest methodsFor: 'tests' stamp: 'IV 5/14/2023 17:42:59'!
+test28ReadingInvalidCommandAfterValidCommandsExecutesThoseCommandsAndThenThrowsErrorStoppingCommandExecution
+
+	self should: [ marsRoverPointingNorth readCommands: 'rlrrar' ]
+		 raise: Error
+		 withExceptionDo: [:anError | 
+			self assert:	 Command invalidCommandErrorDescription 
+				 equals: anError messageText.
+		].
+	
+	self assert: initialDefaultPosition equals: marsRoverPointingNorth position.	
+	self assert: South new equals: marsRoverPointingNorth direction.
+	! !
+
+
+!MarsRoverTest methodsFor: 'setUp/tearDown' stamp: 'IV 5/14/2023 17:49:15'!
+setUp
+	initialDefaultPosition := Position x: 0 y: 0.
+	marsRoverPointingNorth := MarsRover at: initialDefaultPosition pointingTo: North new.
+	marsRoverPointingSouth := MarsRover at: initialDefaultPosition pointingTo: South new.
+	marsRoverPointingWest  := MarsRover at: initialDefaultPosition pointingTo: West new.
+	marsRoverPointingEast  := MarsRover at: initialDefaultPosition pointingTo: East new.! !
+
+
+!MarsRoverTest methodsFor: 'assertions' stamp: 'IV 5/14/2023 17:29:51'!
+assertThat: aMarsRover afterReading: aCommandsString isAt: aPosition
+
+	aMarsRover readCommands: aCommandsString.
+
+	self assert: aPosition equals: aMarsRover position.! !
+
+!MarsRoverTest methodsFor: 'assertions' stamp: 'IV 5/14/2023 17:30:20'!
+assertThat: aMarsRover afterReading: aCommandsString isAt: aPosition pointingTo: aDirection
+
+	self assertThat: aMarsRover afterReading: aCommandsString isAt: aPosition.
+	
+	self assert: aDirection equals: aMarsRover direction! !
+
 
-!classDefinition: #Cardinal category: 'MarsRover'!
-Object subclass: #Cardinal
+!classDefinition: #CardinalPoint category: 'MarsRover'!
+Object subclass: #CardinalPoint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!Cardinal methodsFor: 'comparing' stamp: 'JT 5/11/2023 21:05:07'!
+!CardinalPoint methodsFor: 'comparing' stamp: 'JT 5/11/2023 21:05:07'!
 = anObject
 
 	^ anObject isKindOf: self class
 	! !
 
-!Cardinal methodsFor: 'comparing' stamp: 'JT 5/11/2023 21:05:14'!
+!CardinalPoint methodsFor: 'comparing' stamp: 'JT 5/11/2023 21:05:14'!
 hash
 	^ self class hash! !
 
 
-!Cardinal methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:43:33'!
-backward
-	^ self forward * (-1)! !
-
-!Cardinal methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:41:37'!
-forward
-	self subclassResponsibility ! !
-
-!Cardinal methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:58:03'!
+!CardinalPoint methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:58:03'!
 left
 	self subclassResponsibility ! !
 
-!Cardinal methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:58:16'!
+!CardinalPoint methodsFor: 'relative points' stamp: 'IV 5/14/2023 16:38:40'!
+opposite
+	^ self subclassResponsibility ! !
+
+!CardinalPoint methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:58:16'!
 right
 	self subclassResponsibility ! !
+
+
+!CardinalPoint methodsFor: 'stepping' stamp: 'IV 5/14/2023 16:30:45'!
+stepForwardFrom: aPosition 
+	^ self subclassResponsibility ! !
 
 
 !classDefinition: #East category: 'MarsRover'!
-Cardinal subclass: #East
+CardinalPoint subclass: #East
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!East methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 20:58:41'!
+!East methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:58:41'!
 left
 	^ North new! !
 
-!East methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 20:58:52'!
+!East methodsFor: 'relative points' stamp: 'IV 5/14/2023 16:38:52'!
+opposite
+	^ West new. ! !
+
+!East methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:58:52'!
 right
 	^ South new! !
 
 
-!East methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:41:53'!
-forward
-	^ 1@0! !
+!East methodsFor: 'stepping' stamp: 'IV 5/14/2023 16:31:01'!
+stepForwardFrom: aPosition 
+	^ Position x: aPosition x + 1 
+			   y: aPosition y! !
 
 
 !classDefinition: #North category: 'MarsRover'!
-Cardinal subclass: #North
+CardinalPoint subclass: #North
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!North methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:43:19'!
-forward
-	^ 0@1! !
-
-!North methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:59:15'!
+!North methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:59:15'!
 left
 	^ West new! !
 
-!North methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:59:31'!
+!North methodsFor: 'relative points' stamp: 'IV 5/14/2023 16:39:14'!
+opposite
+	^ South new. ! !
+
+!North methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:59:31'!
 right
 	^ East new! !
+
+
+!North methodsFor: 'stepping' stamp: 'IV 5/14/2023 16:30:50'!
+stepForwardFrom: aPosition 
+	^ Position x: aPosition x 
+			   y: aPosition y + 1! !
 
 
 !classDefinition: #South category: 'MarsRover'!
-Cardinal subclass: #South
+CardinalPoint subclass: #South
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!South methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:44:07'!
-forward
-	^ 0@-1! !
-
-!South methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:59:46'!
+!South methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:59:46'!
 left
 	^ East new! !
 
-!South methodsFor: 'neighbours' stamp: 'JT 5/11/2023 20:59:57'!
+!South methodsFor: 'relative points' stamp: 'IV 5/14/2023 16:39:21'!
+opposite
+	^ North new. ! !
+
+!South methodsFor: 'relative points' stamp: 'JT 5/11/2023 20:59:57'!
 right
 	^ West new! !
 
+
+!South methodsFor: 'stepping' stamp: 'IV 5/14/2023 16:31:16'!
+stepForwardFrom: aPosition 
+	^ Position x: aPosition x 
+			   y: aPosition y - 1! !
+
 
 !classDefinition: #West category: 'MarsRover'!
-Cardinal subclass: #West
+CardinalPoint subclass: #West
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!West methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:44:15'!
-forward
-	^ -1@0! !
-
-!West methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:00:14'!
+!West methodsFor: 'relative points' stamp: 'JT 5/11/2023 21:00:14'!
 left
 	^ South new! !
 
-!West methodsFor: 'neighbours' stamp: 'JT 5/11/2023 21:00:21'!
+!West methodsFor: 'relative points' stamp: 'IV 5/14/2023 16:39:02'!
+opposite
+	^ East new. ! !
+
+!West methodsFor: 'relative points' stamp: 'JT 5/11/2023 21:00:21'!
 right
 	^ North new! !
+
+
+!West methodsFor: 'stepping' stamp: 'IV 5/14/2023 16:31:10'!
+stepForwardFrom: aPosition 
+	^ Position x: aPosition x - 1
+			   y: aPosition y! !
 
 
 !classDefinition: #Command category: 'MarsRover'!
@@ -266,7 +390,7 @@ Object subclass: #Command
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!Command methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:53:19'!
+!Command methodsFor: 'execution' stamp: 'JT 5/11/2023 21:53:19'!
 executeOn: aMarsRover
 
 	self subclassResponsibility ! !
@@ -277,14 +401,25 @@ executeOn: aMarsRover
 Command class
 	instanceVariableNames: ''!
 
-!Command class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:51:50'!
-canHandle: aCommandChar
-	self subclassResponsibility ! !
+!Command class methodsFor: 'error descriptions' stamp: 'IV 5/14/2023 15:56:57'!
+invalidCommandErrorDescription
 
-!Command class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:55:29'!
+	^ 'Invalid command'! !
+
+
+!Command class methodsFor: 'instance creation' stamp: 'IV 5/14/2023 15:55:58'!
 forChar: aCommandChar
 
-	^ (self subclasses detect: [:aCommandClass | aCommandClass canHandle: aCommandChar]) new.! !
+	| command |
+	
+	command := self subclasses detect: [:aCommandClass | aCommandClass canHandle: aCommandChar] ifNone: [self error: self invalidCommandErrorDescription].
+	
+	^ command new.! !
+
+
+!Command class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:51:50'!
+canHandle: aCommandChar
+	self subclassResponsibility ! !
 
 
 !classDefinition: #MoveBackwards category: 'MarsRover'!
@@ -294,7 +429,7 @@ Command subclass: #MoveBackwards
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MoveBackwards methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:53:29'!
+!MoveBackwards methodsFor: 'execution' stamp: 'JT 5/11/2023 21:53:29'!
 executeOn: aMarsRover
 
 	aMarsRover moveBackwards! !
@@ -305,7 +440,7 @@ executeOn: aMarsRover
 MoveBackwards class
 	instanceVariableNames: ''!
 
-!MoveBackwards class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:52:06'!
+!MoveBackwards class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:06'!
 canHandle: aCommandChar
 	^ aCommandChar = $b! !
 
@@ -317,7 +452,7 @@ Command subclass: #MoveForwards
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MoveForwards methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:53:41'!
+!MoveForwards methodsFor: 'execution' stamp: 'JT 5/11/2023 21:53:41'!
 executeOn: aMarsRover
 
 	aMarsRover moveForwards! !
@@ -328,7 +463,7 @@ executeOn: aMarsRover
 MoveForwards class
 	instanceVariableNames: ''!
 
-!MoveForwards class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:52:10'!
+!MoveForwards class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:10'!
 canHandle: aCommandChar
 	^ aCommandChar = $f! !
 
@@ -340,7 +475,7 @@ Command subclass: #RotateLeft
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!RotateLeft methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:53:51'!
+!RotateLeft methodsFor: 'execution' stamp: 'JT 5/11/2023 21:53:51'!
 executeOn: aMarsRover
 
 	aMarsRover rotateLeft! !
@@ -351,7 +486,7 @@ executeOn: aMarsRover
 RotateLeft class
 	instanceVariableNames: ''!
 
-!RotateLeft class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:52:16'!
+!RotateLeft class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:16'!
 canHandle: aCommandChar
 	^ aCommandChar = $l! !
 
@@ -363,7 +498,7 @@ Command subclass: #RotateRight
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!RotateRight methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:54:03'!
+!RotateRight methodsFor: 'execution' stamp: 'JT 5/11/2023 21:54:03'!
 executeOn: aMarsRover
 
 	aMarsRover rotateRight! !
@@ -374,7 +509,7 @@ executeOn: aMarsRover
 RotateRight class
 	instanceVariableNames: ''!
 
-!RotateRight class methodsFor: 'as yet unclassified' stamp: 'JT 5/11/2023 21:52:21'!
+!RotateRight class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:21'!
 canHandle: aCommandChar
 	^ aCommandChar = $r! !
 
@@ -386,49 +521,47 @@ Object subclass: #MarsRover
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRover methodsFor: 'initialization' stamp: 'JT 5/11/2023 21:29:56'!
-initializeAt: aPosition pointingAt: aDirection 
+!MarsRover methodsFor: 'initialization' stamp: 'IV 5/14/2023 16:13:51'!
+initializeAt: aPosition pointingTo: aDirection 
 	position := aPosition.
 	direction := aDirection.! !
 
 
-!MarsRover methodsFor: 'accessing' stamp: 'JT 5/11/2023 20:38:48'!
+!MarsRover methodsFor: 'accessing' stamp: 'IV 5/14/2023 17:50:08'!
 direction
-	^direction! !
+	^ direction! !
 
 !MarsRover methodsFor: 'accessing' stamp: 'JT 5/11/2023 21:29:56'!
 position
 	^ position! !
 
 
-!MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:52:56'!
-executeCommand: aCommandChar
-	|command|
-	
-	command := Command forChar: aCommandChar.
-	
-	command executeOn: self.! !
-
-!MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:54:33'!
-moveBackwards
-
-	position := position + direction backward! !
-
-!MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:54:27'!
-moveForwards
-
-	position := position + direction forward! !
-
 !MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:23:58'!
 readCommands: aCommandString
 	aCommandString do: [:aCommandChar | self executeCommand: aCommandChar ].! !
 
-!MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:54:45'!
+
+!MarsRover methodsFor: 'private commands' stamp: 'IV 5/14/2023 17:49:39'!
+executeCommand: aCommandChar
+
+	(Command forChar: aCommandChar) executeOn: self.! !
+
+!MarsRover methodsFor: 'private commands' stamp: 'IV 5/14/2023 16:37:56'!
+moveBackwards
+
+	position := position stepTowards: direction opposite.! !
+
+!MarsRover methodsFor: 'private commands' stamp: 'IV 5/14/2023 16:22:52'!
+moveForwards
+
+	position := position stepTowards: direction.! !
+
+!MarsRover methodsFor: 'private commands' stamp: 'JT 5/11/2023 21:54:45'!
 rotateLeft
 
 	direction := direction left! !
 
-!MarsRover methodsFor: 'commands' stamp: 'JT 5/11/2023 21:54:49'!
+!MarsRover methodsFor: 'private commands' stamp: 'JT 5/11/2023 21:54:49'!
 rotateRight
 
 	direction := direction right! !
@@ -439,6 +572,57 @@ rotateRight
 MarsRover class
 	instanceVariableNames: ''!
 
-!MarsRover class methodsFor: 'instance creation' stamp: 'JT 5/11/2023 20:36:11'!
-at: aCoordinate pointingAt: aDirection
-	^self new initializeAt: aCoordinate pointingAt: aDirection! !
+!MarsRover class methodsFor: 'instance creation' stamp: 'IV 5/14/2023 16:16:03'!
+at: aCoordinate pointingTo: aDirection
+	^self new initializeAt: aCoordinate pointingTo: aDirection! !
+
+
+!classDefinition: #Position category: 'MarsRover'!
+Object subclass: #Position
+	instanceVariableNames: 'x y'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!Position methodsFor: 'initialization' stamp: 'IV 5/14/2023 16:08:10'!
+initializeWithX: anXValue andY: aYValue
+
+	x := anXValue.
+	y := aYValue.! !
+
+
+!Position methodsFor: 'comparing' stamp: 'IV 5/14/2023 16:10:14'!
+= anObject
+
+	^ (anObject isKindOf: self class) and: 
+	  (anObject x = x) and:
+	  (anObject y = y)! !
+
+!Position methodsFor: 'comparing' stamp: 'IV 5/14/2023 16:10:37'!
+hash
+	^ x hash + y hash! !
+
+
+!Position methodsFor: 'accessing' stamp: 'IV 5/14/2023 16:11:26'!
+x
+	^ x! !
+
+!Position methodsFor: 'accessing' stamp: 'IV 5/14/2023 16:11:39'!
+y
+	^ y! !
+
+
+!Position methodsFor: 'steps' stamp: 'IV 5/14/2023 16:24:01'!
+stepTowards: aDirection 
+	^ aDirection stepForwardFrom: self.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Position class' category: 'MarsRover'!
+Position class
+	instanceVariableNames: ''!
+
+!Position class methodsFor: 'instance creation' stamp: 'IV 5/14/2023 16:08:11'!
+x: anXValue y: aYValue
+
+	^ self new initializeWithX: anXValue andY: aYValue.! !
