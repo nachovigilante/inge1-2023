@@ -407,18 +407,18 @@ invalidCommandErrorDescription
 	^ 'Invalid command'! !
 
 
-!Command class methodsFor: 'instance creation' stamp: 'IV 5/14/2023 15:55:58'!
+!Command class methodsFor: 'instance creation' stamp: 'IV 5/15/2023 10:26:31'!
 forChar: aCommandChar
 
 	| command |
 	
-	command := self subclasses detect: [:aCommandClass | aCommandClass canHandle: aCommandChar] ifNone: [self error: self invalidCommandErrorDescription].
+	command := self subclasses detect: [:aCommandClass | aCommandClass correspondsTo: aCommandChar] ifNone: [self error: self invalidCommandErrorDescription].
 	
 	^ command new.! !
 
 
-!Command class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:51:50'!
-canHandle: aCommandChar
+!Command class methodsFor: 'corresponding char' stamp: 'IV 5/15/2023 10:26:30'!
+correspondsTo: aCommandChar
 	self subclassResponsibility ! !
 
 
@@ -440,8 +440,8 @@ executeOn: aMarsRover
 MoveBackwards class
 	instanceVariableNames: ''!
 
-!MoveBackwards class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:06'!
-canHandle: aCommandChar
+!MoveBackwards class methodsFor: 'corresponding char' stamp: 'IV 5/15/2023 10:26:31'!
+correspondsTo: aCommandChar
 	^ aCommandChar = $b! !
 
 
@@ -463,8 +463,8 @@ executeOn: aMarsRover
 MoveForwards class
 	instanceVariableNames: ''!
 
-!MoveForwards class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:10'!
-canHandle: aCommandChar
+!MoveForwards class methodsFor: 'corresponding char' stamp: 'IV 5/15/2023 10:26:31'!
+correspondsTo: aCommandChar
 	^ aCommandChar = $f! !
 
 
@@ -486,8 +486,8 @@ executeOn: aMarsRover
 RotateLeft class
 	instanceVariableNames: ''!
 
-!RotateLeft class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:16'!
-canHandle: aCommandChar
+!RotateLeft class methodsFor: 'corresponding char' stamp: 'IV 5/15/2023 10:26:31'!
+correspondsTo: aCommandChar
 	^ aCommandChar = $l! !
 
 
@@ -509,8 +509,8 @@ executeOn: aMarsRover
 RotateRight class
 	instanceVariableNames: ''!
 
-!RotateRight class methodsFor: 'can handle' stamp: 'JT 5/11/2023 21:52:21'!
-canHandle: aCommandChar
+!RotateRight class methodsFor: 'corresponding char' stamp: 'IV 5/15/2023 10:26:31'!
+correspondsTo: aCommandChar
 	^ aCommandChar = $r! !
 
 
