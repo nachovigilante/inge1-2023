@@ -29,3 +29,10 @@ Respecto de la estructura del portfolio, tener en cuenta que:
 4. Por ahora no se puede sacar cuentas o portfolios de un portfolio
 
 Resolver este ejercicio por medio de TDD.
+
+## Solución (TODO)
+
+- [ ] Verificar que el balance este resuelto correctamente
+
+- [ ] Verificar que transactions tenga un buen orden de complejidad (que no sea
+  naive)
