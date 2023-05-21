@@ -30,9 +30,18 @@ Respecto de la estructura del portfolio, tener en cuenta que:
 
 Resolver este ejercicio por medio de TDD.
 
-## Solución (TODO)
+## TODO
 
-- [ ] Verificar que el balance este resuelto correctamente
+Vectores de testing
 
-- [ ] Verificar que transactions tenga un buen orden de complejidad (que no sea
-  naive)
+- desde test08 en adelante -> PortfolioTest
+
+- agrego cuenta/portfolio vacio (identidad)/portfolio (interseccion de cuentas)
+- portfolios vacio / novacio (no el mismo, otro que intersecciona):
+	- con 1 portfolio
+		- portfolio no se puede agregar a si mismo (verificar que tire error por identidad, no por cuentas)
+	- con 2 portfolios
+		- portfolio que esta directamente en la otra
+		- portfolio repetido como hijo directo del padre
+		- portfolio que esta niveles arriba / abajo
+

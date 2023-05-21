@@ -270,11 +270,11 @@ test15PortfolioWithAccountsHasAllAccountsTransactions
 	self assert: portfolio transactions asSet
 		 equals: (transaccionesDeAlicia , transaccionesDeBeto) asSet.! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/15/2023 21:34:46'!
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/15/2023 21:37:35'!
 test16PortfolioWithPortfoliosHasAllPortfoliosTransactions
-	| cuentaDeAlicia cuentaDeBeto portfolio portfolioFamiliar transaccionesDeAlicia transaccionesDeBeto portfolioTrabajo |
+	| cuentaDeAlicia cuentaDeBeto portfolio portfolioFamiliar2 transaccionesDeAlicia transaccionesDeBeto portfolioTrabajo |
 	portfolio := Portfolio new.
-	portfolioFamiliar := Portfolio new.
+	portfolioFamiliar2 := Portfolio new.
 	portfolioTrabajo := Portfolio new.
 	
 	cuentaDeAlicia := ReceptiveAccount new.
@@ -286,13 +286,170 @@ test16PortfolioWithPortfoliosHasAllPortfoliosTransactions
 	transaccionesDeBeto := { Withdraw for: 20. Deposit for: 10. Deposit for: 30 }.
 	transaccionesDeBeto do: [:transaccion | cuentaDeBeto register: transaccion].
 
-	portfolioFamiliar add: cuentaDeAlicia.	
+	portfolioFamiliar2 add: cuentaDeAlicia.	
 	portfolioTrabajo add: cuentaDeBeto.
-	portfolio add: portfolioFamiliar.
+	portfolio add: portfolioFamiliar2.
 	portfolio add: portfolioTrabajo.
 	
 	self assert: portfolio transactions asSet
-		 equals: (portfolioFamiliar transactions , portfolioTrabajo transactions) asSet.! !
+		 equals: (portfolioFamiliar2 transactions , portfolioTrabajo transactions) asSet.! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:25:36'!
+test17AddAccountToPortfolioThatAlreadyHasItDirectly
+	| cuentaRepetida portfolio |
+	portfolio := Portfolio new.
+	cuentaRepetida := ReceptiveAccount new.
+	
+	portfolio add: cuentaRepetida.
+
+	self should: [ portfolio add: cuentaRepetida ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio cuentaRepetidaErrorDescription
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:40:56'!
+test20AddPortfolioToPortfolioThatAlreadyHasItDirectly
+	| portfolio portfolioRepetido |
+	portfolio := Portfolio new.
+	portfolioRepetido := Portfolio new.
+
+	portfolio add: portfolioRepetido.
+
+	self should: [ portfolio add: portfolioRepetido ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio portfolioRepetidoErrorDescription 
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:41:32'!
+test21AddPortfolioToPortfolioThatAlreadyHasItIndirectly
+	| portfolio portfolioRepetido otroPortfolio |
+	portfolio := Portfolio new.
+	otroPortfolio := Portfolio new.
+	portfolioRepetido := Portfolio new.
+
+	portfolio add: otroPortfolio.
+	otroPortfolio add: portfolioRepetido.
+
+	self should: [ portfolio add: portfolioRepetido ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio portfolioRepetidoErrorDescription 
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:42:13'!
+test22AddPortfolioToPortfolioThatAlreadyHasItIndirectlyMultipleLevelsDown
+	| portfolio portfolioLevel1 portfolioLevel2 portfolioLevel3 portfolioRepetido |
+	portfolio := Portfolio new.
+	portfolioLevel1 := Portfolio new.
+	portfolioLevel2 := Portfolio new.
+	portfolioLevel3 := Portfolio new.
+	portfolioRepetido := Portfolio new.
+
+	portfolio add: portfolioLevel1.
+	portfolioLevel1 add: portfolioLevel2.
+	portfolioLevel2 add: portfolioLevel3.
+	portfolioLevel3 add: portfolioRepetido.
+
+	self should: [ portfolio add: portfolioRepetido ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio cuentaRepetidaErrorDescription
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:48:07'!
+test23AddAccountToPortfolioThatBelongsToPortfolioThatAlreadyHasItDirectly
+	| portfolio cuentaRepetida portfolioRaiz |
+	portfolioRaiz := Portfolio new.
+	portfolio := Portfolio new.
+	cuentaRepetida := ReceptiveAccount new.
+
+	portfolioRaiz add: cuentaRepetida.
+	portfolioRaiz add: portfolio.
+	
+
+	self should: [ portfolio add: cuentaRepetida ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio cuentaRepetidaErrorDescription
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:49:08'!
+test24AddAccountToPortfolioThatBelongsToPortfolioThatAlreadyHasItIndirectly
+	| cuentaRepetida portfolioRaiz portfolioRamaA portfolioRamaB |
+	portfolioRaiz := Portfolio new.
+	portfolioRamaA := Portfolio new.
+	portfolioRamaB := Portfolio new.
+	cuentaRepetida := ReceptiveAccount new.
+
+	portfolioRaiz add: portfolioRamaA.
+	portfolioRaiz add: portfolioRamaB.
+	portfolioRamaA add: cuentaRepetida.
+
+	self should: [ portfolioRamaB add: cuentaRepetida ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio cuentaRepetidaErrorDescription
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:51:45'!
+test25AddAccountToPortfolioThatBelongsToPortfolioThatAlreadyHasItIndirectlyMultipleLevelsDown
+	| cuentaRepetida portfolioRaiz portfolioRamaA portfolioRamaB portfolioLevel1 portfolioLevel2 portfolioLevel3 |
+	portfolioRaiz := Portfolio new.
+	portfolioRamaA := Portfolio new.
+	portfolioRamaB := Portfolio new.
+	portfolioLevel1 := Portfolio new.
+	portfolioLevel2 := Portfolio new.
+	portfolioLevel3 := Portfolio new.
+	cuentaRepetida := ReceptiveAccount new.
+
+	portfolioRaiz add: portfolioRamaA.
+	portfolioRaiz add: portfolioRamaB.
+	portfolioRamaA add: portfolioLevel1.
+	portfolioLevel1 add: portfolioLevel2.
+	portfolioLevel2 add: portfolioLevel3.
+	portfolioLevel3 add: cuentaRepetida.
+
+	self should: [ portfolioRamaB add: cuentaRepetida ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio cuentaRepetidaErrorDescription
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:58:23'!
+test26AddPortfolioToPortfolioThatBelongsToPortfolioThatAlreadyHasItDirectly
+	| portfolioRaiz portfolioRepetido otroPortfolio |
+	portfolioRaiz := Portfolio new.
+	otroPortfolio := Portfolio new.
+	portfolioRepetido := Portfolio new.
+
+	portfolioRaiz add: portfolioRepetido.
+	portfolioRaiz add: otroPortfolio.
+
+	self should: [ otroPortfolio add: portfolioRepetido ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio portfolioRepetidoErrorDescription 
+		 ].! !
+
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'JT 5/21/2023 18:59:32'!
+test27AddPortfolioToPortfolioThatBelongsToPortfolioThatAlreadyHasItIndirectly
+	| portfolioRaiz portfolioRepetido portfolioRamaB portfolioRamaA |
+	portfolioRaiz := Portfolio new.
+	portfolioRamaA := Portfolio new.
+	portfolioRamaB := Portfolio new.
+	portfolioRepetido := Portfolio new.
+
+	portfolioRaiz add: portfolioRamaB.
+	portfolioRaiz add: portfolioRamaA.
+	portfolioRamaA add: portfolioRepetido.
+
+	self should: [ portfolioRamaB add: portfolioRepetido ]
+		 raise: Error
+		 withExceptionDo: [:anError |
+			anError messageText = Portfolio portfolioRepetidoErrorDescription 
+		 ].! !
 
 
 !classDefinition: #AccountTransaction category: 'Portfolio-Ejercicio'!
@@ -402,70 +559,175 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #BalancedAsset category: 'Portfolio-Ejercicio'!
-Object subclass: #BalancedAsset
+!classDefinition: #Asset category: 'Portfolio-Ejercicio'!
+Object subclass: #Asset
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!BalancedAsset methodsFor: 'transactions' stamp: 'JT 5/15/2023 21:25:41'!
+!Asset methodsFor: 'transactions' stamp: 'JT 5/15/2023 21:25:41'!
 transactions
 
 	self subclassResponsibility ! !
 
 
-!BalancedAsset methodsFor: 'testing' stamp: 'JT 5/15/2023 21:25:32'!
+!Asset methodsFor: 'assertions' stamp: 'JT 5/21/2023 17:01:55'!
+assertCanBeAddedTo: aPortfolio
+
+	self subclassResponsibility ! !
+
+
+!Asset methodsFor: 'testing' stamp: 'JT 5/21/2023 18:34:52'!
+hasAccount: anAccount
+
+	self subclassResponsibility ! !
+
+!Asset methodsFor: 'testing' stamp: 'JT 5/21/2023 18:37:44'!
+hasPortfolio: aPortfolio
+
+	self subclassResponsibility! !
+
+!Asset methodsFor: 'testing' stamp: 'JT 5/15/2023 21:25:32'!
 hasRegistered: aTransaction
 
 	self subclassResponsibility ! !
 
 
-!BalancedAsset methodsFor: 'balance' stamp: 'JT 5/15/2023 21:20:03'!
+!Asset methodsFor: 'portfolio' stamp: 'JT 5/21/2023 16:46:19'!
+addTo: aPortfolio
+
+	self subclassResponsibility ! !
+
+
+!Asset methodsFor: 'balance' stamp: 'JT 5/15/2023 21:20:03'!
 balance
 
 	self subclassResponsibility ! !
 
 
 !classDefinition: #Portfolio category: 'Portfolio-Ejercicio'!
-BalancedAsset subclass: #Portfolio
-	instanceVariableNames: 'accounts portfolios balancedAssets'
+Asset subclass: #Portfolio
+	instanceVariableNames: 'assets cachedAccounts parentPortfolios cachedPortfolios'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!Portfolio methodsFor: 'initialization' stamp: 'JT 5/15/2023 21:22:46'!
+!Portfolio methodsFor: 'initialization' stamp: 'JT 5/21/2023 18:32:00'!
 initialize
-	balancedAssets := OrderedCollection new.
-	! !
+	assets := OrderedCollection new.
+	parentPortfolios := OrderedCollection new.! !
 
 
-!Portfolio methodsFor: 'balance' stamp: 'JT 5/15/2023 21:22:16'!
+!Portfolio methodsFor: 'balance' stamp: 'JT 5/21/2023 16:39:16'!
 balance
 	
-	^ balancedAssets sum: [:aBalancedAsset | aBalancedAsset balance] ifEmpty: 0! !
+	^ assets sum: [:asset | asset balance] ifEmpty: 0! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'JT 5/15/2023 21:32:48'!
+!Portfolio methodsFor: 'transactions' stamp: 'JT 5/21/2023 16:39:36'!
 transactions
 
-	^ balancedAssets inject: OrderedCollection new
-					 into: [:allTransactions :aBalancedAsset | allTransactions addAll: aBalancedAsset transactions; yourself].! !
+	^ assets inject: OrderedCollection new
+					 into: [:allTransactions :asset | allTransactions addAll: asset transactions; yourself].! !
 
 
-!Portfolio methodsFor: 'adding' stamp: 'JT 5/15/2023 21:21:10'!
-add: aBalancedAsset
-	balancedAssets add: aBalancedAsset.! !
+!Portfolio methodsFor: 'testing' stamp: 'JT 5/21/2023 18:33:55'!
+hasAccount: anAccount
 
+	^ assets anySatisfy: [: anAsset | anAsset hasAccount: anAccount].! !
 
-!Portfolio methodsFor: 'testing' stamp: 'JT 5/15/2023 21:22:37'!
+!Portfolio methodsFor: 'testing' stamp: 'JT 5/21/2023 18:38:28'!
+hasPortfolio: aPortfolio
+
+	^ self = aPortfolio or: [assets anySatisfy: [:asset | asset hasPortfolio: aPortfolio]].! !
+
+!Portfolio methodsFor: 'testing' stamp: 'JT 5/21/2023 16:40:02'!
 hasRegistered: aTransaction
 
-	^ balancedAssets anySatisfy: [:anAccount | anAccount hasRegistered: aTransaction]! !
+	^ assets anySatisfy: [:asset | asset hasRegistered: aTransaction]! !
+
+
+!Portfolio methodsFor: 'adding' stamp: 'JT 5/21/2023 17:10:20'!
+add: anAsset
+	anAsset addTo: self.! !
+
+!Portfolio methodsFor: 'adding' stamp: 'JT 5/21/2023 18:32:36'!
+addAccount: anAccount
+
+	self assertDoesntHaveAccount: anAccount.
+	
+	assets add: anAccount.! !
+
+!Portfolio methodsFor: 'adding' stamp: 'JT 5/21/2023 19:08:35'!
+addPortfolio: aPortfolio
+
+	"chequeamos que el portfolio no este repetido porque en caso de agregar uno vacio (A) dos veces,
+	 al agregar una cuenta a A no se puede verificar que este repetido"
+	self rootPortfolios do: [:rootPortfolio | rootPortfolio assertDoesntHavePortfolio: aPortfolio].
+	
+	assets add: aPortfolio.
+	
+	aPortfolio registerParent: self.! !
+
+!Portfolio methodsFor: 'adding' stamp: 'JT 5/21/2023 17:10:32'!
+addTo: aPortfolio
+
+	aPortfolio addPortfolio: self.! !
+
+
+!Portfolio methodsFor: 'parents' stamp: 'JT 5/21/2023 17:47:39'!
+registerParent: aPortfolio
+
+	parentPortfolios add: aPortfolio.! !
+
+!Portfolio methodsFor: 'parents' stamp: 'JT 5/21/2023 17:56:21'!
+rootPortfolios
+
+	^ parentPortfolios
+		collect: [:parentPortfolio | parentPortfolio rootPortfolios]
+		andFold: [:allRootPortfolios :rootPortfolios | allRootPortfolios addAll: rootPortfolios; yourself ]
+		ifEmpty: [OrderedCollection with: self].! !
+
+
+!Portfolio methodsFor: 'private - assertions' stamp: 'JT 5/21/2023 18:47:41'!
+assertDoesntHaveAccount: anAccount
+
+	(self rootPortfolios anySatisfy: [:rootPortfolio | rootPortfolio hasAccount: anAccount]) ifTrue: [self error: self cuentaRepetidaErrorDescription]! !
+
+!Portfolio methodsFor: 'private - assertions' stamp: 'JT 5/21/2023 18:38:58'!
+assertDoesntHavePortfolio: aPortfolio
+
+	(self hasPortfolio: aPortfolio) ifTrue: [self error: self portfolioRepetidoErrorDescription].! !
+
+
+!Portfolio methodsFor: 'private - accessing' stamp: 'JT 5/21/2023 17:23:05'!
+cachedAccounts
+
+	^ cachedAccounts ! !
+
+!Portfolio methodsFor: 'private - accessing' stamp: 'JT 5/21/2023 18:02:36'!
+cachedPortfolios
+
+	^ cachedPortfolios ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Portfolio class' category: 'Portfolio-Ejercicio'!
+Portfolio class
+	instanceVariableNames: ''!
+
+!Portfolio class methodsFor: 'error descriptions' stamp: 'JT 5/21/2023 17:27:40'!
+cuentaRepetidaErrorDescription
+	^ 'Cuenta repetida'! !
+
+!Portfolio class methodsFor: 'error descriptions' stamp: 'JT 5/21/2023 18:04:30'!
+portfolioRepetidoErrorDescription
+	^ 'Portfolio repetido'! !
 
 
 !classDefinition: #ReceptiveAccount category: 'Portfolio-Ejercicio'!
-BalancedAsset subclass: #ReceptiveAccount
+Asset subclass: #ReceptiveAccount
 	instanceVariableNames: 'transactions'
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -504,8 +766,30 @@ withdrawBalanceValue: aWithdrawTransaction
 	^ aWithdrawTransaction value negated! !
 
 
+!ReceptiveAccount methodsFor: 'testing' stamp: 'JT 5/21/2023 18:34:15'!
+hasAccount: anAccount
+
+	^ self = anAccount! !
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'JT 5/21/2023 18:37:49'!
+hasPortfolio: aPortfolio
+
+	^ false.! !
+
 !ReceptiveAccount methodsFor: 'testing' stamp: 'NR 10/17/2019 03:28:43'!
 hasRegistered: aTransaction
 
 	^ transactions includes: aTransaction 
 ! !
+
+
+!ReceptiveAccount methodsFor: 'portfolio' stamp: 'JT 5/21/2023 17:10:45'!
+addTo: aPortfolio
+
+	aPortfolio addAccount: self.! !
+
+
+!ReceptiveAccount methodsFor: 'assertions' stamp: 'JT 5/21/2023 17:03:10'!
+assertCanBeAddedTo: aPortfolio
+
+	aPortfolio assertCanAddReceptiveAccount: self.! !
