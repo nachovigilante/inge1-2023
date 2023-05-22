@@ -31,7 +31,7 @@ accountWith: transactions
 	^ account.! !
 
 
-!PortfolioTest methodsFor: 'setup' stamp: 'JT 5/22/2023 13:57:43'!
+!PortfolioTest methodsFor: 'setUp/tearDown' stamp: 'JT 5/22/2023 13:57:43'!
 setUp
 
 	portfolio := Portfolio new.
@@ -41,13 +41,13 @@ setUp
 	cuentaVacia := ReceptiveAccount new.! !
 
 
-!PortfolioTest methodsFor: 'assertions' stamp: 'JT 5/22/2023 13:38:22'!
+!PortfolioTest methodsFor: 'assertions' stamp: 'IV 5/22/2023 15:17:55'!
 should: aPortfolio afterAdding: anAsset throwErrorWithMessage: anErrorMessage
 
 	^ self should: [ aPortfolio add: anAsset. ]
 		 raise: Error
 		 withExceptionDo: [:anError |
-			anError messageText = anErrorMessage
+			self assert: anError messageText equals: anErrorMessage
 		 ]! !
 
 
@@ -171,7 +171,7 @@ test08PortfolioWithPortfoliosHasAllPortfoliosTransactions
 	self assert: portfolio transactions asSet
 		 equals: (cuentaDeAlicia transactions , cuentaDeBeto transactions) asSet.! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:58:21'!
+!PortfolioTest methodsFor: 'tests' stamp: 'IV 5/22/2023 15:21:29'!
 test09CannotAddAccountToPortfolioThatAlreadyHasItDirectly
 	
 	portfolio add: cuentaVacia.
@@ -180,16 +180,16 @@ test09CannotAddAccountToPortfolioThatAlreadyHasItDirectly
 		 afterAdding: cuentaVacia
 		 throwErrorWithMessage: Portfolio cuentaRepetidaErrorDescription! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:57:29'!
+!PortfolioTest methodsFor: 'tests' stamp: 'IV 5/22/2023 15:19:46'!
 test10CannotAddEmptyPortfolioToPortfolioThatAlreadyHasIt
 	
 	portfolio add: emptyPortfolio.
 
 	self should: portfolio
 		 afterAdding: emptyPortfolio
-		 throwErrorWithMessage: Portfolio cuentaRepetidaErrorDescription! !
+		 throwErrorWithMessage: Portfolio portfolioRepetidoOConCuentasEnComunErrorDescription ! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:58:42'!
+!PortfolioTest methodsFor: 'tests' stamp: 'IV 5/22/2023 15:20:27'!
 test11CannotAddPortfolioWithAnAccountToAnotherPortfolioThatAlreadyHasThatAccount
 
 	portfolio add: cuentaVacia.
@@ -197,7 +197,7 @@ test11CannotAddPortfolioWithAnAccountToAnotherPortfolioThatAlreadyHasThatAccount
 	
 	self should: portfolio
 		 afterAdding: portfolioFamiliar
-		 throwErrorWithMessage: Portfolio cuentaRepetidaErrorDescription! !
+		 throwErrorWithMessage: Portfolio portfolioRepetidoOConCuentasEnComunErrorDescription! !
 
 !PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:45:22'!
 test12CannotAddEmptyPortfolioToItself
@@ -206,14 +206,14 @@ test12CannotAddEmptyPortfolioToItself
 		 afterAdding: portfolio
 		 throwErrorWithMessage: Portfolio portfolioRepetidoOConCuentasEnComunErrorDescription! !
 
-!PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:58:53'!
+!PortfolioTest methodsFor: 'tests' stamp: 'IV 5/22/2023 15:22:01'!
 test13CannotAddNonEmptyPortfolioToItself
 
 	portfolio add: cuentaVacia.
 	
 	self should: portfolio 
 	  	 afterAdding: cuentaVacia
-		 throwErrorWithMessage: Portfolio portfolioRepetidoOConCuentasEnComunErrorDescription! !
+		 throwErrorWithMessage: Portfolio cuentaRepetidaErrorDescription ! !
 
 !PortfolioTest methodsFor: 'tests' stamp: 'JT 5/22/2023 13:57:29'!
 test14CannotAddEmptyPortfolioToPortfolioThatHasItMultipleLevelsDown
@@ -274,7 +274,7 @@ TestCase subclass: #ReceptiveAccountTest
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!ReceptiveAccountTest methodsFor: 'setup' stamp: 'JT 5/22/2023 13:51:16'!
+!ReceptiveAccountTest methodsFor: 'setUp/tearDown' stamp: 'JT 5/22/2023 13:51:16'!
 setUp
 
 	account := ReceptiveAccount new.! !
@@ -347,8 +347,8 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!AccountTransaction methodsFor: 'balance' stamp: 'JT 5/15/2023 20:23:10'!
-balanceFor: aReceptiveAccount
+!AccountTransaction methodsFor: 'balance' stamp: 'IV 5/22/2023 15:32:50'!
+affectBalanceOf: aReceptiveAccount
 
 	self subclassResponsibility ! !
 
@@ -394,8 +394,8 @@ value
 	^ value! !
 
 
-!Deposit methodsFor: 'balance' stamp: 'JT 5/15/2023 20:24:07'!
-balanceFor: aReceptiveAccount
+!Deposit methodsFor: 'balance' stamp: 'IV 5/22/2023 15:32:50'!
+affectBalanceOf: aReceptiveAccount
 
 	^ aReceptiveAccount depositBalanceValue: self! !
 
@@ -430,8 +430,8 @@ value
 	^ value! !
 
 
-!Withdraw methodsFor: 'balance' stamp: 'JT 5/15/2023 20:24:26'!
-balanceFor: aReceptiveAccount
+!Withdraw methodsFor: 'balance' stamp: 'IV 5/22/2023 15:32:50'!
+affectBalanceOf: aReceptiveAccount
 
 	^ aReceptiveAccount withdrawBalanceValue: self! !
 
@@ -458,7 +458,6 @@ Object subclass: #Asset
 transactions
 
 	self subclassResponsibility ! !
-
 
 
 !Asset methodsFor: 'testing' stamp: 'JT 5/21/2023 18:34:52'!
@@ -590,26 +589,15 @@ rootPortfolios
 		ifEmpty: [OrderedCollection with: self].! !
 
 
-!Portfolio methodsFor: 'private - assertions' stamp: 'JT 5/22/2023 12:11:36'!
+!Portfolio methodsFor: 'private - assertions' stamp: 'IV 5/22/2023 15:18:19'!
 assertAccountCanBeAdded: anAccount
 
-	(self accountCannotBeAdded: anAccount) ifTrue: [self error: self cuentaRepetidaErrorDescription]! !
+	(self accountCannotBeAdded: anAccount) ifTrue: [self error: self class cuentaRepetidaErrorDescription]! !
 
-!Portfolio methodsFor: 'private - assertions' stamp: 'JT 5/22/2023 12:20:58'!
+!Portfolio methodsFor: 'private - assertions' stamp: 'IV 5/22/2023 15:18:23'!
 assertPortfolioCanBeAdded: aPortfolio
 
-	(self portfolioCannotBeAdded: aPortfolio) ifTrue: [self error: self portfolioRepetidoOConCuentasEnComunErrorDescription].! !
-
-
-!Portfolio methodsFor: 'private - accessing' stamp: 'JT 5/21/2023 17:23:05'!
-cachedAccounts
-
-	^ cachedAccounts ! !
-
-!Portfolio methodsFor: 'private - accessing' stamp: 'JT 5/21/2023 18:02:36'!
-cachedPortfolios
-
-	^ cachedPortfolios ! !
+	(self portfolioCannotBeAdded: aPortfolio) ifTrue: [self error: self class portfolioRepetidoOConCuentasEnComunErrorDescription].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -651,9 +639,9 @@ transactions
 	^ transactions copy! !
 
 
-!ReceptiveAccount methodsFor: 'balance' stamp: 'JT 5/15/2023 20:54:33'!
+!ReceptiveAccount methodsFor: 'balance' stamp: 'IV 5/22/2023 15:32:51'!
 balance
-	^ transactions sum: [:aTransaction | aTransaction balanceFor: self	] ifEmpty: 0.! !
+	^ transactions sum: [:aTransaction | aTransaction affectBalanceOf: self	] ifEmpty: 0.! !
 
 !ReceptiveAccount methodsFor: 'balance' stamp: 'JT 5/15/2023 20:27:29'!
 depositBalanceValue: aDepositTransaction
@@ -687,4 +675,3 @@ hasRegistered: aTransaction
 addTo: aPortfolio
 
 	aPortfolio addAccount: self.! !
-
