@@ -5,19 +5,31 @@ TestCase subclass: #AccountSummaryTest
 	poolDictionaries: ''
 	category: 'Portfolio2-Ejercicio'!
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/24/2023 16:41:13'!
+!AccountSummaryTest methodsFor: 'assertions' stamp: 'JT 5/26/2023 16:38:55'!
+assertArray: anArray equalsCollection: aCollection
+
+	self assert: anArray size equals: aCollection size.
+	
+	anArray with: aCollection do: [:arrayElement :collectionElement |
+		self assert: arrayElement equals: collectionElement
+	].! !
+
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 16:39:18'!
 test01AccountSummaryForEmptyAccountIsEmpty
 
-	| account summary |
+	| account summary summaryLines |
 	account := ReceptiveAccount new.
 	summary := AccountSummary for: account.
+	summaryLines := summary lines.
 	
-	self assert: summary lines isEmpty.! !
+	
+	self assertArray: {'Balance = 0'} equalsCollection: summaryLines.! !
 
-!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/24/2023 17:30:51'!
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 16:28:59'!
 test02SummaryForAccountWithTransactionHasTransaction
 
-	| accountA summaryA accountB accountC accountD summaryB summaryC summaryD |
+	| accountA summaryALines accountB accountC accountD summaryBLines summaryCLines summaryDLines |
 	accountA := ReceptiveAccount new.
 	accountB := ReceptiveAccount new.
 	accountC := ReceptiveAccount new.
@@ -27,22 +39,135 @@ test02SummaryForAccountWithTransactionHasTransaction
 	accountB register: (Withdraw for: 200).
 	Transference from: accountC to: accountD of: 50.
 	
-	summaryA := AccountSummary for: accountA.
-	summaryB := AccountSummary for: accountB.
-	summaryC := AccountSummary for: accountC.
-	summaryD := AccountSummary for: accountD.
+	summaryALines := (AccountSummary for: accountA) lines.
+	summaryBLines := (AccountSummary for: accountB) lines.
+	summaryCLines := (AccountSummary for: accountC) lines.
+	summaryDLines := (AccountSummary for: accountD) lines.
 	
-	self assert: 1 equals: summaryA lines size.
-	self assert: 'Deposito por 100' equals: summaryA lines first.
+	self assert: (OrderedCollection with: 'Deposito por 100' with: 'Balance = 100')
+	 	 equals: summaryALines.
+		
+	self assert: (OrderedCollection with: 'Extraccion por 200' with: 'Balance = -200')
+	 	 equals: summaryBLines.
+		
+	self assert: (OrderedCollection with: 'Salida por transferencia de 50' with: 'Balance = -50')
+	 	 equals: summaryCLines.
 
-	self assert: 1 equals: summaryB lines size.
-	self assert: 'Extraccion por 200' equals: summaryB lines first.
+	self assert: (OrderedCollection with: 'Entrada por transferencia de 50' with: 'Balance = 50')
+	 	 equals: summaryDLines.! !
 
-	self assert: 1 equals: summaryC lines size.
-	self assert: 'Salida por transferencia de 50' equals: summaryC lines first.
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 16:42:24'!
+test03SummaryForAccountWithMultipleTransactionsHasAllTransactions
 
-	self assert: 1 equals: summaryD lines size.
-	self assert: 'Entrada por transferencia de 50' equals: summaryD lines first.! !
+	| accountA summaryALines accountB accountC accountD summaryBLines |
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	accountC := ReceptiveAccount new.
+	accountD := ReceptiveAccount new.
+	
+	accountA register: (Deposit for: 100);
+			 register: (Withdraw for: 50).
+	accountB register: (Withdraw for: 200);
+			 register: (Deposit for: 300).
+	
+	Transference from: accountA to: accountB of: 50.
+	
+	summaryALines := (AccountSummary for: accountA) lines.
+	summaryBLines := (AccountSummary for: accountB) lines.
+	
+	self assertArray: {
+			'Deposito por 100'.
+			'Extraccion por 50'.
+			'Salida por transferencia de 50'.
+			'Balance = 0' }
+	 	 equalsCollection: summaryALines.
+		
+	self assertArray: {
+			'Extraccion por 200'.
+			'Deposito por 300'.
+			'Entrada por transferencia de 50'.
+			'Balance = 150' }
+	 	 equalsCollection: summaryBLines.! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 16:45:55'!
+test04SummaryForEmptyPortfolioIsEmpty
+
+	| emptyPortfolio summaryLines |
+	emptyPortfolio := Portfolio new.
+	summaryLines := (AccountSummary for: emptyPortfolio) lines.
+	
+	self assertArray: { 'Balance = 0' }
+	 	 equalsCollection: summaryLines.! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 17:01:08'!
+test05SummaryForPortfolioWithAccountsHasAllAccountTransactions
+
+	| summaryLines accountA accountB portfolio |
+	portfolio := Portfolio new.
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	
+	portfolio add: accountA;
+			  add: accountB.
+
+	accountA register: (Deposit for: 10);
+			 register: (Withdraw for: 5).
+			
+	accountB register: (Withdraw for: 10).
+	
+	Transference from: accountA to: accountB of: 10.
+	
+	summaryLines := (AccountSummary for: portfolio) lines.
+	
+	self assertArray: {
+		 'Deposito por 10'.
+		 'Extraccion por 5'.
+		 'Salida por transferencia de 10'.
+		 'Extraccion por 10'.
+		 'Entrada por transferencia de 10'.
+		 'Balance = -5' }
+	 	 equalsCollection: summaryLines.! !
+
+!AccountSummaryTest methodsFor: 'tests' stamp: 'JT 5/26/2023 17:56:04'!
+test06SummaryForPortfolioWithPortfoliosHasAllTransactions
+
+	| summaryLines accountA accountB portfolio accountC accountD portfolioFamiliar portfolioTrabajo |
+	portfolio := Portfolio new.
+	portfolioFamiliar := Portfolio new.
+	portfolioTrabajo := Portfolio new.
+	
+	accountA := ReceptiveAccount new.
+	accountB := ReceptiveAccount new.
+	accountC := ReceptiveAccount new.
+	accountD := ReceptiveAccount new.
+	
+	portfolioFamiliar add: accountA; add: accountB.
+	portfolioTrabajo add: accountC; add: accountD.
+	portfolio add: portfolioFamiliar; add: portfolioTrabajo.
+
+	accountA register: (Deposit for: 10);
+			 register: (Withdraw for: 5).
+			
+	accountB register: (Withdraw for: 10).
+	
+	accountC register: (Deposit for: 10).
+	
+	accountD register: (Deposit for: 20).
+	
+	Transference from: accountC to: accountD of: 10.
+	
+	summaryLines := (AccountSummary for: portfolio) lines.
+	
+	self assertArray: {
+		 'Deposito por 10'.
+		 'Extraccion por 5'.
+		 'Extraccion por 10'.
+		 'Deposito por 10'.
+		 'Salida por transferencia de 10'.
+		 'Deposito por 20'.
+		 'Entrada por transferencia de 10'.
+		 'Balance = 25' }
+	 	 equalsCollection: summaryLines.! !
 
 
 !classDefinition: #PortfolioTest category: 'Portfolio2-Ejercicio'!
@@ -441,6 +566,12 @@ transactions
 	self subclassResponsibility ! !
 
 
+!Account methodsFor: 'reports' stamp: 'JT 5/26/2023 16:46:45'!
+generateReportFor: aReport
+
+	self subclassResponsibility ! !
+
+
 !Account methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:24:04'!
 addedTo: aPortfolio
 
@@ -487,6 +618,12 @@ rootParents
 	self addRootParentsTo: rootParents.
 	
 	^ rootParents! !
+
+
+!Portfolio methodsFor: 'reports' stamp: 'JT 5/26/2023 17:39:13'!
+generateReportFor: aReport
+
+	^ aReport reportBlock value: accounts! !
 
 
 !Portfolio methodsFor: 'initialization' stamp: 'HAW 5/25/2019 12:03:18'!
@@ -637,10 +774,10 @@ isComposedBy: anAccount
 	^self = anAccount ! !
 
 
-!ReceptiveAccount methodsFor: 'reports' stamp: 'JT 5/24/2023 17:57:40'!
-generateReportFor: anAccountSummary
+!ReceptiveAccount methodsFor: 'reports' stamp: 'JT 5/26/2023 17:20:38'!
+generateReportFor: aReport	
 
-	^ transactions collect: [:transaction | transaction summaryFor: self]! !
+	^ aReport reportBlock value: transactions! !
 
 
 !ReceptiveAccount methodsFor: 'composition' stamp: 'HAW 5/25/2019 12:03:32'!
@@ -651,21 +788,43 @@ addedTo: aPortfolio
 
 !classDefinition: #AccountSummary category: 'Portfolio2-Ejercicio'!
 Object subclass: #AccountSummary
-	instanceVariableNames: 'account lines'
+	instanceVariableNames: 'account'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio2-Ejercicio'!
 
-!AccountSummary methodsFor: 'initialization' stamp: 'JT 5/24/2023 17:21:02'!
+!AccountSummary methodsFor: 'initialization' stamp: 'JT 5/26/2023 17:32:06'!
 initializeFor: anAccount
 
-	lines := anAccount generateReportFor: self.! !
+	account := anAccount.! !
 
 
-!AccountSummary methodsFor: 'accessing' stamp: 'JT 5/24/2023 16:41:13'!
+
+!AccountSummary methodsFor: 'processing' stamp: 'JT 5/26/2023 17:50:40'!
+reportBlock
+	^ [:transactionsOrAccounts | | reportLines |
+		(account isKindOf: ReceptiveAccount) ifTrue: [
+			"trasactions"
+			reportLines := transactionsOrAccounts collect: [:transaction | transaction summaryFor: account].
+			reportLines add: 'Balance = ' , account balance asString.
+			reportLines
+		] ifFalse: [
+			"accounts"
+			reportLines := transactionsOrAccounts inject: OrderedCollection new into: [:lines :receptiveAccount |
+				
+				lines addAll: ((receptiveAccount generateReportFor: (AccountSummary for: receptiveAccount)) removeLast; yourself).
+				lines
+			].
+			reportLines add: 'Balance = ' , account balance asString.
+			reportLines
+		]
+	]! !
+
+
+!AccountSummary methodsFor: 'accessing' stamp: 'JT 5/26/2023 17:26:51'!
 lines
 
-	^ lines! !
+	^ account generateReportFor: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
