@@ -1,18 +1,15 @@
 !classDefinition: #MarsRover category: 'MarsRover2-Ejercicio'!
 Object subclass: #MarsRover
-	instanceVariableNames: 'position head logger observers positionObservers headingObservers'
+	instanceVariableNames: 'position head'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover2-Ejercicio'!
 
-!MarsRover methodsFor: 'initialization' stamp: 'IV 6/5/2023 09:42:02'!
+!MarsRover methodsFor: 'initialization' stamp: 'JT 6/5/2023 10:38:50'!
 initializeAt: aPosition heading: aHeadingType
 
 	position := ObservablePosition with: aPosition.
-	head := ObservableHeading with: (aHeadingType for: self).
-	
-	positionObservers := OrderedCollection new.
-	headingObservers := OrderedCollection new.! !
+	head := ObservableHeading with: (aHeadingType for: self).! !
 
 
 !MarsRover methodsFor: 'command processing' stamp: 'HAW 6/30/2018 19:48:26'!
@@ -104,7 +101,7 @@ rotateRight
 ! !
 
 
-!MarsRover methodsFor: 'testing' stamp: 'IV 6/5/2023 10:05:03'!
+!MarsRover methodsFor: 'testing' stamp: 'JT 6/5/2023 10:47:43'!
 isAt: aPosition heading: aHeadingType
 
 	^position value = aPosition and: [ head isHeading: aHeadingType ]! !
@@ -140,16 +137,6 @@ attachToPositionChanges: aMarsRoverObserver
 
 	position addObserver: aMarsRoverObserver! !
 
-!MarsRover methodsFor: 'observers' stamp: 'JT 6/4/2023 22:42:30'!
-notifyHeadingChanged
-
-	headingObservers do: [:aHeadingObserver | head notifyTo: aHeadingObserver].! !
-
-!MarsRover methodsFor: 'observers' stamp: 'JT 6/4/2023 22:46:27'!
-notifyPositionChanged
-
-	positionObservers do: [:aPositionObserver | aPositionObserver notifyPositionChangedTo: position].! !
-
 
 !MarsRover methodsFor: 'exceptions' stamp: 'HAW 6/30/2018 19:48:45'!
 invalidCommandErrorDescription
@@ -179,12 +166,6 @@ Object subclass: #MarsRoverHeading
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover2-Ejercicio'!
-
-!MarsRoverHeading methodsFor: 'observers' stamp: 'JT 6/4/2023 22:43:13'!
-notifyTo: aHeadingObserver
-
-	self subclassResponsibility ! !
-
 
 !MarsRoverHeading methodsFor: 'heading' stamp: 'HAW 10/7/2021 20:14:20'!
 rotateLeft
@@ -266,12 +247,6 @@ rotateRight
 	^marsRover headSouth! !
 
 
-!MarsRoverHeadingEast methodsFor: 'observers' stamp: 'JT 6/4/2023 22:43:30'!
-notifyTo: aHeadingObserver
-
-	aHeadingObserver notifyNowHeadingEast! !
-
-
 !MarsRoverHeadingEast methodsFor: 'visiting' stamp: 'IV 6/5/2023 10:10:16'!
 accept: aVisitor
 
@@ -305,18 +280,6 @@ rotateLeft
 rotateRight
 	
 	^marsRover headEast! !
-
-
-!MarsRoverHeadingNorth methodsFor: 'string' stamp: 'JT 6/1/2023 21:20:09'!
-asString
-
-	self subclassResponsibility ! !
-
-
-!MarsRoverHeadingNorth methodsFor: 'observers' stamp: 'JT 6/4/2023 22:43:37'!
-notifyTo: aHeadingObserver
-
-	aHeadingObserver notifyNowHeadingNorth! !
 
 
 !MarsRoverHeadingNorth methodsFor: 'visiting' stamp: 'IV 6/5/2023 10:10:33'!
@@ -354,18 +317,6 @@ rotateRight
 	^marsRover headWest! !
 
 
-!MarsRoverHeadingSouth methodsFor: 'string' stamp: 'JT 6/1/2023 21:20:09'!
-asString
-
-	self subclassResponsibility ! !
-
-
-!MarsRoverHeadingSouth methodsFor: 'observers' stamp: 'JT 6/4/2023 22:43:53'!
-notifyTo: aHeadingObserver
-
-	aHeadingObserver notifyNowHeadingSouth ! !
-
-
 !MarsRoverHeadingSouth methodsFor: 'visiting' stamp: 'IV 6/5/2023 10:10:42'!
 accept: aVisitor
 
@@ -401,18 +352,6 @@ rotateRight
 	^marsRover headNorth! !
 
 
-!MarsRoverHeadingWest methodsFor: 'string' stamp: 'JT 6/1/2023 21:20:09'!
-asString
-
-	self subclassResponsibility ! !
-
-
-!MarsRoverHeadingWest methodsFor: 'observers' stamp: 'JT 6/4/2023 22:44:02'!
-notifyTo: aHeadingObserver
-
-	aHeadingObserver notifyNowHeadingWest! !
-
-
 !MarsRoverHeadingWest methodsFor: 'visiting' stamp: 'IV 6/5/2023 10:10:51'!
 accept: aVisitor
 
@@ -426,21 +365,21 @@ Object subclass: #MarsRoverObserver
 	poolDictionaries: ''
 	category: 'MarsRover2-Ejercicio'!
 
-!MarsRoverObserver methodsFor: 'initialization' stamp: 'IV 6/4/2023 20:16:27'!
+!MarsRoverObserver methodsFor: 'initialization' stamp: 'JT 6/5/2023 10:42:18'!
 initializeForHeadingOf: aMarsRover
 
-	self subscribeToHeadingChangesOf: aMarsRover.! !
+	aMarsRover attachToHeadingChanges: self.! !
 
-!MarsRoverObserver methodsFor: 'initialization' stamp: 'IV 6/4/2023 20:16:31'!
+!MarsRoverObserver methodsFor: 'initialization' stamp: 'JT 6/5/2023 10:42:23'!
 initializeForPositionAndHeadingOf: aMarsRover
 
-	self subscribeToPositionChangesOf: aMarsRover.
-	self subscribeToHeadingChangesOf: aMarsRover.! !
+	aMarsRover attachToPositionChanges: self.
+	aMarsRover attachToHeadingChanges: self.! !
 
-!MarsRoverObserver methodsFor: 'initialization' stamp: 'IV 6/4/2023 20:16:33'!
+!MarsRoverObserver methodsFor: 'initialization' stamp: 'JT 6/5/2023 10:42:23'!
 initializeForPositionOf: aMarsRover
 
-	self subscribeToPositionChangesOf: aMarsRover.! !
+	aMarsRover attachToPositionChanges: self.! !
 
 
 !MarsRoverObserver methodsFor: 'notifications' stamp: 'IV 6/3/2023 18:44:36'!
@@ -474,16 +413,6 @@ value
 
 	self subclassResponsibility ! !
 
-
-!MarsRoverObserver methodsFor: 'subscriptions' stamp: 'JT 6/4/2023 22:28:44'!
-subscribeToHeadingChangesOf: aMarsRover
-
-	aMarsRover attachToHeadingChanges: self! !
-
-!MarsRoverObserver methodsFor: 'subscriptions' stamp: 'JT 6/4/2023 22:29:25'!
-subscribeToPositionChangesOf: aMarsRover
-
-	aMarsRover attachToPositionChanges: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -583,20 +512,21 @@ notifyPositionChangedTo: aPosition
 	currentPosition := aPosition.! !
 
 
-!MarsRoverWindow methodsFor: 'evaluating' stamp: 'IV 6/4/2023 20:19:59'!
-headingStatus
-	
-	^'Heading: ', currentHeading asString.! !
-
-!MarsRoverWindow methodsFor: 'evaluating' stamp: 'IV 6/4/2023 20:19:48'!
-positionStatus
-
-	^'Position: ', currentPosition asString.! !
-
 !MarsRoverWindow methodsFor: 'evaluating' stamp: 'IV 6/3/2023 18:56:24'!
 value
 
 	^self positionStatus, ', ', self headingStatus.! !
+
+
+!MarsRoverWindow methodsFor: 'status' stamp: 'IV 6/4/2023 20:19:59'!
+headingStatus
+	
+	^'Heading: ', currentHeading asString.! !
+
+!MarsRoverWindow methodsFor: 'status' stamp: 'IV 6/4/2023 20:19:48'!
+positionStatus
+
+	^'Position: ', currentPosition asString.! !
 
 
 !classDefinition: #ObservableVariable category: 'MarsRover2-Ejercicio'!
@@ -636,10 +566,10 @@ notifyObservers
 	self subclassResponsibility! !
 
 
-!ObservableVariable methodsFor: 'proxy' stamp: 'IV 6/5/2023 09:45:21'!
+!ObservableVariable methodsFor: 'proxy' stamp: 'JT 6/5/2023 10:44:14'!
 doesNotUnderstand: aMessage
 
-	self subclassResponsibility! !
+	^ aMessage sendTo: value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -666,12 +596,6 @@ notifyObservers
 	observers do: [:anObserver |
 		value accept: self.
 	]! !
-
-
-!ObservableHeading methodsFor: 'proxy' stamp: 'IV 6/5/2023 09:45:21'!
-doesNotUnderstand: aMessage
-
-	^ aMessage sendTo: value.! !
 
 
 !ObservableHeading methodsFor: 'visiting' stamp: 'IV 6/5/2023 10:13:49'!
@@ -724,12 +648,6 @@ notifyObservers
 	observers do: [:anObserver |
 		anObserver notifyPositionChangedTo: 	value.
 	]! !
-
-
-!ObservablePosition methodsFor: 'proxy' stamp: 'IV 6/5/2023 09:45:21'!
-doesNotUnderstand: aMessage
-
-	^ aMessage sendTo: value.! !
 !classDefinition: #MarsRoverLoggersTest category: 'MarsRover2-Tests'!
 TestCase subclass: #MarsRoverLoggersTest
 	instanceVariableNames: 'marsRoverHeadingNorth marsRoverHeadingSouth marsRoverHeadingWest marsRoverHeadingEast'
@@ -1413,23 +1331,23 @@ test18WindowForRoverThatProcessesMultipleCommandsShowsCurrentPositionAndHeading
 
 	self assert: window hasPosition: '1@0' andHeading: 'North'! !
 
-!MarsRoverWindowTest methodsFor: 'tests' stamp: 'JT 6/5/2023 00:36:09'!
+!MarsRoverWindowTest methodsFor: 'tests' stamp: 'JT 6/5/2023 10:55:06'!
 test19PositionWindowForRoverThatProcessesMultipleCommandsShowsCurrentPosition
 
 	| window |
 	
 	window := self positionWindowFor: marsRoverHeadingNorth processing: 'frflb'.
 
-	self assert: window hasPosition: '1@0' andHeading: 'No information'! !
+	self assert: window hasNoHeadingButHasPosition: '1@0'.! !
 
-!MarsRoverWindowTest methodsFor: 'tests' stamp: 'JT 6/5/2023 00:39:56'!
+!MarsRoverWindowTest methodsFor: 'tests' stamp: 'JT 6/5/2023 10:55:21'!
 test20HeadingWindowForRoverThatProcessesMultipleCommandsShowsCurrentHeading
 
 	| window |
 	
 	window := self headingWindowFor: marsRoverHeadingNorth processing: 'frflb'.
 
-	self assert: window hasPosition: 'No information' andHeading: 'North'! !
+	self assert: window hasNoPositionButHasHeading: 'North'.! !
 
 
 !MarsRoverWindowTest methodsFor: 'assertions' stamp: 'JT 6/5/2023 00:00:49'!
