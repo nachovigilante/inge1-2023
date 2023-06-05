@@ -52,5 +52,11 @@ Construir esta funcionalidad haciendo TDD y en base a la solución de la cátedr
 
 ## Entrega
 
-- Archivo (`.changes` only): http://0x0.st/HbI_.zip
+Por una interacción que tuvimos por mail con la cátedra, nos comentaron que el hecho de que el MarsRover tuviera la responsabilidad de notificar a todos los observadores se podría resolver en otra solución distinta a la original, por lo que tenemos las 2 versiones.
+
+### Versión normal
+
+- [Archivo (`.changes` only)](http://0x0.st/HbI_.zip)
 - [Archivo (`.image` y `.changes`)](http://0x0.st/HbJg.all.zip)
+
+### Versión con proxy
