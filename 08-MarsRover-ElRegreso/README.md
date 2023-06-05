@@ -52,4 +52,5 @@ Construir esta funcionalidad haciendo TDD y en base a la solución de la cátedr
 
 ## Entrega
 
+- Archivo (`.changes` only): http://0x0.st/HbI_.zip
 - [Archivo (`.image` y `.changes`)](http://0x0.st/HbJg.all.zip)
