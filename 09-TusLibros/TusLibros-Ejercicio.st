@@ -5,12 +5,12 @@ TestCase subclass: #TusLibrosTest
 	poolDictionaries: ''
 	category: 'TusLibros-Ejercicio'!
 
-!TusLibrosTest methodsFor: 'setUp/tearDown' stamp: 'JT 6/8/2023 11:56:48'!
+!TusLibrosTest methodsFor: 'setUp/tearDown' stamp: 'JT 6/8/2023 18:41:27'!
 setUp
-	catalog := BookCatalog new.
-	catalog add: 'isbn1' priced: 10 * peso.
-	catalog add: 'isbn2' priced: 20 * peso.
-	catalog add: 'isbn3' priced: 30 * peso.
+	catalog := Dictionary newFromPairs: {
+		'isbn1'. 10 * peso.
+		'isbn2'. 20 * peso.
+		'isbn3'. 30 * peso }.
 	cart := Cart using: catalog.! !
 
 
@@ -30,30 +30,30 @@ test02CartWithBookIsNotEmpty
 	
 	self deny: cart isEmpty.! !
 
-!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 11:35:32'!
+!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 18:49:11'!
 test03CartWithBookListsBookWithAQuantityOfOne
 
 	| bookISBN |
 	bookISBN := 'isbn1'.
 	cart addOneOf: bookISBN.
 	
-	self assert: cart
-		 hasItems: { CartItem withOneOf: bookISBN }.! !
+	self assert: cart items equals: ((Bag new) add: bookISBN; yourself).! !
 
-!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 11:36:13'!
+!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 18:47:19'!
 test04CartWithManyBooksListsAllOfThemWithEachQuantity
 
-	| aBook anotherBook |
+	| aBook anotherBook expectedItems |
 	aBook := 'isbn1'.
 	anotherBook := 'isbn2'.
 
 	cart addOneOf: aBook;
 		 add: 2 of: anotherBook.
 	
-	self assert: cart hasItems: {
-		CartItem withOneOf: aBook.
-		CartItem with: 2 of: anotherBook.
-	}.! !
+	expectedItems := Bag new.
+	expectedItems add: aBook;
+				  add: anotherBook withOccurrences: 2.
+		
+	self assert: cart items equals: expectedItems.! !
 
 !TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 11:36:38'!
 test05CartWithManyBooksCanCalculateTotalPriceOfItems
@@ -86,69 +86,6 @@ assert: aCart hasItems: expectedCartItems
 	]! !
 
 
-!classDefinition: #BookCatalog category: 'TusLibros-Ejercicio'!
-Object subclass: #BookCatalog
-	instanceVariableNames: 'items'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros-Ejercicio'!
-
-!BookCatalog methodsFor: 'adding' stamp: 'JT 6/8/2023 11:58:47'!
-add: anISBN priced: aPrice 
-
-	items add: (BookCatalogItem with: anISBN for: aPrice).! !
-
-
-!BookCatalog methodsFor: 'initialization' stamp: 'JT 6/8/2023 11:18:35'!
-initialize
-
-	items := OrderedCollection new.! !
-
-
-!BookCatalog methodsFor: 'price' stamp: 'JT 6/8/2023 12:02:36'!
-priceFor: anISBN
-
-	^ (items detect: [:item | item isbn = anISBN]) price.! !
-
-
-!BookCatalog methodsFor: 'testing' stamp: 'JT 6/8/2023 11:59:04'!
-hasBookWith: anISBN
-
-	^ items anySatisfy: [:item | item isbn = anISBN].! !
-
-
-!classDefinition: #BookCatalogItem category: 'TusLibros-Ejercicio'!
-Object subclass: #BookCatalogItem
-	instanceVariableNames: 'isbn price amount'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros-Ejercicio'!
-
-!BookCatalogItem methodsFor: 'initialization' stamp: 'JT 6/8/2023 11:58:06'!
-initializeWith: anISBN for: aPrice
-	isbn := anISBN.
-	price := aPrice.! !
-
-
-!BookCatalogItem methodsFor: 'accessing' stamp: 'JT 6/8/2023 11:58:18'!
-isbn
-	^isbn! !
-
-!BookCatalogItem methodsFor: 'accessing' stamp: 'JT 6/8/2023 11:32:44'!
-price
-	^price! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'BookCatalogItem class' category: 'TusLibros-Ejercicio'!
-BookCatalogItem class
-	instanceVariableNames: ''!
-
-!BookCatalogItem class methodsFor: 'instance creation' stamp: 'JT 6/8/2023 11:17:59'!
-with: aBook for: anAmount
-	^self new initializeWith: aBook for: anAmount ! !
-
-
 !classDefinition: #Cart category: 'TusLibros-Ejercicio'!
 Object subclass: #Cart
 	instanceVariableNames: 'items bookCatalog'
@@ -156,11 +93,11 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TusLibros-Ejercicio'!
 
-!Cart methodsFor: 'initialization' stamp: 'JT 6/8/2023 11:20:09'!
+!Cart methodsFor: 'initialization' stamp: 'JT 6/8/2023 18:42:16'!
 initialize
 
-	items := OrderedCollection new.
-	bookCatalog := BookCatalog new.! !
+	items := Bag new.
+	bookCatalog := Dictionary new.! !
 
 !Cart methodsFor: 'initialization' stamp: 'JT 6/8/2023 11:19:25'!
 initializeUsing: aBookCatalog
@@ -173,12 +110,12 @@ isEmpty
 	^ items isEmpty.! !
 
 
-!Cart methodsFor: 'adding' stamp: 'JT 6/8/2023 11:25:09'!
+!Cart methodsFor: 'adding' stamp: 'JT 6/8/2023 18:42:44'!
 add: aQuantity of: anISBN
 
 	self verifyValidISBN: anISBN.
 
-	items add: (CartItem with: aQuantity of: anISBN).! !
+	items add: anISBN withOccurrences: aQuantity.! !
 
 !Cart methodsFor: 'adding' stamp: 'JT 6/8/2023 11:22:45'!
 addOneOf: anISBN
@@ -186,17 +123,17 @@ addOneOf: anISBN
 	self add: 1 of: anISBN! !
 
 
-!Cart methodsFor: 'items' stamp: 'JT 6/5/2023 21:19:34'!
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:42:59'!
 items
-	^ items.! !
+	^ items copy.! !
 
-!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 12:04:24'!
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:49:33'!
 totalPrice
 
 	^ items inject: 0 * peso into: [:total :item | | price |
-		price := bookCatalog priceFor: item isbn.
-		total + (price * item quantity)
-	]! !
+		price := bookCatalog at: item.
+		total + price
+	].! !
 
 
 !Cart methodsFor: 'preconditions' stamp: 'JT 6/8/2023 12:07:08'!
@@ -204,10 +141,10 @@ signalInvalidISBN
 
 	^ self error: self class invalidISBNErrorDescription! !
 
-!Cart methodsFor: 'preconditions' stamp: 'JT 6/8/2023 12:07:08'!
+!Cart methodsFor: 'preconditions' stamp: 'JT 6/8/2023 18:44:27'!
 verifyValidISBN: anISBN
 
-	(bookCatalog hasBookWith: anISBN) ifFalse: [self signalInvalidISBN].! !
+	(bookCatalog includesKey: anISBN) ifFalse: [self signalInvalidISBN].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -224,49 +161,3 @@ using: aBookCatalog
 invalidISBNErrorDescription
 
 	^ 'ISBN invalido'! !
-
-
-!classDefinition: #CartItem category: 'TusLibros-Ejercicio'!
-Object subclass: #CartItem
-	instanceVariableNames: 'isbn quantity'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros-Ejercicio'!
-
-!CartItem methodsFor: 'initialization' stamp: 'JT 6/8/2023 12:10:11'!
-initializeWith: aQuantity of: anISBN
-	quantity := aQuantity.
-	isbn := anISBN.! !
-
-
-!CartItem methodsFor: 'accessing' stamp: 'JT 6/8/2023 12:09:51'!
-isbn
-
-	^ isbn! !
-
-!CartItem methodsFor: 'accessing' stamp: 'JT 6/5/2023 21:40:24'!
-quantity
-
-	^quantity! !
-
-
-!CartItem methodsFor: 'comparing' stamp: 'JT 6/8/2023 12:09:51'!
-= aCartItem
-
-	^ isbn = aCartItem isbn! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'CartItem class' category: 'TusLibros-Ejercicio'!
-CartItem class
-	instanceVariableNames: ''!
-
-!CartItem class methodsFor: 'instance creation' stamp: 'JT 6/5/2023 21:17:08'!
-with: aQuantity of: aBook
-
-	^self new initializeWith: aQuantity of: aBook ! !
-
-!CartItem class methodsFor: 'instance creation' stamp: 'JT 6/5/2023 21:17:51'!
-withOneOf: aBook
-
-	^self with: 1 of: aBook! !

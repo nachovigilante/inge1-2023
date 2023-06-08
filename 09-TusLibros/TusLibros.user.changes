@@ -1910,3 +1910,208 @@ PASSED!
 PASSED!
 
 ----QUIT----(8 June 2023 12:13:43) TusLibros.image priorSource: 9404334!
+
+----STARTUP---- (8 June 2023 18:39:44) as /home/jt/files/cuis-university/images/TusLibros.image!
+
+!TusLibrosTest methodsFor: 'setUp/tearDown' stamp: 'JT 6/8/2023 18:41:27' prior: 50626235 overrides: 16961394!
+setUp
+	catalog := Dictionary newFromPairs: {
+		'isbn1'. 10 * peso.
+		'isbn2'. 20 * peso.
+		'isbn3'. 30 * peso }.
+	cart := Cart using: catalog.! !
+!Cart methodsFor: 'initialization' stamp: 'JT 6/8/2023 18:41:49' prior: 50625778 overrides: 16920235!
+initialize
+
+	items := OrderedCollection new.
+	bookCatalog := Dictionary new.! !
+!Cart methodsFor: 'initialization' stamp: 'JT 6/8/2023 18:42:16' prior: 50626510 overrides: 16920235!
+initialize
+
+	items := Bag new.
+	bookCatalog := Dictionary new.! !
+!Cart methodsFor: 'adding' stamp: 'JT 6/8/2023 18:42:44' prior: 50625903!
+add: aQuantity of: anISBN
+
+	self verifyValidISBN: anISBN.
+
+	items add: anISBN withOccurrences: aQuantity.! !
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:42:59' prior: 50625319!
+items
+	^ items copy.! !
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:43:42' prior: 50626412!
+totalPrice
+
+	^ items inject: 0 * peso into: [:total :item | | price |
+		price := bookCatalog priceFor: item isbn.
+		total + price
+	].! !
+
+!classRemoval: #BookCatalog stamp: 'JT 6/8/2023 18:43:47'!
+Object subclass: #BookCatalog
+	instanceVariableNames: 'items'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+!classRemoval: #BookCatalogItem stamp: 'JT 6/8/2023 18:43:54'!
+Object subclass: #BookCatalogItem
+	instanceVariableNames: 'isbn price amount'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+!testRun: #TusLibrosTest #test01NewCartIsEmpty stamp: 'JT 6/8/2023 18:44:03'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:44:04'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:44:04'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:44:10'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:44:10'!
+ERROR!
+!Cart methodsFor: 'preconditions' stamp: 'JT 6/8/2023 18:44:27' prior: 50626441!
+verifyValidISBN: anISBN
+
+	(bookCatalog includesKey: anISBN) ifFalse: [self signalInvalidISBN].! !
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:44:29'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:44:30'!
+ERROR!
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:44:30'!
+ERROR!
+!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 18:47:19' prior: 50626180!
+test04CartWithManyBooksListsAllOfThemWithEachQuantity
+
+	| aBook anotherBook expectedItems |
+	aBook := 'isbn1'.
+	anotherBook := 'isbn2'.
+
+	cart addOneOf: aBook;
+		 add: 2 of: anotherBook.
+	
+	expectedItems := Bag new.
+	expectedItems add: aBook;
+				  add: anotherBook withOccurrences: 2.
+		
+	self assert: cart items equals: expectedItems.! !
+
+!testRun: #TusLibrosTest #test04CartWithManyBooksListsAllOfThemWithEachQuantity stamp: 'JT 6/8/2023 18:47:22'!
+PASSED!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:47:25'!
+ERROR!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:47:25'!
+ERROR!
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:47:53' prior: 50626531!
+totalPrice
+
+	^ items inject: 0 * peso into: [:total :item | | price |
+		price := bookCatalog at: item isbn.
+		total + price
+	].! !
+
+!testRun: #TusLibrosTest #test01NewCartIsEmpty stamp: 'JT 6/8/2023 18:47:56'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:47:56'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:47:56'!
+ERROR!
+
+!testRun: #TusLibrosTest #test04CartWithManyBooksListsAllOfThemWithEachQuantity stamp: 'JT 6/8/2023 18:47:56'!
+PASSED!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:47:56'!
+ERROR!
+
+!testRun: #TusLibrosTest #test06CartCannotAddBookWithMissingISBN stamp: 'JT 6/8/2023 18:47:56'!
+PASSED!
+!TusLibrosTest methodsFor: 'tests' stamp: 'JT 6/8/2023 18:49:11' prior: 50626144!
+test03CartWithBookListsBookWithAQuantityOfOne
+
+	| bookISBN |
+	bookISBN := 'isbn1'.
+	cart addOneOf: bookISBN.
+	
+	self assert: cart items equals: ((Bag new) add: bookISBN; yourself).! !
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:49:13'!
+PASSED!
+
+!testRun: #TusLibrosTest #test01NewCartIsEmpty stamp: 'JT 6/8/2023 18:49:14'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:49:14'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:49:14'!
+PASSED!
+
+!testRun: #TusLibrosTest #test04CartWithManyBooksListsAllOfThemWithEachQuantity stamp: 'JT 6/8/2023 18:49:14'!
+PASSED!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:14'!
+ERROR!
+
+!testRun: #TusLibrosTest #test06CartCannotAddBookWithMissingISBN stamp: 'JT 6/8/2023 18:49:14'!
+PASSED!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:14'!
+ERROR!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:20'!
+ERROR!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:20'!
+ERROR!
+!Cart methodsFor: 'items' stamp: 'JT 6/8/2023 18:49:33' prior: 50626607!
+totalPrice
+
+	^ items inject: 0 * peso into: [:total :item | | price |
+		price := bookCatalog at: item.
+		total + price
+	].! !
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:37'!
+PASSED!
+
+!testRun: #TusLibrosTest #test06CartCannotAddBookWithMissingISBN stamp: 'JT 6/8/2023 18:49:39'!
+PASSED!
+
+!testRun: #TusLibrosTest #test01NewCartIsEmpty stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02CartWithBookIsNotEmpty stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03CartWithBookListsBookWithAQuantityOfOne stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!testRun: #TusLibrosTest #test04CartWithManyBooksListsAllOfThemWithEachQuantity stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!testRun: #TusLibrosTest #test05CartWithManyBooksCanCalculateTotalPriceOfItems stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!testRun: #TusLibrosTest #test06CartCannotAddBookWithMissingISBN stamp: 'JT 6/8/2023 18:49:41'!
+PASSED!
+
+!classRemoval: #CartItem stamp: 'JT 6/8/2023 18:49:46'!
+Object subclass: #CartItem
+	instanceVariableNames: 'isbn quantity'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+----QUIT----(8 June 2023 18:50:01) TusLibros.image priorSource: 9435022!
