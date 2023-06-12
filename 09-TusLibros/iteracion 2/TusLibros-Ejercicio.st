@@ -115,15 +115,83 @@ itemSellByTheStore
 
 !classDefinition: #CashierTest category: 'TusLibros'!
 TestCase subclass: #CashierTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'cart cashier creditCard'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
+
+!CashierTest methodsFor: 'setUp/tearDown' stamp: 'JT 6/12/2023 14:00:35'!
+setUp
+
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createCreditCard.! !
+
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:35'!
+test01CannotCheckoutEmptyCart
+	
+	self should: [cashier checkout: cart with: creditCard on: June / 6 / 2023] 
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: Cashier emptyCartErrorDescription.! !
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:35'!
+test02CheckoutOfACartWithOneProductReturnsItsPrice
+
+	cart add: (10@'validbook').
+	
+	self assert: 10 equals: (cashier checkout: cart with: creditCard on: June / 6 / 2023).! !
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:35'!
+test03CheckoutOfACartWithMoreThanOneOcurrenciesOfAProductReturnTheSumOfTheirPrices
+
+	cart add: 5 of: (10@'validbook').
+	
+	self assert: 50 equals: (cashier checkout: cart with: creditCard on: June / 6 / 2023).! !
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:46'!
+test04CannotCheckoutWithExpiredCard
+
+	| expiredCreditCard |
+	cart add: (10@'validbook').
+	expiredCreditCard := CreditCard of: 'Ignacio Vigilante' withNumber: '1234 1234 1234 1234' expiringAt: August, 1900.
+	
+	self should: [ cashier checkout: cart with: expiredCreditCard on: June / 6 / 2023 ] 
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: MockMerchantProcessor expiredCreditCardErrorDescription.! !
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:35'!
+test05CannotCheckoutWithStolenCard
+
+	| cashierForStolenCards |
+	cart add: (10@'validbook').
+	cashierForStolenCards := Cashier with: MockMerchantProcessorStolenCard new.
+	
+	self should: [ cashierForStolenCards checkout: cart with: creditCard on: June / 6 / 2023 ] 
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: MockMerchantProcessor stolenCreditCardErrorDescription.! !
+
+!CashierTest methodsFor: 'tests' stamp: 'JT 6/12/2023 14:00:35'!
+test06CannotCheckoutWithInsufficientFunds
+
+	| cashierForInsufficientFunds |
+	cart add: (10@'validbook').
+	cashierForInsufficientFunds := Cashier with: MockMerchantProcessorInsufficientFunds new.
+	
+	self should: [ cashierForInsufficientFunds checkout: cart with: creditCard on: June / 6 / 2023 ] 
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: MockMerchantProcessor insufficientFundsErrorDescription.! !
+
 
 !CashierTest methodsFor: 'support' stamp: 'IV 6/8/2023 19:59:45'!
 createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
+
+!CashierTest methodsFor: 'support' stamp: 'IV 6/10/2023 19:55:01'!
+createCashier
+
+	^ Cashier with: (MockMerchantProcessorOK new).! !
 
 !CashierTest methodsFor: 'support' stamp: 'IV 6/10/2023 19:20:26'!
 createCreditCard
@@ -139,91 +207,6 @@ defaultCatalog
 itemSellByTheStore
 	
 	^ 10@'validbook'! !
-
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 19:55:01'!
-createCashier
-
-	^ Cashier with: (MockMerchantProcessorOK new).! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 19:54:37'!
-test01CannotCheckoutEmptyCart
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	creditCard := self createCreditCard.
-	
-	self should: [cashier checkout: cart with: creditCard on: June / 6 / 2023] 
-		 raise: Error - MessageNotUnderstood 
-		 withMessageText: Cashier emptyCartErrorDescription.! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 19:54:37'!
-test02CheckoutOfACartWithOneProductReturnsItsPrice
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cart add: (10@'validbook').
-	cashier := self createCashier.
-	creditCard := self createCreditCard.
-	
-	self assert: 10 equals: (cashier checkout: cart with: creditCard on: June / 6 / 2023).! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 19:54:37'!
-test03CheckoutOfACartWithMoreThanOneOcurrenciesOfAProductReturnTheSumOfTheirPrices
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cart add: 5 of: (10@'validbook').
-	cashier := self createCashier.
-	creditCard := self createCreditCard.
-	
-	self assert: 50 equals: (cashier checkout: cart with: creditCard on: June / 6 / 2023).! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 20:10:11'!
-test04CannotCheckoutWithExpiredCard
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cart add: (10@'validbook').
-	cashier := self createCashier.
-	creditCard := CreditCard of: 'Ignacio Vigilante' withNumber: '1234 1234 1234 1234' expiringAt: August, 1900.
-	
-	self should: [ cashier checkout: cart with: creditCard on: June / 6 / 2023 ] 
-		 raise: Error - MessageNotUnderstood 
-		 withMessageText: Cashier expiredCreditCardErrorDescription.! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 20:22:26'!
-test05CannotCheckoutWithStolenCard
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cart add: (10@'validbook').
-	cashier := Cashier with: MockMerchantProcessorStolenCard new.
-	creditCard := self createCreditCard.
-	
-	self should: [ cashier checkout: cart with: creditCard on: June / 6 / 2023 ] 
-		 raise: Error - MessageNotUnderstood 
-		 withMessageText: Cashier stolenCreditCardErrorDescription.! !
-
-!CashierTest methodsFor: 'tests' stamp: 'IV 6/10/2023 20:22:29'!
-test06CannotCheckoutWithInsufficientFunds
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cart add: (10@'validbook').
-	cashier := Cashier with: MockMerchantProcessorInsufficientFunds new.
-	creditCard := self createCreditCard.
-	
-	self should: [ cashier checkout: cart with: creditCard on: June / 6 / 2023 ] 
-		 raise: Error - MessageNotUnderstood 
-		 withMessageText: Cashier insufficientFundsErrorDescription.! !
 
 
 !classDefinition: #Cart category: 'TusLibros'!
@@ -318,37 +301,28 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'checkout' stamp: 'IV 6/10/2023 20:07:31'!
+!Cashier methodsFor: 'initialization' stamp: 'IV 6/10/2023 19:54:05'!
+initializeWith: aMerchantProcessor
+
+	mp := aMerchantProcessor.! !
+
+
+!Cashier methodsFor: 'checkout' stamp: 'JT 6/12/2023 13:48:54'!
 checkout: aCart with: aCreditCard on: aDate 
 
-	| result |
-	
 	self assertCartIsNotEmpty: aCart.
 	
-	result := mp processWithAmountOf: aCart totalPrice chargingTo: aCreditCard on: aDate.
-		
-	(result first) = $1 ifTrue: [ self parseErrorResponse: result ].
-	
+	mp processPaymentOf: aCart totalPrice chargingTo: aCreditCard on: aDate.
+
 	^ aCart totalPrice.
 	! !
 
-!Cashier methodsFor: 'checkout' stamp: 'IV 6/10/2023 20:05:57'!
-ifErrorOf: anErrorResponse is: aForeignErrorDescription throw: anErrorDescription
+!Cashier methodsFor: 'checkout' stamp: 'JT 6/12/2023 13:35:43'!
+safeProcessPaymentOf: anAmount chargingTo: aCreditCard on: aDate
 
-	(anErrorResponse is: aForeignErrorDescription substringAt: 3) ifTrue: [
-		self error: anErrorDescription.	
-	].
-
-
-
-! !
-
-!Cashier methodsFor: 'checkout' stamp: 'IV 6/10/2023 20:21:43'!
-parseErrorResponse: result
-
-	self ifErrorOf: result is: MockMerchantProcessor expiredCreditCardErrorDescription throw: self class expiredCreditCardErrorDescription.
-	self ifErrorOf: result is: MockMerchantProcessor stolenCreditCardErrorDescription throw: self class stolenCreditCardErrorDescription.
-	self ifErrorOf: result is: MockMerchantProcessor insufficientFundsErrorDescription throw: self class insufficientFundsErrorDescription.! !
+	[ mp processPaymentOf: anAmount chargingTo: aCreditCard on: aDate ]
+		on: Error - MessageNotUnderstood
+		do: [ :anError | self handle: anError ]! !
 
 
 !Cashier methodsFor: 'assertions' stamp: 'IV 6/8/2023 20:13:27'!
@@ -357,10 +331,40 @@ assertCartIsNotEmpty: aCart
 	^ aCart isEmpty ifTrue: [self error: self class emptyCartErrorDescription]! !
 
 
-!Cashier methodsFor: 'initialization' stamp: 'IV 6/10/2023 19:54:05'!
-initializeWith: aMerchantProcessor
+!Cashier methodsFor: 'error handling' stamp: 'JT 6/12/2023 13:25:35'!
+handle: aPossibleMerchantProcessorError
 
-	mp := aMerchantProcessor.! !
+	self handleExpiredCreditCardError: aPossibleMerchantProcessorError.		
+	self handleStolenCreditCardError: aPossibleMerchantProcessorError.
+	self handleInsufficientFundsError: aPossibleMerchantProcessorError.
+		
+	self error: aPossibleMerchantProcessorError.! !
+
+!Cashier methodsFor: 'error handling' stamp: 'JT 6/12/2023 13:26:16'!
+handleExpiredCreditCardError: aPossibleExpiredCreditCardError
+
+	^ self if: aPossibleExpiredCreditCardError
+		 equals: MockMerchantProcessor expiredCreditCardErrorDescription
+		 raiseErrorWith: self class expiredCreditCardErrorDescription! !
+
+!Cashier methodsFor: 'error handling' stamp: 'JT 6/12/2023 13:26:04'!
+handleInsufficientFundsError: aPossibleInsufficientFundsError
+
+	^ self if: aPossibleInsufficientFundsError
+		 equals: MockMerchantProcessor insufficientFundsErrorDescription
+		 raiseErrorWith: self class insufficientFundsErrorDescription! !
+
+!Cashier methodsFor: 'error handling' stamp: 'JT 6/12/2023 13:26:25'!
+handleStolenCreditCardError: aPossibleStolenCreditCardError
+
+	^ self if: aPossibleStolenCreditCardError
+		 equals: MockMerchantProcessor stolenCreditCardErrorDescription
+		 raiseErrorWith: self class stolenCreditCardErrorDescription! !
+
+!Cashier methodsFor: 'error handling' stamp: 'JT 6/12/2023 13:18:34'!
+if: anErrorMessage equals: aMerchantProcessorErrorMessage raiseErrorWith: aLocalErrorMessage
+
+	anErrorMessage = aMerchantProcessorErrorMessage ifTrue: [ self error: aLocalErrorMessage ]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -397,7 +401,7 @@ with: aMerchantProcessor
 
 !classDefinition: #CreditCard category: 'TusLibros'!
 Object subclass: #CreditCard
-	instanceVariableNames: 'number expiration securityCode owner'
+	instanceVariableNames: 'number expiration owner'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
@@ -445,8 +449,8 @@ Object subclass: #MockMerchantProcessor
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MockMerchantProcessor methodsFor: 'process' stamp: 'IV 6/10/2023 19:52:10'!
-processWithAmountOf: anAmount chargingTo: aCreditCard on: aDate
+!MockMerchantProcessor methodsFor: 'process' stamp: 'JT 6/12/2023 13:28:11'!
+processPaymentOf: anAmount chargingTo: aCreditCard on: aDate
 
 	self subclassResponsibility! !
 
@@ -479,10 +483,10 @@ MockMerchantProcessor subclass: #MockMerchantProcessorInsufficientFunds
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MockMerchantProcessorInsufficientFunds methodsFor: 'process' stamp: 'IV 6/10/2023 20:15:33'!
-processWithAmountOf: anAmount chargingTo: aCreditCard on: aDate
+!MockMerchantProcessorInsufficientFunds methodsFor: 'process' stamp: 'JT 6/12/2023 13:45:09'!
+processPaymentOf: anAmount chargingTo: aCreditCard on: aDate
 
-	^'1|', self class insufficientFundsErrorDescription.! !
+	self error: self class insufficientFundsErrorDescription.! !
 
 
 !classDefinition: #MockMerchantProcessorOK category: 'TusLibros'!
@@ -492,12 +496,10 @@ MockMerchantProcessor subclass: #MockMerchantProcessorOK
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MockMerchantProcessorOK methodsFor: 'process' stamp: 'IV 6/10/2023 19:55:48'!
-processWithAmountOf: anAmount chargingTo: aCreditCard on: aDate
+!MockMerchantProcessorOK methodsFor: 'process' stamp: 'JT 6/12/2023 13:45:03'!
+processPaymentOf: anAmount chargingTo: aCreditCard on: aDate
 
-	(aCreditCard expiration firstDate < aDate) ifTrue: [ ^'1|', self class expiredCreditCardErrorDescription ].
-	
-	^'0|OK'.! !
+	(aCreditCard expiration firstDate < aDate) ifTrue: [ self error: self class expiredCreditCardErrorDescription ].! !
 
 
 !classDefinition: #MockMerchantProcessorStolenCard category: 'TusLibros'!
@@ -507,7 +509,7 @@ MockMerchantProcessor subclass: #MockMerchantProcessorStolenCard
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MockMerchantProcessorStolenCard methodsFor: 'process' stamp: 'IV 6/10/2023 19:52:21'!
-processWithAmountOf: anAmount chargingTo: aCreditCard on: aDate
+!MockMerchantProcessorStolenCard methodsFor: 'process' stamp: 'JT 6/12/2023 13:44:56'!
+processPaymentOf: anAmount chargingTo: aCreditCard on: aDate
 
-	^'1|', self class stolenCreditCardErrorDescription.! !
+	self error: self class stolenCreditCardErrorDescription.! !
