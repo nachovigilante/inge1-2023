@@ -265,129 +265,141 @@ setUp
 	now := DateAndTime now.! !
 
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'ARM 6/11/2023 14:00:14'!
+!RestInterfaceTest methodsFor: 'cart operations' stamp: 'JT 6/13/2023 13:24:37'!
+createCartFor: aRestInterface
+
+	^ aRestInterface createCartFor: (testObjectsFactory validUser) authenticatedWith: (testObjectsFactory validPassword)! !
+
+
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:09:03'!
 test01CanCreateCartWithValidUserAndPassword
 
 	| interface cartID |
-	
 	interface := self createDefaultInterface.
-
-	cartID := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
+	cartID := self createCartFor: interface.
 	
 	self assert: (interface listCartIdentifiedAs: cartID) isEmpty! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:01:02'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:39:23'!
 test02CanNotCreateCartWithInvalidUser
 
 	| interface |
-
 	interface := self createDefaultInterface.
 
-	self
-		should: [ interface createCartFor: self invalidUser authenticatedWith: self validUserPassword ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface invalidUserAndOrPasswordErrorDescription.! !
+	self should: [
+		interface createCartFor: testObjectsFactory invalidUser
+				  authenticatedWith: testObjectsFactory validPassword ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface invalidUserAndOrPasswordErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:01:13'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:39:33'!
 test03CanNotCreateCartWithInvalidPassword
 
 	| interface |
-
 	interface := self createDefaultInterface.
 
-	self
-		should: [ interface createCartFor: self validUser authenticatedWith: self invalidPassword ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface invalidUserAndOrPasswordErrorDescription.! !
+	self should: [
+		interface createCartFor: testObjectsFactory validUser
+				  authenticatedWith: testObjectsFactory invalidPassword ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface invalidUserAndOrPasswordErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/21/2013 23:15'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:13:47'!
 test04CanAddItemsToACreatedCart
 
 	| interface cartId |
-
 	interface := self createDefaultInterface.
-
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	self
-		shouldnt: [interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId]
-		raise: Error - MessageNotUnderstood
+	cartId := self createCartFor: interface.
+	
+	self shouldnt: [
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId ]
+		 raise: Error - MessageNotUnderstood
 		! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:00:40'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:13:41'!
 test05CanNotAddItemToNotCreatedCart
 
 	| interface |
-
 	interface := self createDefaultInterface.
 
-	self
-		should: [interface add: self validBook quantity: 1 toCartIdentifiedAs: (testObjectsFactory invalidCartId)]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface invalidCartIdErrorDescription.! !
+	self should: [
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: testObjectsFactory invalidCartId ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface invalidCartIdErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:00:30'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:13:28'!
 test06CanNotAddItemNotSellByTheStore
 
 	| interface cartId |
-
 	interface := self createDefaultInterface.
+	cartId := self createCartFor: interface.
+	
+	self should: [
+		interface add: testObjectsFactory itemNotSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: interface invalidItemErrorMessage.! !
 
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	self
-		should: [interface add: self invalidBook quantity: 1 toCartIdentifiedAs: cartId ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: interface invalidItemErrorMessage.! !
-
-!RestInterfaceTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/22/2013 00:05'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:13:36'!
 test07ListCartOfAnEmptyCartReturnsAnEmptyBag
 
 	| interface cartId |
-
 	interface := self createDefaultInterface.
-
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
+	cartId := self createCartFor: interface.
+	
 	self assert: (interface listCartIdentifiedAs: cartId) isEmpty 
 	! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:00:17'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:14:24'!
 test08CanNotListCartOfInvalidCartId
 
 	| interface |
-
 	interface := self createDefaultInterface.
 
 	self 
-		should: [interface listCartIdentifiedAs: (testObjectsFactory invalidCartId)] 
+		should: [ interface listCartIdentifiedAs: testObjectsFactory invalidCartId ] 
 		raise: Error - MessageNotUnderstood
 		withMessageText: RestInterface invalidCartIdErrorDescription! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 11:00:12'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:15:28'!
 test09ListCartReturnsTheRightNumberOfItems
 
 	| interface cartId cartContent |
-
 	interface := self createDefaultInterface.
-
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId.
-	interface add: self anotherValidBook quantity: 2 toCartIdentifiedAs: cartId.
+	cartId := self createCartFor: interface.
+	
+	interface add: testObjectsFactory itemSellByTheStore
+			  quantity: 1
+			  toCartIdentifiedAs: cartId;
+			  add: testObjectsFactory anotherItemSellByTheStore
+			  quantity: 2
+			  toCartIdentifiedAs: cartId.
+			
 	cartContent := interface listCartIdentifiedAs: cartId.
 	
-	self assert: 1 equals: (cartContent occurrencesOf: self validBook). 
-	self assert: 2 equals: (cartContent occurrencesOf: self anotherValidBook)
+	self assert: 1
+		 equals: (cartContent occurrencesOf: testObjectsFactory itemSellByTheStore). 
+	self assert: 2
+		 equals: (cartContent occurrencesOf: testObjectsFactory anotherItemSellByTheStore)
 ! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/22/2013 11:08'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:15:49'!
 test10CanCheckoutACart
 
 	| interface cartId  |
-
 	interface := self createDefaultInterface.
-
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId.
-	self
-		shouldnt: [interface 
+	cartId := self createCartFor: interface.
+	
+	interface add: testObjectsFactory itemSellByTheStore
+			  quantity: 1
+			  toCartIdentifiedAs: cartId.
+	self shouldnt: [
+		interface 
 			checkOutCartIdentifiedAs: cartId 
 			withCreditCardNumbered: '1111222233334444' 
 			ownedBy: 'Juan Perez' 
@@ -396,78 +408,76 @@ test10CanCheckoutACart
 		
 		! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:00:02'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:16:36'!
 test11CanNotCheckoutANotCreatedCart
 
 	| interface |
-
 	interface := self createDefaultInterface.
 
-	self
-		should: [interface 
-			checkOutCartIdentifiedAs: (testObjectsFactory invalidCartId)  
+	self should: [
+		interface 
+			checkOutCartIdentifiedAs: testObjectsFactory invalidCartId
 			withCreditCardNumbered: '1111222233334444' 
 			ownedBy: 'Juan Perez' 
 			expiringOn: testObjectsFactory notExpiredMonthOfYear ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface invalidCartIdErrorDescription.! !
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface invalidCartIdErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 12:59:37'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:16:32'!
 test12CanNotCheckoutAnEmptyCart
 
 	| interface cartId |
-
 	interface := self createDefaultInterface.
-
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	self
-		should: [interface 
+	cartId := self createCartFor: interface.
+	
+	self should: [
+		interface 
 			checkOutCartIdentifiedAs: cartId 
 			withCreditCardNumbered: '1111222233334444' 
 			ownedBy: 'Juan Perez' 
 			expiringOn: testObjectsFactory notExpiredMonthOfYear ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: interface cartCanNotBeEmptyErrorMessage.
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: interface cartCanNotBeEmptyErrorMessage.
 		
 		! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 12:59:00'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:39:59'!
 test13CanNotListCartItemsAfterTimeoutSinceCreation
 
 	| interface cartId |
-
 	interface := self createDefaultInterfaceWithTimeTravel.
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
+	cartId := self createCartFor: interface.
 
-	self increaseTimeBy: self overTimeoutDuration.
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
 	
 	self should: [ interface listCartIdentifiedAs: cartId ]
 		raise: Error - MessageNotUnderstood
 		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 12:58:43'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:04'!
 test14CanNotAddItemsToCartAfterTimeoutSinceCreation
 
 	| interface cartId |
-
 	interface := self createDefaultInterfaceWithTimeTravel.
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
+	cartId := self createCartFor: interface.
 
-	self increaseTimeBy: self overTimeoutDuration.
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
 	
-	self should: [ interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId. ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+	self should: [
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 12:58:28'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:10'!
 test15CanNotCheckoutCartAfterTimeoutSinceCreation
 
 	| interface cartId |
-
 	interface := self createDefaultInterfaceWithTimeTravel.
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
+	cartId := self createCartFor: interface.
 
-	self increaseTimeBy: self overTimeoutDuration.
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
 	
 	self should: [
 		interface
@@ -478,58 +488,47 @@ test15CanNotCheckoutCartAfterTimeoutSinceCreation
 		raise: Error - MessageNotUnderstood
 		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:02:55'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:16'!
 test16CanNotOperateOnCartAfterTimeoutSinceLastUsage
 
 	| interface cartId |
-
 	interface := self createDefaultInterfaceWithTimeTravel.
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId.
-	self increaseTimeBy: self overTimeoutDuration.
+	cartId := self createCartFor: interface.
+	
+	interface add: testObjectsFactory itemSellByTheStore
+			  quantity: 1
+			  toCartIdentifiedAs: cartId.
+	
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
 	
 	self should: [
 		interface listCartIdentifiedAs: cartId.
-		self increaseTimeBy: self underTimeoutDuration. ]
-		raise: Error - MessageNotUnderstood
-		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 12:58:06'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:28:22'!
 test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout
 
 	| interface cartId |
-
 	interface := self createDefaultInterfaceWithTimeTravel.
-	cartId := interface createCartFor: self validUser authenticatedWith: self validUserPassword.
-	self increaseTimeBy: self underTimeoutDuration.
+	cartId := self createCartFor: interface.
+	
+	self increaseTimeBy: testObjectsFactory underTimeoutDuration.
 	
 	self shouldnt: [
-		interface add: self validBook quantity: 1 toCartIdentifiedAs: cartId.
-		self increaseTimeBy: self underTimeoutDuration.
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId.
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration.
 		interface listCartIdentifiedAs: cartId.
-		self increaseTimeBy: self underTimeoutDuration.
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration.
 		interface
 			checkOutCartIdentifiedAs: cartId
 			withCreditCardNumbered: '1111222233334444'
 			ownedBy: 'Juan Perez'
 			expiringOn: testObjectsFactory notExpiredMonthOfYear. ]
 		raise: Error - MessageNotUnderstood.! !
-
-
-!RestInterfaceTest methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 12:40:07'!
-overTimeoutDuration
-
-	^self timeoutDuration + (Duration minutes: 1)! !
-
-!RestInterfaceTest methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 12:39:50'!
-timeoutDuration
-
-	^Duration minutes: 30.! !
-
-!RestInterfaceTest methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 12:49:42'!
-underTimeoutDuration
-
-	^self timeoutDuration - (Duration minutes: 1).! !
 
 
 !RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/13/2023 11:41:41'!
@@ -550,56 +549,13 @@ createDefaultInterfaceWithTimeTravel
 		timeProvider: self.! !
 
 
-!RestInterfaceTest methodsFor: 'books' stamp: 'HernanWilkinson 6/22/2013 00:15'!
-anotherValidBook
-	
-	^testObjectsFactory anotherItemSellByTheStore ! !
-
-!RestInterfaceTest methodsFor: 'books' stamp: 'HernanWilkinson 6/21/2013 23:49'!
-invalidBook
-
-	^testObjectsFactory itemNotSellByTheStore ! !
-
-!RestInterfaceTest methodsFor: 'books' stamp: 'HernanWilkinson 6/21/2013 23:50'!
-validBook
-	
-	^testObjectsFactory itemSellByTheStore ! !
-
-
-!RestInterfaceTest methodsFor: 'authentication message protocol' stamp: 'ARM 6/11/2023 13:57:02'!
+!RestInterfaceTest methodsFor: 'authentication message protocol' stamp: 'JT 6/13/2023 13:24:55'!
 is: aUser authenticatingWith: aPassword 
 	| storedPassword |
 	
-	storedPassword := self validUsersAndPasswords at: aUser ifAbsent: [ ^false ].
+	storedPassword := testObjectsFactory validUsersAndPasswords at: aUser ifAbsent: [ ^false ].
+	
 	^aPassword = storedPassword ! !
-
-
-!RestInterfaceTest methodsFor: 'user credentials' stamp: 'HernanWilkinson 6/21/2013 23:06'!
-invalidPassword
-	
-	^'invalidPassword'! !
-
-!RestInterfaceTest methodsFor: 'user credentials' stamp: 'HernanWilkinson 6/21/2013 22:30'!
-invalidUser
-
-	^'invalidUser'! !
-
-!RestInterfaceTest methodsFor: 'user credentials' stamp: 'HernanWilkinson 6/21/2013 22:27'!
-validUser
-	
-	^'validUser'! !
-
-!RestInterfaceTest methodsFor: 'user credentials' stamp: 'HernanWilkinson 6/21/2013 22:28'!
-validUserPassword
-	
-	^'validUserPassword'! !
-
-!RestInterfaceTest methodsFor: 'user credentials' stamp: 'HernanWilkinson 6/21/2013 22:43'!
-validUsersAndPasswords
-	
-	^Dictionary new
-		at: self validUser put: self validUserPassword;
-		yourself! !
 
 
 !RestInterfaceTest methodsFor: 'time provider message protocol' stamp: 'JT 6/13/2023 12:00:54'!
@@ -1035,6 +991,11 @@ Object subclass: #StoreTestObjectsFactory
 	category: 'TusLibros-it3'!
 
 !StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/22/2013 00:16'!
+anotherItemSellByTheStore
+	
+	^'anotherValidBook'! !
+
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/22/2013 00:16'!
 anotherItemSellByTheStorePrice
 	
 	^15! !
@@ -1103,7 +1064,45 @@ today
 	^ today! !
 
 
-!StoreTestObjectsFactory methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/22/2013 00:16'!
-anotherItemSellByTheStore
+!StoreTestObjectsFactory methodsFor: 'user credentials' stamp: 'JT 6/13/2023 13:19:45'!
+invalidPassword
+
+	^'invalidPassword'! !
+
+!StoreTestObjectsFactory methodsFor: 'user credentials' stamp: 'JT 6/13/2023 13:20:23'!
+invalidUser
+
+	^'invalidUser'! !
+
+!StoreTestObjectsFactory methodsFor: 'user credentials' stamp: 'JT 6/13/2023 13:20:55'!
+validPassword
+
+	^'validPassword'! !
+
+!StoreTestObjectsFactory methodsFor: 'user credentials' stamp: 'JT 6/13/2023 13:20:17'!
+validUser
+
+	^'validUser'! !
+
+!StoreTestObjectsFactory methodsFor: 'user credentials' stamp: 'JT 6/13/2023 13:22:15'!
+validUsersAndPasswords
 	
-	^'anotherValidBook'! !
+	^Dictionary new
+		at: self validUser put: self validPassword;
+		yourself! !
+
+
+!StoreTestObjectsFactory methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 13:25:37'!
+overTimeoutDuration
+
+	^self timeoutDuration + (Duration minutes: 1).! !
+
+!StoreTestObjectsFactory methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 13:25:21'!
+timeoutDuration
+
+	^Duration minutes: 30.! !
+
+!StoreTestObjectsFactory methodsFor: 'timeout duration' stamp: 'JT 6/13/2023 13:25:42'!
+underTimeoutDuration
+
+	^self timeoutDuration - (Duration minutes: 1).! !
