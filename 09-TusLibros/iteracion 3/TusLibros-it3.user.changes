@@ -4224,3 +4224,465 @@ PASSED!
 PASSED!
 
 ----SNAPSHOT----(13 June 2023 14:40:52) TusLibros-it3.image priorSource: 9531692!
+
+----STARTUP---- (15 June 2023 13:56:26) as /home/jt/files/cuis-university/images/TusLibros-it3.image!
+
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:18:10' prior: 50627028!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider
+
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeProvider: aTimeProvider! !
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:20:05'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration 
+
+	^self authenticatingWith: anAuthenticationSystem
+		  acceptingItemsOf: aCatalog
+		  processingWith: aMerchantProcessor
+		  timeProvider: DateAndTime.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:20:05' prior: 50626020!
+createDefaultInterface
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self timeoutDuration: (Duration minutes: 30).! !
+
+!methodRemoval: RestInterface class #authenticatingWith:acceptingItemsOf:processingWith: stamp: 'JT 6/15/2023 14:20:05'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor
+
+	^self authenticatingWith: anAuthenticationSystem
+		  acceptingItemsOf: aCatalog
+		  processingWith: aMerchantProcessor
+		  timeProvider: DateAndTime.!
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:20:39' prior: 50630516!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration 
+
+	^self authenticatingWith: anAuthenticationSystem
+		  acceptingItemsOf: aCatalog
+		  processingWith: aMerchantProcessor
+		  timeoutDuration: aTimeoutDuration
+		  timeProvider: DateAndTime.! !
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:21:13'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider
+
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeProvider: aTimeProvider! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:21:13' prior: 50626187!
+createDefaultInterfaceWithTimeTravel
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self
+		timeoutDuration: (Duration minutes: 30) timeProvider: self.! !
+
+!methodRemoval: RestInterface class #authenticatingWith:acceptingItemsOf:processingWith:timeProvider: stamp: 'JT 6/15/2023 14:21:13'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider
+
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeProvider: aTimeProvider!
+!RestInterface methodsFor: 'initialization' stamp: 'JT 6/15/2023 14:21:46'!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider 
+
+	carts := Dictionary new.
+	cartTimestamps := Dictionary new.
+	lastId := 0.
+	
+	authenticationSystem := anAuthenticationSystem.
+	catalog := aCatalog.
+	merchantProcessor := aMerchantProcessor.
+	timeoutDuration := aTimeoutDuration.
+	timeProvider := aTimeProvider.! !
+
+!methodRemoval: RestInterface #initializeAuthenticatingWith:acceptingItemsOf:processingWith:timeoutDuration:timeProvider: stamp: 'JT 6/15/2023 14:21:49'!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider 
+
+	carts := Dictionary new.
+	cartTimestamps := Dictionary new.
+	lastId := 0.
+	
+	authenticationSystem := anAuthenticationSystem.
+	catalog := aCatalog.
+	merchantProcessor := aMerchantProcessor.
+	timeoutDuration := aTimeoutDuration.
+	timeProvider := aTimeProvider.!
+!RestInterface methodsFor: 'initialization' stamp: 'JT 6/15/2023 14:22:19'!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider 
+
+	timeoutDuration := Duration minutes: 30.
+	carts := Dictionary new.
+	cartTimestamps := Dictionary new.
+	lastId := 0.
+	
+	authenticationSystem := anAuthenticationSystem.
+	catalog := aCatalog.
+	merchantProcessor := aMerchantProcessor.
+	timeProvider := aTimeProvider.! !
+!RestInterface class methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:22:19' prior: 50630564!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider
+
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeoutDuration: (Duration minutes: 30) timeProvider: aTimeProvider! !
+
+!methodRemoval: RestInterface #initializeAuthenticatingWith:acceptingItemsOf:processingWith:timeProvider: stamp: 'JT 6/15/2023 14:22:19'!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider 
+
+	timeoutDuration := Duration minutes: 30.
+	carts := Dictionary new.
+	cartTimestamps := Dictionary new.
+	lastId := 0.
+	
+	authenticationSystem := anAuthenticationSystem.
+	catalog := aCatalog.
+	merchantProcessor := aMerchantProcessor.
+	timeProvider := aTimeProvider.!
+!RestInterface methodsFor: 'initialization' stamp: 'JT 6/15/2023 14:22:30' prior: 50630637!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider 
+
+	carts := Dictionary new.
+	cartTimestamps := Dictionary new.
+	lastId := 0.
+	
+	authenticationSystem := anAuthenticationSystem.
+	catalog := aCatalog.
+	merchantProcessor := aMerchantProcessor.
+	timeoutDuration := aTimeoutDuration.
+	timeProvider := aTimeProvider.! !
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:22:52' prior: 50630655!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider
+
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeoutDuration: aTimeoutDuration
+			  timeProvider: aTimeProvider! !
+!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/15/2023 14:23:25' prior: 50630529!
+createDefaultInterface
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration.! !
+!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/15/2023 14:23:38' prior: 50630578!
+createDefaultInterfaceWithTimeTravel
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration
+		timeProvider: self.! !
+
+!testRun: #RestInterfaceTest #test01CanCreateCartWithValidUserAndPassword stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test02CanNotCreateCartWithInvalidUser stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test03CanNotCreateCartWithInvalidPassword stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test04CanAddItemsToACreatedCart stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test05CanNotAddItemToNotCreatedCart stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test06CanNotAddItemNotSellByTheStore stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test07ListCartOfAnEmptyCartReturnsAnEmptyBag stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test08CanNotListCartOfInvalidCartId stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test09ListCartReturnsTheRightNumberOfItems stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test10CanCheckoutACart stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test11CanNotCheckoutANotCreatedCart stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test12CanNotCheckoutAnEmptyCart stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test13CanNotListCartItemsAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test14CanNotAddItemsToCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test15CanNotCheckoutCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test16CanNotOperateOnCartAfterTimeoutSinceLastUsage stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout stamp: 'JT 6/15/2023 14:23:40'!
+PASSED!
+
+!testRun: #CashierTest #test01CanNotCheckoutAnEmptyCart stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CashierTest #test02CalculatedTotalIsCorrect stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CashierTest #test03CanNotCheckoutWithAnExpiredCreditCart stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckoutRegistersASale stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CashierTest #test05CashierChargesCreditCardUsingMerchantProcessor stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CashierTest #test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit stamp: 'JT 6/15/2023 14:30:51'!
+PASSED!
+
+!testRun: #CartTest #test01NewCartsAreCreatedEmpty stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test02CanNotAddItemsThatDoNotBelongToStore stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test03AfterAddingAnItemTheCartIsNotEmptyAnymore stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test04CanNotAddNonPositiveNumberOfItems stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test05CanNotAddMoreThanOneItemNotSellByTheStore stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test06CartRemembersAddedItems stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test07CartDoesNotHoldNotAddedItems stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #CartTest #test08CartRemembersTheNumberOfAddedItems stamp: 'JT 6/15/2023 14:30:53'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test01CanCreateCartWithValidUserAndPassword stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test02CanNotCreateCartWithInvalidUser stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test03CanNotCreateCartWithInvalidPassword stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test04CanAddItemsToACreatedCart stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test05CanNotAddItemToNotCreatedCart stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test06CanNotAddItemNotSellByTheStore stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test07ListCartOfAnEmptyCartReturnsAnEmptyBag stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test08CanNotListCartOfInvalidCartId stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test09ListCartReturnsTheRightNumberOfItems stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test10CanCheckoutACart stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test11CanNotCheckoutANotCreatedCart stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test12CanNotCheckoutAnEmptyCart stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test13CanNotListCartItemsAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test14CanNotAddItemsToCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test15CanNotCheckoutCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test16CanNotOperateOnCartAfterTimeoutSinceLastUsage stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout stamp: 'JT 6/15/2023 14:30:55'!
+PASSED!
+!RestInterfaceTest methodsFor: 'cart operations' stamp: 'JT 6/15/2023 14:31:08' prior: 50629932!
+createCartFor: aRestInterface
+
+	^ aRestInterface createCartFor: testObjectsFactory validUser
+					 authenticatedWith: testObjectsFactory validPassword! !
+!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/15/2023 14:31:21'!
+createDefaultInterfaceWithTimeProvider
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration
+		timeProvider: self.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:31:21' prior: 50630345!
+test13CanNotListCartItemsAfterTimeoutSinceCreation
+
+	| interface cartId |
+	interface := self createDefaultInterfaceWithTimeProvider.
+	cartId := self createCartFor: interface.
+
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
+	
+	self should: [ interface listCartIdentifiedAs: cartId ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:31:21' prior: 50630147!
+test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout
+
+	| interface cartId |
+	interface := self createDefaultInterfaceWithTimeProvider.
+	cartId := self createCartFor: interface.
+	
+	self increaseTimeBy: testObjectsFactory underTimeoutDuration.
+	
+	self shouldnt: [
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId.
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration.
+		interface listCartIdentifiedAs: cartId.
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration.
+		interface
+			checkOutCartIdentifiedAs: cartId
+			withCreditCardNumbered: '1111222233334444'
+			ownedBy: 'Juan Perez'
+			expiringOn: testObjectsFactory notExpiredMonthOfYear. ]
+		raise: Error - MessageNotUnderstood.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:31:21' prior: 50630411!
+test16CanNotOperateOnCartAfterTimeoutSinceLastUsage
+
+	| interface cartId |
+	interface := self createDefaultInterfaceWithTimeProvider.
+	cartId := self createCartFor: interface.
+	
+	interface add: testObjectsFactory itemSellByTheStore
+			  quantity: 1
+			  toCartIdentifiedAs: cartId.
+	
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
+	
+	self should: [
+		interface listCartIdentifiedAs: cartId.
+		self increaseTimeBy: testObjectsFactory underTimeoutDuration. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:31:21' prior: 50630387!
+test15CanNotCheckoutCartAfterTimeoutSinceCreation
+
+	| interface cartId |
+	interface := self createDefaultInterfaceWithTimeProvider.
+	cartId := self createCartFor: interface.
+
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
+	
+	self should: [
+		interface
+			checkOutCartIdentifiedAs: cartId
+			withCreditCardNumbered: '1111222233334444'
+			ownedBy: 'Juan Perez'
+			expiringOn: testObjectsFactory notExpiredCreditCard ]
+		raise: Error - MessageNotUnderstood
+		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+!RestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'JT 6/15/2023 14:31:21' prior: 50630365!
+test14CanNotAddItemsToCartAfterTimeoutSinceCreation
+
+	| interface cartId |
+	interface := self createDefaultInterfaceWithTimeProvider.
+	cartId := self createCartFor: interface.
+
+	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
+	
+	self should: [
+		interface add: testObjectsFactory itemSellByTheStore
+				  quantity: 1
+				  toCartIdentifiedAs: cartId. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
+
+!methodRemoval: RestInterfaceTest #createDefaultInterfaceWithTimeTravel stamp: 'JT 6/15/2023 14:31:21'!
+createDefaultInterfaceWithTimeTravel
+	
+	^RestInterface
+		authenticatingWith: self
+		acceptingItemsOf: testObjectsFactory defaultCatalog
+		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration
+		timeProvider: self.!
+
+!testRun: #RestInterfaceTest #test01CanCreateCartWithValidUserAndPassword stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test02CanNotCreateCartWithInvalidUser stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test03CanNotCreateCartWithInvalidPassword stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test04CanAddItemsToACreatedCart stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test05CanNotAddItemToNotCreatedCart stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test06CanNotAddItemNotSellByTheStore stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test07ListCartOfAnEmptyCartReturnsAnEmptyBag stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test08CanNotListCartOfInvalidCartId stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test09ListCartReturnsTheRightNumberOfItems stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test10CanCheckoutACart stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test11CanNotCheckoutANotCreatedCart stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test12CanNotCheckoutAnEmptyCart stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test13CanNotListCartItemsAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test14CanNotAddItemsToCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test15CanNotCheckoutCartAfterTimeoutSinceCreation stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test16CanNotOperateOnCartAfterTimeoutSinceLastUsage stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+!testRun: #RestInterfaceTest #test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout stamp: 'JT 6/15/2023 14:31:28'!
+PASSED!
+
+----QUIT----(15 June 2023 14:32:10) TusLibros-it3.image priorSource: 9563066!

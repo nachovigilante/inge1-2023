@@ -265,10 +265,11 @@ setUp
 	now := DateAndTime now.! !
 
 
-!RestInterfaceTest methodsFor: 'cart operations' stamp: 'JT 6/13/2023 13:24:37'!
+!RestInterfaceTest methodsFor: 'cart operations' stamp: 'JT 6/15/2023 14:31:08'!
 createCartFor: aRestInterface
 
-	^ aRestInterface createCartFor: (testObjectsFactory validUser) authenticatedWith: (testObjectsFactory validPassword)! !
+	^ aRestInterface createCartFor: testObjectsFactory validUser
+					 authenticatedWith: testObjectsFactory validPassword! !
 
 
 !RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:09:03'!
@@ -441,11 +442,11 @@ test12CanNotCheckoutAnEmptyCart
 		
 		! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:39:59'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/15/2023 14:31:21'!
 test13CanNotListCartItemsAfterTimeoutSinceCreation
 
 	| interface cartId |
-	interface := self createDefaultInterfaceWithTimeTravel.
+	interface := self createDefaultInterfaceWithTimeProvider.
 	cartId := self createCartFor: interface.
 
 	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
@@ -454,11 +455,11 @@ test13CanNotListCartItemsAfterTimeoutSinceCreation
 		raise: Error - MessageNotUnderstood
 		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:04'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/15/2023 14:31:21'!
 test14CanNotAddItemsToCartAfterTimeoutSinceCreation
 
 	| interface cartId |
-	interface := self createDefaultInterfaceWithTimeTravel.
+	interface := self createDefaultInterfaceWithTimeProvider.
 	cartId := self createCartFor: interface.
 
 	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
@@ -470,11 +471,11 @@ test14CanNotAddItemsToCartAfterTimeoutSinceCreation
 		 raise: Error - MessageNotUnderstood
 		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:10'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/15/2023 14:31:21'!
 test15CanNotCheckoutCartAfterTimeoutSinceCreation
 
 	| interface cartId |
-	interface := self createDefaultInterfaceWithTimeTravel.
+	interface := self createDefaultInterfaceWithTimeProvider.
 	cartId := self createCartFor: interface.
 
 	self increaseTimeBy: testObjectsFactory overTimeoutDuration.
@@ -488,11 +489,11 @@ test15CanNotCheckoutCartAfterTimeoutSinceCreation
 		raise: Error - MessageNotUnderstood
 		withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 14:40:16'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/15/2023 14:31:21'!
 test16CanNotOperateOnCartAfterTimeoutSinceLastUsage
 
 	| interface cartId |
-	interface := self createDefaultInterfaceWithTimeTravel.
+	interface := self createDefaultInterfaceWithTimeProvider.
 	cartId := self createCartFor: interface.
 	
 	interface add: testObjectsFactory itemSellByTheStore
@@ -507,11 +508,11 @@ test16CanNotOperateOnCartAfterTimeoutSinceLastUsage
 		 raise: Error - MessageNotUnderstood
 		 withMessageText: RestInterface cartCanNotBeUsedAfterTimeoutErrorDescription.! !
 
-!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/13/2023 13:28:22'!
+!RestInterfaceTest methodsFor: 'tests' stamp: 'JT 6/15/2023 14:31:21'!
 test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout
 
 	| interface cartId |
-	interface := self createDefaultInterfaceWithTimeTravel.
+	interface := self createDefaultInterfaceWithTimeProvider.
 	cartId := self createCartFor: interface.
 	
 	self increaseTimeBy: testObjectsFactory underTimeoutDuration.
@@ -531,21 +532,23 @@ test17CanOperateOnCartMultipleTimesIfDurationBetweenOperationsIsLessThanTimeout
 		raise: Error - MessageNotUnderstood.! !
 
 
-!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/13/2023 11:41:41'!
+!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/15/2023 14:23:25'!
 createDefaultInterface
 	
 	^RestInterface
 		authenticatingWith: self
 		acceptingItemsOf: testObjectsFactory defaultCatalog
-		processingWith: self.! !
+		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration.! !
 
-!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/13/2023 11:50:06'!
-createDefaultInterfaceWithTimeTravel
+!RestInterfaceTest methodsFor: 'interface' stamp: 'JT 6/15/2023 14:31:21'!
+createDefaultInterfaceWithTimeProvider
 	
 	^RestInterface
 		authenticatingWith: self
 		acceptingItemsOf: testObjectsFactory defaultCatalog
 		processingWith: self
+		timeoutDuration: testObjectsFactory timeoutDuration
 		timeProvider: self.! !
 
 
@@ -799,10 +802,9 @@ Object subclass: #RestInterface
 	poolDictionaries: ''
 	category: 'TusLibros-it3'!
 
-!RestInterface methodsFor: 'initialization' stamp: 'JT 6/13/2023 12:15:35'!
-initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider 
+!RestInterface methodsFor: 'initialization' stamp: 'JT 6/15/2023 14:22:30'!
+initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider 
 
-	timeoutDuration := Duration minutes: 30.
 	carts := Dictionary new.
 	cartTimestamps := Dictionary new.
 	lastId := 0.
@@ -810,6 +812,7 @@ initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog 
 	authenticationSystem := anAuthenticationSystem.
 	catalog := aCatalog.
 	merchantProcessor := aMerchantProcessor.
+	timeoutDuration := aTimeoutDuration.
 	timeProvider := aTimeProvider.! !
 
 
@@ -953,18 +956,23 @@ signalInvalidUserAndOrPassword
 RestInterface class
 	instanceVariableNames: ''!
 
-!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/13/2023 11:43:34'!
-authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:20:39'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration 
 
 	^self authenticatingWith: anAuthenticationSystem
 		  acceptingItemsOf: aCatalog
 		  processingWith: aMerchantProcessor
+		  timeoutDuration: aTimeoutDuration
 		  timeProvider: DateAndTime.! !
 
-!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/13/2023 12:36:33'!
-authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider
+!RestInterface class methodsFor: 'instance creation' stamp: 'JT 6/15/2023 14:22:52'!
+authenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeoutDuration: aTimeoutDuration timeProvider: aTimeProvider
 
-	^self new initializeAuthenticatingWith: anAuthenticationSystem acceptingItemsOf: aCatalog processingWith: aMerchantProcessor timeProvider: aTimeProvider! !
+	^self new initializeAuthenticatingWith: anAuthenticationSystem
+			  acceptingItemsOf: aCatalog
+			  processingWith: aMerchantProcessor
+			  timeoutDuration: aTimeoutDuration
+			  timeProvider: aTimeProvider! !
 
 
 !RestInterface class methodsFor: 'error descriptions' stamp: 'JT 6/13/2023 12:01:46'!
