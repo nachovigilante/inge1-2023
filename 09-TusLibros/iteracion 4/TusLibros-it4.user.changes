@@ -1,0 +1,944 @@
+
+
+----STARTUP---- (15 June 2023 20:46:49) as /home/jt/files/cuis-university/images/TusLibros-it4.image!
+
+
+----End fileIn of /home/jt/files/cuis-university/images/TusLibros-Model Ejercicio it4.st----!
+
+----End fileIn of /home/jt/files/cuis-university/images/TusLibrosREST Ejercicio it4.st----!
+
+----End fileIn of /home/jt/files/cuis-university/images/TusLibros-Tests Ejercicio it4.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/System/Collections-CompactArrays.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/Features/Compression.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/Features/Sound.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/Features/Cryptography-DigitalSignatures.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/Features/Identities-UUID.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/System/Network-Kernel.pck.st----!
+
+----End fileIn of /home/jt/files/cuis-university/linux64/Packages/Features/WebClient.pck.st----!
+
+----QUIT----(15 June 2023 21:01:18) TusLibros-it4.image priorSource: 9369961!
+
+----STARTUP---- (16 June 2023 13:42:00) as /home/jt/files/cuis-university/images/TusLibros-it4.image!
+
+
+!testRun: #CartTest #test01NewCartsAreCreatedEmpty stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test02CanNotAddItemsThatDoNotBelongToStore stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test03AfterAddingAnItemTheCartIsNotEmptyAnymore stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test04CanNotAddNonPositiveNumberOfItems stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test05CanNotAddMoreThanOneItemNotSellByTheStore stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test06CartRemembersAddedItems stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test07CartDoesNotHoldNotAddedItems stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CartTest #test08CartRemembersTheNumberOfAddedItems stamp: 'JT 6/16/2023 14:49:43'!
+PASSED!
+
+!testRun: #CashierTest #test01CanNotCheckoutAnEmptyCart stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #CashierTest #test02CalculatedTotalIsCorrect stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #CashierTest #test03CanNotCheckoutWithAnExpiredCreditCart stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckoutRegistersASale stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #CashierTest #test05CashierChargesCreditCardUsingMerchantProcessor stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #CashierTest #test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit stamp: 'JT 6/16/2023 14:49:44'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test01CanCreateCartWithValidUserAndPassword stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test02CanNotCreateCartWithInvalidUser stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test03CanNotCreateCartWithInvalidPassword stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test04CanAddItemsToACreatedCart stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test05CanNotAddItemToNotCreatedCart stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test06CanNotAddItemNotSellByTheStore stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test08CanNotListCartOfInvalidCartId stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test09ListCartReturnsTheRightNumberOfItems stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test10CheckOutReturnsTransactionIdAndImpactsCustomerPurchases stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test10_1_CanNotCheckoutAnAlreadyCheckedOutCart stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test11CanNotCheckoutANotCreatedCart stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test12CanNotCheckoutAnEmptyCart stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test13CanNotCheckoutWithAnExpiredCreditCard stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test14ListPurchasesIncludesBoughtItems stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test15CanNotListPurchasesOfInvalidCustomer stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test16CanNotListPurchasesOfValidCustomerWithInvalidPassword stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test17CanNotAddToCartWhenSessionIsExpired stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test18CanNotListCartWhenSessionIsExpired stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test19CanNotCheckOutCartWhenSessionIsExpired stamp: 'JT 6/16/2023 15:03:33'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 15:03:35'!
+FAILURE!
+
+!testRun: #TusLibrosSystemFacadeTest #test21StorePerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 15:03:37'!
+FAILURE!
+
+----QUIT----(16 June 2023 15:37:26) TusLibros-it4.image priorSource: 10636979!
+
+----STARTUP---- (16 June 2023 15:38:50) as /home/jt/files/cuis-university/images/TusLibros-it4.image!
+
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:47:51' prior: 50625370!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess |
+	(Delay forSeconds: 1) wait.
+
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	^ totalSales.! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:47:58' prior: 50664193!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess |
+	(Delay forSeconds: 1) wait.
+
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:51:53' prior: 50664218!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess barrier |
+	(Delay forSeconds: 1) wait.
+
+	barrier := Semaphore new.
+	salesBook size timesRepeat: [ barrier signal ].
+	
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:52:34' prior: 50664243!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess barrier numberOfWorkers |
+	(Delay forSeconds: 1) wait.
+
+	barrier := Semaphore new.
+	numberOfWorkers := salesBook size.
+	
+	numberOfWorkers timesRepeat: [ barrier signal ].
+	
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	numberOfWorkers timesRepeat: [ barrier wait ].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:53:03' prior: 50664271!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess barrier numberOfWorkers |
+	(Delay forSeconds: 1) wait.
+
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	barrier := Semaphore new.
+	numberOfWorkers := salesBook size.
+	
+	numberOfWorkers timesRepeat: [ barrier signal ].
+	
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	numberOfWorkers timesRepeat: [ barrier wait ].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:53:05' prior: 50664302!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess barrier numberOfWorkers |
+	(Delay forSeconds: 1) wait.
+
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	barrier := Semaphore new.
+	numberOfWorkers := salesBook size.
+	
+	numberOfWorkers timesRepeat: [ barrier signal ].
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ]
+		] fork
+	].
+
+	numberOfWorkers timesRepeat: [ barrier wait ].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 15:53:37' prior: 50664333!
+totalSalesOf: anItem
+	
+	| totalSales totalSalesAccess barrier numberOfWorkers |
+	(Delay forSeconds: 1) wait.
+
+	totalSalesAccess := Semaphore forMutualExclusion.
+	totalSales := 0.
+	barrier := Semaphore new.
+	numberOfWorkers := salesBook size.
+	
+	salesBook do: [:aSale | 
+		[ | quantityPerItem | 
+			quantityPerItem := 0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+			totalSalesAccess critical: [ totalSales := totalSales + quantityPerItem ].
+			barrier signal.
+		] fork
+	].
+
+	numberOfWorkers timesRepeat: [ barrier wait ].
+
+	^ totalSales.
+
+	"^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem]."! !
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 15:53:52'!
+FAILURE!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 15:53:54'!
+FAILURE!
+!TusLibrosSystemFacadeTest methodsFor: 'tests - performance' stamp: 'JT 6/16/2023 15:55:48' prior: 50626587!
+test20BookPerformanceShouldNotTakeTooLong
+
+	| cartId bookPerformance quantity total |
+
+	cartId := systemFacade createCartFor: self validUser authenticatedWith: self validUserPassword.
+	systemFacade add: 2 of: self validBook toCartIdentifiedAs: cartId.
+	systemFacade 
+		checkOutCartIdentifiedAs: cartId 
+		withCreditCardNumbered: testObjectsFactory validCreditCardNumber 
+		ownedBy: testObjectsFactory validOwnerName 
+		expiringOn: testObjectsFactory notExpiredMonthOfYear.
+		
+	cartId := systemFacade createCartFor: self anotherValidUser authenticatedWith: self anotherValidUserPassword.
+	systemFacade add: 5 of: self validBook toCartIdentifiedAs: cartId.
+	systemFacade 
+		checkOutCartIdentifiedAs: cartId 
+		withCreditCardNumbered: testObjectsFactory validCreditCardNumber 
+		ownedBy: testObjectsFactory validOwnerName 
+		expiringOn: testObjectsFactory notExpiredMonthOfYear.
+		
+	bookPerformance := systemFacade bookPerformance: self validBook.
+	"self should: [bookPerformance := systemFacade bookPerformance: self validBook ] 
+		notTakeMoreThanMilliseconds: 1100.	"
+
+	quantity := bookPerformance at: 'quantity'.
+	total := bookPerformance at: 'total'.
+	self assert: 7 equals: quantity.
+	self assert: (testObjectsFactory itemSellByTheStorePrice * 7) equals: total.
+	self assert: 
+		self validBook,' was selled ',quantity asString, ' times and raised a total amount of money equal to: ', total asString
+		equals: (bookPerformance at: 'summary')
+	! !
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 15:55:51'!
+PASSED!
+!TusLibrosSystemFacadeTest methodsFor: 'tests - performance' stamp: 'JT 6/16/2023 15:56:33' prior: 50664402!
+test20BookPerformanceShouldNotTakeTooLong
+
+	| cartId bookPerformance quantity total |
+
+	cartId := systemFacade createCartFor: self validUser authenticatedWith: self validUserPassword.
+	systemFacade add: 2 of: self validBook toCartIdentifiedAs: cartId.
+	systemFacade 
+		checkOutCartIdentifiedAs: cartId 
+		withCreditCardNumbered: testObjectsFactory validCreditCardNumber 
+		ownedBy: testObjectsFactory validOwnerName 
+		expiringOn: testObjectsFactory notExpiredMonthOfYear.
+		
+	cartId := systemFacade createCartFor: self anotherValidUser authenticatedWith: self anotherValidUserPassword.
+	systemFacade add: 5 of: self validBook toCartIdentifiedAs: cartId.
+	systemFacade 
+		checkOutCartIdentifiedAs: cartId 
+		withCreditCardNumbered: testObjectsFactory validCreditCardNumber 
+		ownedBy: testObjectsFactory validOwnerName 
+		expiringOn: testObjectsFactory notExpiredMonthOfYear.
+
+	self should: [bookPerformance := systemFacade bookPerformance: self validBook ] 
+		notTakeMoreThanMilliseconds: 1100.	
+
+	quantity := bookPerformance at: 'quantity'.
+	total := bookPerformance at: 'total'.
+	self assert: 7 equals: quantity.
+	self assert: (testObjectsFactory itemSellByTheStorePrice * 7) equals: total.
+	self assert: 
+		self validBook,' was selled ',quantity asString, ' times and raised a total amount of money equal to: ', total asString
+		equals: (bookPerformance at: 'summary')
+	! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:03:24' prior: 50625349!
+totalMoneyRaisedBy: anItem
+	
+	| access barrier numberOfWorkers totalMoneyRaised |
+	(Delay forSeconds: 1) wait.
+	
+	access := Semaphore forMutualExclusion.
+	totalMoneyRaised := 0.
+	barrier := Semaphore new.
+	numberOfWorkers := salesBook size.
+	
+	salesBook do: [:aSale | 
+		[ | totalPerItem |
+			totalPerItem :=0.
+			aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [totalPerItem := totalPerItem + aLineItem total]].
+			
+			access critical: [ totalMoneyRaised := totalMoneyRaised + totalPerItem ].
+			barrier signal
+		] fork
+	].
+
+	"^salesBook sum: [:aSale | | totalPerItem |
+		totalPerItem :=0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [totalPerItem := totalPerItem + aLineItem total]].
+		totalPerItem]."
+	
+	numberOfWorkers timesRepeat: [barrier wait].
+	
+	^ totalMoneyRaised! !
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:04:39'!
+FAILURE!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:04:41'!
+FAILURE!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:04:46'!
+FAILURE!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:04:48'!
+FAILURE!
+
+aBlock timeToRun!
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'NR 6/13/2022 07:15:41' prior: 50664501!
+totalMoneyRaisedBy: anItem
+	
+	(Delay forSeconds: 1) wait.
+
+	^salesBook sum: [:aSale | | totalPerItem |
+		totalPerItem :=0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [totalPerItem := totalPerItem + aLineItem total]].
+		totalPerItem].
+	
+	! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'NR 6/13/2022 07:15:27' prior: 50664364!
+totalSalesOf: anItem
+	
+	(Delay forSeconds: 1) wait.
+
+	^salesBook sum: [:aSale | | quantityPerItem | 
+		quantityPerItem := 0.
+		aSale lineItemsDo: [:aLineItem | (aLineItem item = anItem) ifTrue: [quantityPerItem := quantityPerItem + aLineItem quantity]].
+		quantityPerItem].
+
+! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:07:25' prior: 50625285!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales jobsDone result |
+
+	bookPerformance := Dictionary new.
+	
+	jobsDone := Semaphore new.
+	
+	totalSales := [ result := self totalSalesOf: anItem. jobsDone signal. result ] fork.
+	totalMoney := [ result := self totalMoneyRaisedBy: anItem. jobsDone signal. result ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:07:40' prior: 50664570!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales jobsDone |
+
+	bookPerformance := Dictionary new.
+	
+	jobsDone := Semaphore new.
+	
+	totalSales := [ |result| result := self totalSalesOf: anItem. jobsDone signal. result ] fork.
+	totalMoney := [ |result| result := self totalMoneyRaisedBy: anItem. jobsDone signal. result ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:08:40' prior: 50664594!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales jobsDone |
+
+	bookPerformance := Dictionary new.
+	
+	jobsDone := Semaphore new.
+	
+	[ totalSales := self totalSalesOf: anItem. jobsDone signal ] fork.
+	[ |result| totalMoney := self totalMoneyRaisedBy: anItem. jobsDone signal ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:08:44' prior: 50664618!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales jobsDone |
+
+	bookPerformance := Dictionary new.
+	
+	jobsDone := Semaphore new.
+	
+	[ totalSales := self totalSalesOf: anItem. jobsDone signal ] fork.
+	[ totalMoney := self totalMoneyRaisedBy: anItem. jobsDone signal ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:08:58'!
+PASSED!
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:10:08' prior: 50625326!
+storePerformance
+
+	| totalMoney totalSales performance jobsDone |
+	
+	performance := Dictionary new.
+	
+	
+	jobsDone := Semaphore new.
+	
+	[ totalSales := self totalSales. jobsDone signal ] fork.
+	[ totalMoney := self totalMoneyRaised. jobsDone signal ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	performance at: 'quantity' put: totalSales.
+	performance at: 'total' put: totalMoney.
+	performance at: 'summary' put: 'The store selled a total of ',totalSales asString, ' books and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^performance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:10:12' prior: 50664667!
+storePerformance
+
+	| totalMoney totalSales performance jobsDone |
+	
+	performance := Dictionary new.
+	jobsDone := Semaphore new.
+	
+	[ totalSales := self totalSales. jobsDone signal ] fork.
+	[ totalMoney := self totalMoneyRaised. jobsDone signal ] fork.
+	
+	2 timesRepeat: [ jobsDone wait ].
+	
+	performance at: 'quantity' put: totalSales.
+	performance at: 'total' put: totalMoney.
+	performance at: 'summary' put: 'The store selled a total of ',totalSales asString, ' books and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^performance
+	
+
+! !
+
+!testRun: #TusLibrosSystemFacadeTest #test21StorePerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:10:24'!
+PASSED!
+
+!testRun: #CartTest #test01NewCartsAreCreatedEmpty stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test02CanNotAddItemsThatDoNotBelongToStore stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test03AfterAddingAnItemTheCartIsNotEmptyAnymore stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test04CanNotAddNonPositiveNumberOfItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test05CanNotAddMoreThanOneItemNotSellByTheStore stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test06CartRemembersAddedItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test07CartDoesNotHoldNotAddedItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CartTest #test08CartRemembersTheNumberOfAddedItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test01CanNotCheckoutAnEmptyCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test02CalculatedTotalIsCorrect stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test03CanNotCheckoutWithAnExpiredCreditCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test04CheckoutRegistersASale stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test05CashierChargesCreditCardUsingMerchantProcessor stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CashierTest #test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test01CreditCardNumberWithLessThan16DigitsIsNotValid stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test02CreditCardNumberWithMoreThan16DigitsIsNotValid stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test03CreditCardNumberShouldBeDigitsOnly stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test04NameCanNotBeEmpty stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test05IsExpiredOnNextExpirationMonth stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test06IsNotExpiredOnExpirationMonth stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #CreditCardTest #test07CanGetCreditCardInfoFromIt stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test01CanCreateCartWithValidUserAndPassword stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test02CanNotCreateCartWithInvalidUser stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test03CanNotCreateCartWithInvalidPassword stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test04CanAddItemsToACreatedCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test05CanNotAddItemToNotCreatedCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test06CanNotAddItemNotSellByTheStore stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test08CanNotListCartOfInvalidCartId stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test09ListCartReturnsTheRightNumberOfItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test10CheckOutReturnsTransactionIdAndImpactsCustomerPurchases stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test10_1_CanNotCheckoutAnAlreadyCheckedOutCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test11CanNotCheckoutANotCreatedCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test12CanNotCheckoutAnEmptyCart stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test13CanNotCheckoutWithAnExpiredCreditCard stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test14ListPurchasesIncludesBoughtItems stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test15CanNotListPurchasesOfInvalidCustomer stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test16CanNotListPurchasesOfValidCustomerWithInvalidPassword stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test17CanNotAddToCartWhenSessionIsExpired stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test18CanNotListCartWhenSessionIsExpired stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test19CanNotCheckOutCartWhenSessionIsExpired stamp: 'JT 6/16/2023 16:15:56'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:15:57'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test21StorePerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:15:58'!
+PASSED!
+!TusLibrosSystemFacade methodsFor: 'nil' stamp: 'JT 6/16/2023 16:23:41'!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blocksSemaphore numberOfBlocks |
+	blocksSemaphore := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blocksSemaphore signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blocksSemaphore wait ].! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:24:00' prior: 50664860!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blocksCompleted numberOfBlocks |
+	blocksCompleted := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blocksCompleted signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blocksCompleted wait ].! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:24:08' prior: 50664873!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blockCompleted numberOfBlocks |
+	blockCompleted := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockCompleted signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockCompleted wait ].! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:24:13' prior: 50664886!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blockFinished numberOfBlocks |
+	blockFinished := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockFinished signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockFinished wait ].! !
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:26:03' prior: 50664641!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales |
+
+	bookPerformance := Dictionary new.
+	
+	self runAndWaitAll: {
+		[ totalSales := self totalSalesOf: anItem ].
+		[ totalMoney := self totalMoneyRaisedBy: anItem ].
+	}.
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:26:14'!
+PASSED!
+!TusLibrosSystemFacade methodsFor: 'private' stamp: 'JT 6/16/2023 16:26:52' prior: 50664688!
+storePerformance
+
+	| totalMoney totalSales performance |
+	
+	performance := Dictionary new.
+	
+	self runAndWaitAll: {
+		[ totalSales := self totalSales. ].
+		[ totalMoney := self totalMoneyRaised. ].
+	}.
+
+	performance at: 'quantity' put: totalSales.
+	performance at: 'total' put: totalMoney.
+	performance at: 'summary' put: 'The store selled a total of ',totalSales asString, ' books and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^performance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'asynchronous jobs' stamp: 'JT 6/16/2023 16:27:25'!
+runAsynchronouslyAndWaitAll: aCollectionOfBlocks
+
+	| blockFinished numberOfBlocks |
+	blockFinished := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockFinished signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockFinished wait ].! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:27:25' prior: 50664911!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales |
+
+	bookPerformance := Dictionary new.
+	
+	self runAsynchronouslyAndWaitAll: {
+		[ totalSales := self totalSalesOf: anItem ].
+		[ totalMoney := self totalMoneyRaisedBy: anItem ].
+	}.
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:27:25' prior: 50664934!
+storePerformance
+
+	| totalMoney totalSales performance |
+	
+	performance := Dictionary new.
+	
+	self runAsynchronouslyAndWaitAll: {
+		[ totalSales := self totalSales. ].
+		[ totalMoney := self totalMoneyRaised. ].
+	}.
+
+	performance at: 'quantity' put: totalSales.
+	performance at: 'total' put: totalMoney.
+	performance at: 'summary' put: 'The store selled a total of ',totalSales asString, ' books and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^performance
+	
+
+! !
+
+!methodRemoval: TusLibrosSystemFacade #runAndWaitAll: stamp: 'JT 6/16/2023 16:27:25'!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blockFinished numberOfBlocks |
+	blockFinished := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockFinished signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockFinished wait ].!
+!TusLibrosSystemFacade methodsFor: 'asynchronous jobs' stamp: 'JT 6/16/2023 16:28:28'!
+runAndWaitAll: aCollectionOfBlocks
+
+	| blockFinished numberOfBlocks |
+	blockFinished := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockFinished signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockFinished wait ].! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:28:28' prior: 50664985!
+storePerformance
+
+	| totalMoney totalSales performance |
+	
+	performance := Dictionary new.
+	
+	self runAndWaitAll: {
+		[ totalSales := self totalSales. ].
+		[ totalMoney := self totalMoneyRaised. ].
+	}.
+
+	performance at: 'quantity' put: totalSales.
+	performance at: 'total' put: totalMoney.
+	performance at: 'summary' put: 'The store selled a total of ',totalSales asString, ' books and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^performance
+	
+
+! !
+!TusLibrosSystemFacade methodsFor: 'as yet unclassified' stamp: 'JT 6/16/2023 16:28:28' prior: 50664965!
+bookPerformance: anItem
+
+	| bookPerformance totalMoney totalSales |
+
+	bookPerformance := Dictionary new.
+	
+	self runAndWaitAll: {
+		[ totalSales := self totalSalesOf: anItem ].
+		[ totalMoney := self totalMoneyRaisedBy: anItem ].
+	}.
+	
+	bookPerformance at: 'quantity' put: totalSales.
+	bookPerformance at: 'total' put: totalMoney.
+	bookPerformance at: 'summary' put: anItem,' was selled ',totalSales asString, ' times and raised a total amount of money equal to: ', totalMoney asString.
+	
+	^bookPerformance
+	
+
+! !
+
+!methodRemoval: TusLibrosSystemFacade #runAsynchronouslyAndWaitAll: stamp: 'JT 6/16/2023 16:28:28'!
+runAsynchronouslyAndWaitAll: aCollectionOfBlocks
+
+	| blockFinished numberOfBlocks |
+	blockFinished := Semaphore new.
+	numberOfBlocks := aCollectionOfBlocks size.
+	
+	aCollectionOfBlocks do: [:aBlock | [ aBlock value. blockFinished signal] fork ].
+	
+	numberOfBlocks timesRepeat: [ blockFinished wait ].!
+
+!testRun: #TusLibrosSystemFacadeTest #test20BookPerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:28:38'!
+PASSED!
+
+!testRun: #TusLibrosSystemFacadeTest #test21StorePerformanceShouldNotTakeTooLong stamp: 'JT 6/16/2023 16:28:50'!
+PASSED!
+
+----SNAPSHOT----(16 June 2023 16:29:38) TusLibros-it4.image priorSource: 10641150!
