@@ -1273,3 +1273,216 @@ PASSED!
 
 !testRun: #ImportTest #test02EachCustomerHasCorrectInformation stamp: 'IV 6/25/2023 16:22:24'!
 PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 17:11:15'!
+test03EachCustomerHasItsAddresses
+
+    | customerA firstAddressOfCustomerA secondAddressOfCustomerA customerB addressOfCustomerB |
+    self importCustomers.
+    
+    customerA := self findCustomerIdentifiedBy: '22333444' ofType: 'D'.
+    customerB := self findCustomerIdentifiedBy: '23-25666777-9' ofType: 'C'.
+    firstAddressOfCustomerA := Address street: 'San Martin' number: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+    secondAddressOfCustomerA := Address street: 'Maipu' number: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'.
+    addressOfCustomerB := Address street: 'Alem' number: 1122 town: 'CABA' zipCode: 1001 province: 'CABA'.
+
+    self assert: 2 equals: customerA numberOfAddresses.
+    self assert: (customerA hasAddress: firstAddressOfCustomerA).
+    self assert: (customerA hasAddress: secondAddressOfCustomerA).
+    
+    self assert: 1 equals: customerB numberOfAddresses.
+    self assert: (customerB hasAddress: addressOfCustomerB)! !
+!Address methodsFor: 'province' stamp: 'IV 6/25/2023 17:13:08' overrides: 16901772!
+= anObject
+
+    ^ (anObject isKindOf: (self class))
+        and: [ streetName = anObject streetName and: streetNumber = anObject streetNumber ]
+        and: [ town = anObject town ]
+        and: [ zipCode = anObject zipCode ]
+        and: [ province = anObject province ]! !
+!Address methodsFor: 'comparing' stamp: 'IV 6/25/2023 17:13:26' overrides: 16901788!
+hash
+
+    ^ streetName hash + streetNumber hash + town hash + zipCode hash + province hash! !
+!Address methodsFor: 'initialization' stamp: 'IV 6/25/2023 17:13:50'!
+initializeStreet: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+
+    streetName := aStreetName.
+    streetNumber := aStreetNumber.
+    town := aTownName.
+    zipCode := aZipCode.
+    province := aProvinceName.! !
+!Address methodsFor: 'initialization' stamp: 'IV 6/25/2023 17:14:00'!
+initializeAt: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+
+    streetName := aStreetName.
+    streetNumber := aStreetNumber.
+    town := aTownName.
+    zipCode := aZipCode.
+    province := aProvinceName.! !
+
+!methodRemoval: Address #initializeStreet:number:town:zipCode:province: stamp: 'IV 6/25/2023 17:14:00'!
+initializeStreet: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+
+    streetName := aStreetName.
+    streetNumber := aStreetNumber.
+    town := aTownName.
+    zipCode := aZipCode.
+    province := aProvinceName.!
+!Address class methodsFor: 'no messages' stamp: 'IV 6/25/2023 17:14:28'!
+street: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+    ^self new initializeStreet: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName! !
+!Address class methodsFor: 'as yet unclassified' stamp: 'IV 6/25/2023 17:14:36'!
+at: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+    ^self new initializeStreet: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'IV 6/25/2023 17:14:36' prior: 50649145!
+test03EachCustomerHasItsAddresses
+
+    | customerA firstAddressOfCustomerA secondAddressOfCustomerA customerB addressOfCustomerB |
+    self importCustomers.
+    
+    customerA := self findCustomerIdentifiedBy: '22333444' ofType: 'D'.
+    customerB := self findCustomerIdentifiedBy: '23-25666777-9' ofType: 'C'.
+    firstAddressOfCustomerA := Address at: 'San Martin' number: 3322 town: 'Olivos' zipCode: 1636 province: 'BsAs'.
+    secondAddressOfCustomerA := Address at: 'Maipu' number: 888 town: 'Florida' zipCode: 1122 province: 'Buenos Aires'.
+    addressOfCustomerB := Address at: 'Alem' number: 1122 town: 'CABA' zipCode: 1001 province: 'CABA'.
+
+    self assert: 2 equals: customerA numberOfAddresses.
+    self assert: (customerA hasAddress: firstAddressOfCustomerA).
+    self assert: (customerA hasAddress: secondAddressOfCustomerA).
+    
+    self assert: 1 equals: customerB numberOfAddresses.
+    self assert: (customerB hasAddress: addressOfCustomerB)! !
+
+!methodRemoval: Address class #street:number:town:zipCode:province: stamp: 'IV 6/25/2023 17:14:36'!
+street: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+    ^self new initializeStreet: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName!
+!Address class methodsFor: 'as yet unclassified' stamp: 'IV 6/25/2023 17:14:47' prior: 50649240!
+at: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName 
+    ^self new initializeAt: aStreetName number: aStreetNumber town: aTownName zipCode: aZipCode province: aProvinceName! !
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 17:15:19'!
+importCustomers
+
+	^ (CustomerImporter from: self dataStream into: session) value! !
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 17:15:19' prior: 50649117!
+test02EachCustomerHasCorrectInformation
+
+	| firstCustomer secondCustomer |
+	
+	self importCustomers.
+	
+	firstCustomer := self findCustomerIdentifiedBy: '22333444' ofType: 'D'.
+	secondCustomer := self findCustomerIdentifiedBy: '23-25666777-9' ofType: 'C'.
+	
+	self assert: 'Pepe' equals: firstCustomer firstName.
+	self assert: 'Sanchez' equals: firstCustomer lastName.
+	
+	self assert: 'Juan' equals: secondCustomer firstName.
+	self assert: 'Perez' equals: secondCustomer lastName.! !
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 17:15:19' prior: 50649108!
+test01ImportCustomerHasCorrectNumberOfCustomers
+
+	self importCustomers.
+	
+	self assert: 2 equals: (session selectAllOfType: Customer) size.! !
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 17:15:25' prior: 50649309!
+test02EachCustomerHasCorrectInformation
+
+	| firstCustomer secondCustomer |	
+	self importCustomers.
+	
+	firstCustomer := self findCustomerIdentifiedBy: '22333444' ofType: 'D'.
+	secondCustomer := self findCustomerIdentifiedBy: '23-25666777-9' ofType: 'C'.
+	
+	self assert: 'Pepe' equals: firstCustomer firstName.
+	self assert: 'Sanchez' equals: firstCustomer lastName.
+	
+	self assert: 'Juan' equals: secondCustomer firstName.
+	self assert: 'Perez' equals: secondCustomer lastName.! !
+!Customer methodsFor: 'addresses' stamp: 'IV 6/25/2023 17:15:41'!
+hasAddress: anAddress
+
+    ^ addresses includes: anAddress! !
+!Customer methodsFor: 'addresses' stamp: 'IV 6/25/2023 17:15:49'!
+numberOfAddresses
+
+    ^ addresses size! !
+!Customer methodsFor: 'identification' stamp: 'IV 6/25/2023 17:15:59'!
+hasIdOfType: anIdentificationType withNumber: anIdentificationNumber
+    ^ identificationType = anIdentificationType and: [identificationNumber = anIdentificationNumber].! !
+
+!testRun: #ImportTest #test01ImportCustomerHasCorrectNumberOfCustomers stamp: 'IV 6/25/2023 17:16:13'!
+PASSED!
+
+!testRun: #ImportTest #test02EachCustomerHasCorrectInformation stamp: 'IV 6/25/2023 17:16:14'!
+PASSED!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:16:14'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:16:15'!
+FAILURE!
+
+!testRun: #ImportTest #test01ImportCustomerHasCorrectNumberOfCustomers stamp: 'IV 6/25/2023 17:16:19'!
+PASSED!
+
+!testRun: #ImportTest #test02EachCustomerHasCorrectInformation stamp: 'IV 6/25/2023 17:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:16:23'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:16:24'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:17:41'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:18:32'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:18:33'!
+FAILURE!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:18:44'!
+FAILURE!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'IV 6/25/2023 17:21:07' prior: 50648691 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := inputStream nextLine.
+	[ line notNil ] whileTrue: [
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := inputStream nextLine. ].
+
+	inputStream close
+! !
+
+!testRun: #ImportTest #test01ImportCustomerHasCorrectNumberOfCustomers stamp: 'IV 6/25/2023 17:21:15'!
+PASSED!
+
+!testRun: #ImportTest #test02EachCustomerHasCorrectInformation stamp: 'IV 6/25/2023 17:21:16'!
+PASSED!
+
+!testRun: #ImportTest #test03EachCustomerHasItsAddresses stamp: 'IV 6/25/2023 17:21:17'!
+PASSED!
+
+----SNAPSHOT----(25 June 2023 17:23:46) CuisUniversity-5832.image priorSource: 10159528!
