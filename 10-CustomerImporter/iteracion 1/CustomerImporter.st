@@ -18,18 +18,19 @@ tearDown
 	session close! !
 
 
-!ImportTest methodsFor: 'tests' stamp: 'JT 6/22/2023 21:11:22'!
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 16:20:44'!
 test01ImportCustomerHasCorrectNumberOfCustomers
 
-	self importCustomers.
+	(CustomerImporter from: self dataStream into: session) value.
 	
 	self assert: 2 equals: (session selectAllOfType: Customer) size.! !
 
-!ImportTest methodsFor: 'tests' stamp: 'JT 6/22/2023 21:22:56'!
+!ImportTest methodsFor: 'tests' stamp: 'IV 6/25/2023 16:20:55'!
 test02EachCustomerHasCorrectInformation
 
 	| firstCustomer secondCustomer |
-	self importCustomers.
+	
+	(CustomerImporter from: self dataStream into: session) value.
 	
 	firstCustomer := self findCustomerIdentifiedBy: '22333444' ofType: 'D'.
 	secondCustomer := self findCustomerIdentifiedBy: '23-25666777-9' ofType: 'C'.
@@ -41,38 +42,6 @@ test02EachCustomerHasCorrectInformation
 	self assert: 'Perez' equals: secondCustomer lastName.! !
 
 
-!ImportTest methodsFor: 'importing' stamp: 'JT 6/22/2023 21:10:06'!
-importCustomers
-
-	| inputStream  newCustomer line |
-	inputStream := UniFileStream new open: 'input.txt' forWrite: false.
-
-	line := inputStream nextLine.
-	[ line notNil ] whileTrue: [
-		(line beginsWith: 'C') ifTrue: [ | customerData |
-			customerData := line findTokens: $,.
-			newCustomer := Customer new.
-			newCustomer firstName: customerData second.
-			newCustomer lastName: customerData third.
-			newCustomer identificationType: customerData fourth.
-			newCustomer identificationNumber: customerData fifth.
-			session persist: newCustomer ].
-
-		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
-			addressData := line findTokens: $,.
-			newAddress := Address new.
-			newCustomer addAddress: newAddress.
-			newAddress streetName: addressData second.
-			newAddress streetNumber: addressData third asNumber .
-			newAddress town: addressData fourth.
-			newAddress zipCode: addressData fifth asNumber .
-			newAddress province: addressData fourth ].
-
-		line := inputStream nextLine. ].
-
-	inputStream close! !
-
-
 !ImportTest methodsFor: 'customers' stamp: 'JT 6/22/2023 21:20:06'!
 findCustomerIdentifiedBy: anIdentificationNumber ofType: anIdentificationType 
 
@@ -81,6 +50,17 @@ findCustomerIdentifiedBy: anIdentificationNumber ofType: anIdentificationType
 					   ofType: Customer.
 
 	^ results anyOne! !
+
+
+!ImportTest methodsFor: 'data' stamp: 'IV 6/25/2023 16:17:07'!
+dataStream
+
+	^ReadStream on: 
+'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs
+A,Maipu,888,Florida,1122,Buenos Aires
+C,Juan,Perez,C,23-25666777-9
+A,Alem,1122,CABA,1001,CABA'! !
 
 
 !classDefinition: #Address category: 'CustomerImporter'!
@@ -216,6 +196,63 @@ initialize
 
 	super initialize.
 	addresses := OrderedCollection new.! !
+
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session inputStream'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!CustomerImporter methodsFor: 'evaluating' stamp: 'IV 6/25/2023 16:05:45'!
+value
+
+	| newCustomer line |
+
+	line := inputStream nextLine.
+	[ line notNil ] whileTrue: [
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData fourth ].
+
+		line := inputStream nextLine. ].
+
+	inputStream close
+! !
+
+
+!CustomerImporter methodsFor: 'initialization' stamp: 'IV 6/25/2023 16:07:52'!
+initializeFrom: anInputStream into: aDataBaseSession
+
+	session := aDataBaseSession.
+	inputStream := anInputStream.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CustomerImporter class' category: 'CustomerImporter'!
+CustomerImporter class
+	instanceVariableNames: ''!
+
+!CustomerImporter class methodsFor: 'instance creation' stamp: 'IV 6/25/2023 16:08:04'!
+from: anInputStream into: aDataBaseSession
+
+	^self new initializeFrom: anInputStream into: aDataBaseSession.! !
 
 
 !classDefinition: #DataBaseSession category: 'CustomerImporter'!
