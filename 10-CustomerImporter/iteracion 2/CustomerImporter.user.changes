@@ -1,0 +1,2389 @@
+
+
+----STARTUP---- (28 June 2023 18:42:21) as /home/jt/files/cuis-university/images/CustomerImporter-it2v2.image!
+
+
+----End fileIn of /home/jt/source/ingsoft1-ejercicios/10-CustomerImporter/Step1/CustomerImporter-35.st----!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 18:47:07'!
+test02ImportDataCannotHaveEmptyLine
+	
+	self should: [ CustomerImporter valueFrom: self importDataWithEmptyLine into: session. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter streamHasInvalidLinesErrorDescription.! !
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:47:10'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:47:10'!
+ERROR!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 18:48:16' prior: 50624888!
+test02ImportDataCannotHaveEmptyLine
+	
+	self should: [ CustomerImporter valueFrom: self importDataWithEmptyLine into: session. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter streamCannotHaveEmptyLineErrorDescription.! !
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:48:18'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:48:18'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:48:25'!
+streamCannotHaveEmptyLineErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:48:35' prior: 50624922!
+streamCannotHaveEmptyLineErrorDescription
+	^ 'Stream cannot have an empty line'! !
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:48:36'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:48:36'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:48:49'!
+importDataWithEmptyLine
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:48:55' prior: 50624939!
+importDataWithEmptyLine
+	ReadStream on: ''.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:48:58' prior: 50624944!
+importDataWithEmptyLine
+	ReadStream on: '
+'.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:49:08' prior: 50624949!
+importDataWithEmptyLine
+	^ ReadStream on: '
+'.! !
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:49:28'!
+FAILURE!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:49:28'!
+FAILURE!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:49:33'!
+FAILURE!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:49:33'!
+FAILURE!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:49:44' prior: 50624737 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:50:26' prior: 50624972 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self error: self class streamCannotHaveEmptyLineErrorDescription].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 18:50:28'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:50:29'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 18:50:33'!
+PASSED!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:50:48'!
+signalStreamCannotHaveEmptyLine
+
+	^ self error: self class streamCannotHaveEmptyLineErrorDescription! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:50:48' prior: 50625004 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 18:53:33'!
+test03ImportDataCannotHaveLinesWithInvalidPrefix
+	
+	self should: [ CustomerImporter valueFrom: self importDataWithLineWithInvalidPrefix into: session. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter lineDoesntHaveValidPrefixErrorDescription.! !
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:53:36'!
+ERROR!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:53:36'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:53:40'!
+lineDoesntHaveValidPrefixErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:54:04' prior: 50625106!
+lineDoesntHaveValidPrefixErrorDescription
+	^ 'Line does not have valid prefix'! !
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:54:06'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:54:12'!
+importDataWithLineWithInvalidPrefix
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 18:54:45' prior: 50625121!
+importDataWithLineWithInvalidPrefix
+	^ ReadStream on: 'B,,,,'! !
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:55:01'!
+FAILURE!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:55:01'!
+FAILURE!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:56:20' prior: 50625054 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		((line beginsWith: 'C') or: [line beginsWith: 'A']) not ifTrue: [self error: self class lineCannotHaveInvalidPrefixErrorDescription].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:56:28'!
+ERROR!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:56:28'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:56:33'!
+lineCannotHaveInvalidPrefixErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:56:40' prior: 50625184!
+lineCannotHaveInvalidPrefixErrorDescription
+	^ 'Line cannot have invalid prefix'! !
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:56:42'!
+FAILURE!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 18:56:42'!
+FAILURE!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:57:22' prior: 50625190!
+lineCannotHaveInvalidPrefixErrorDescription
+	^ self lineDoesntHaveValidPrefixErrorDescription ! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:57:24' prior: 50625204!
+lineCannotHaveInvalidPrefixErrorDescription
+	^ self lineDoesntHaveValidPrefixErrorDescription! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 18:57:25' prior: 50625211!
+lineCannotHaveInvalidPrefixErrorDescription
+	^self lineDoesntHaveValidPrefixErrorDescription! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:58:01' prior: 50625139 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		((line beginsWith: 'C') or: [line beginsWith: 'A']) not ifTrue: [self error: self class lineDoesntHaveValidPrefixErrorDescription].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+
+!methodRemoval: CustomerImporter class #lineCannotHaveInvalidPrefixErrorDescription stamp: 'JT 6/28/2023 18:58:08'!
+lineCannotHaveInvalidPrefixErrorDescription
+	^self lineDoesntHaveValidPrefixErrorDescription!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:58:24'!
+signalLineDoesntHaveValidPrefix
+
+	^ self error: self class lineDoesntHaveValidPrefixErrorDescription! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:58:24' prior: 50625225 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		((line beginsWith: 'C') or: [line beginsWith: 'A']) not ifTrue: [self signalLineDoesntHaveValidPrefix].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:59:25'!
+lineHasInvalidPrefix: line
+
+	^ ((line beginsWith: 'C') or: [line beginsWith: 'A']) not! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 18:59:25' prior: 50625276 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		(self lineHasInvalidPrefix: line) ifTrue: [self signalLineDoesntHaveValidPrefix].
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 18:59:42' prior: 50625313!
+lineHasInvalidPrefix: aLine
+
+	^ ((aLine beginsWith: 'C') or: [aLine beginsWith: 'A']) not! !
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:00:06'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:00:08'!
+PASSED!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:01:46'!
+assertLineIsValid: line
+
+	line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		(self lineHasInvalidPrefix: line) ifTrue: [self signalLineDoesntHaveValidPrefix]! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:01:46' prior: 50625320 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		self assertLineIsValid: line.
+		
+		(line beginsWith: 'C') ifTrue: [ | customerData |
+			customerData := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: customerData second.
+			newCustomer lastName: customerData third.
+			newCustomer identificationType: customerData fourth.
+			newCustomer identificationNumber: customerData fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:02:27' prior: 50625377 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		self assertLineIsValid: line.
+		
+		(line beginsWith: 'C') ifTrue: [ | data |
+			data := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: data second.
+			newCustomer lastName: data third.
+			newCustomer identificationType: data fourth.
+			newCustomer identificationNumber: data fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | addressData newAddress |
+			addressData := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: addressData second.
+			newAddress streetNumber: addressData third asNumber .
+			newAddress town: addressData fourth.
+			newAddress zipCode: addressData fifth asNumber .
+			newAddress province: addressData sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:02:35' prior: 50625410 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [
+		self assertLineIsValid: line.
+		
+		(line beginsWith: 'C') ifTrue: [ | data |
+			data := line findTokens: $,.
+			newCustomer := Customer new.
+			newCustomer firstName: data second.
+			newCustomer lastName: data third.
+			newCustomer identificationType: data fourth.
+			newCustomer identificationNumber: data fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | data newAddress |
+			data := line findTokens: $,.
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: data second.
+			newAddress streetNumber: data third asNumber .
+			newAddress town: data fourth.
+			newAddress zipCode: data fifth asNumber .
+			newAddress province: data sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:02:54' prior: 50625442 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [ | data |
+		self assertLineIsValid: line.
+		data := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: data second.
+			newCustomer lastName: data third.
+			newCustomer identificationType: data fourth.
+			newCustomer identificationNumber: data fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: data second.
+			newAddress streetNumber: data third asNumber .
+			newAddress town: data fourth.
+			newAddress zipCode: data fifth asNumber .
+			newAddress province: data sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:03:10' prior: 50625472 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	line := readStream nextLine.
+	[ line notNil ] whileTrue: [ | record |
+		self assertLineIsValid: line.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+
+		line := readStream nextLine. ].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:04:09' prior: 50625501 overrides: 16902254!
+value
+
+	| newCustomer line |
+
+	
+	[
+		line := readStream nextLine.
+		line notNil
+	] whileTrue: [ | record |
+		self assertLineIsValid: line.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:04:11'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:04:11'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:04:11'!
+PASSED!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:05:22' prior: 50625368!
+assertLineIsValid: aLine
+
+	aLine isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+		(self lineHasInvalidPrefix: aLine) ifTrue: [self signalLineDoesntHaveValidPrefix]! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:05:25' prior: 50625568!
+assertLineIsValid: aLine
+
+	aLine isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	(self lineHasInvalidPrefix: aLine) ifTrue: [self signalLineDoesntHaveValidPrefix]! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:05:55' prior: 50625531 overrides: 16902254!
+value
+
+	| newCustomer  |
+
+	
+	[
+		line := readStream nextLine.
+		line notNil
+	] whileTrue: [ | record |
+		self assertLineIsValid: line.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'JT 6/28/2023 19:05:55'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream line'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:06:36'!
+nextLineIsNotEmpty
+
+	line := readStream nextLine.
+		line notNil! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:06:36' prior: 50625587 overrides: 16902254!
+value
+
+	| newCustomer  |
+
+	
+	[
+		self nextLineIsNotEmpty
+	] whileTrue: [ | record |
+		self assertLineIsValid: line.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:07:10' prior: 50625629 overrides: 16902254!
+value
+
+	| newCustomer  |
+
+	
+	[ self nextLineIsNotEmpty ] whileTrue: [ | record |
+		self assertLineIsValid: line.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:07:26' prior: 50625623!
+nextLineIsNotEmpty
+
+	line := readStream nextLine.
+	line notNil! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:07:29' prior: 50625685!
+nextLineIsNotEmpty
+
+	line := readStream nextLine.
+	^ line notNil! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:07:56'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:07:57'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:07:57'!
+PASSED!
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:09:29'!
+lineHasInvalidPrefix
+	^self lineHasInvalidPrefix: line! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:09:46' prior: 50625577!
+assertLineIsValid: aLine
+
+	aLine isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	(self lineHasInvalidPrefix) ifTrue: [self signalLineDoesntHaveValidPrefix]! !
+
+!methodRemoval: CustomerImporter #lineHasInvalidPrefix: stamp: 'JT 6/28/2023 19:09:54'!
+lineHasInvalidPrefix: aLine
+
+	^ ((aLine beginsWith: 'C') or: [aLine beginsWith: 'A']) not!
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:09:54' prior: 50625704!
+lineHasInvalidPrefix
+	^ ((line beginsWith: 'C') or: [line beginsWith: 'A']) not! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:10:21'!
+assertLineIsValid
+	
+	^self assertLineIsValid: line! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:10:30' prior: 50625657 overrides: 16902254!
+value
+
+	| newCustomer  |
+
+	
+	[ self nextLineIsNotEmpty ] whileTrue: [ | record |
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!methodRemoval: CustomerImporter #assertLineIsValid: stamp: 'JT 6/28/2023 19:10:41'!
+assertLineIsValid: aLine
+
+	aLine isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	(self lineHasInvalidPrefix) ifTrue: [self signalLineDoesntHaveValidPrefix]!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:11:53' prior: 50625728!
+assertLineIsValid
+	
+	line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	self lineHasInvalidPrefix ifTrue: [self signalLineDoesntHaveValidPrefix].! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:12:19'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:12:19'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:12:19'!
+PASSED!
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:12:31' prior: 50625734 overrides: 16902254!
+value
+
+	 
+
+	
+	[ self nextLineIsNotEmpty ] whileTrue: [ | record |
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'JT 6/28/2023 19:12:31'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream line newCustomer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:12:35' prior: 50625787 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [ | record |
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [ | newAddress |
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:12:37'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:12:37'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:12:37'!
+PASSED!
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:12:46' prior: 50625823 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [ | record |
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [  
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'JT 6/28/2023 19:12:46'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream line newCustomer newAddress'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:12:50'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:12:51'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:12:51'!
+PASSED!
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:13:04' prior: 50625860 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer ].
+
+		(line beginsWith: 'A') ifTrue: [  
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!classDefinition: #CustomerImporter category: 'CustomerImporter' stamp: 'JT 6/28/2023 19:13:04'!
+Object subclass: #CustomerImporter
+	instanceVariableNames: 'session readStream line newCustomer newAddress record'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'CustomerImporter'!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:15'!
+createCustomerFromRecord
+
+	newCustomer := Customer new.
+			newCustomer firstName: record second.
+			newCustomer lastName: record third.
+			newCustomer identificationType: record fourth.
+			newCustomer identificationNumber: record fifth.
+			session persist: newCustomer! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:15' prior: 50625905 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [
+			self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [  
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:21' prior: 50625952 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [  
+			newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth ].
+	].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:14:25'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:14:25'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:14:25'!
+PASSED!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:48'!
+createAddressFromRecord
+
+	newAddress := Address new.
+			newCustomer addAddress: newAddress.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:48' prior: 50625972 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [  
+			self createAddressFromRecord ].
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:14:55' prior: 50626014 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		record := line findTokens: $,.
+		
+		(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ].
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:15:06'!
+createRecord
+
+	^ record := line findTokens: $,! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:15:06' prior: 50626026 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		self createRecord.
+		
+		(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ].
+	].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:15:30'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:15:30'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:15:30'!
+PASSED!
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:21:26'!
+parseLine
+
+	(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+		(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:21:26' prior: 50626043 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		self createRecord.
+		
+		self parseLine.
+	].
+
+	! !
+!CustomerImporter methodsFor: 'evaluating' stamp: 'JT 6/28/2023 19:21:35' prior: 50626072 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		self createRecord.
+		self parseLine.
+	].
+
+	! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:22:47'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:22:47'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:22:47'!
+PASSED!
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:22:52' prior: 50626063!
+parseLine
+
+	(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+	(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:09' prior: 50626096!
+parseLine
+
+	| isCustomerLine |
+	isCustomerLine := line beginsWith: 'C'.
+	(isCustomerLine) ifTrue: [ self createCustomerFromRecord ].
+
+	(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:20' prior: 50626104!
+parseLine
+
+	(line beginsWith: 'C') ifTrue: [ self createCustomerFromRecord ].
+
+	(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:30'!
+isCustomerLine
+
+	^ line beginsWith: 'C'! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:30' prior: 50626114!
+parseLine
+
+	(self isCustomerLine) ifTrue: [ self createCustomerFromRecord ].
+
+	(line beginsWith: 'A') ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:23:30' prior: 50625723!
+lineHasInvalidPrefix
+	^ ((self isCustomerLine) or: [line beginsWith: 'A']) not! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:39'!
+isAddressLine
+
+	^ line beginsWith: 'A'! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:39' prior: 50626126!
+parseLine
+
+	(self isCustomerLine) ifTrue: [ self createCustomerFromRecord ].
+
+	(self isAddressLine) ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:23:39' prior: 50626134!
+lineHasInvalidPrefix
+	^ ((self isCustomerLine) or: [self isAddressLine]) not! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:48' prior: 50626144!
+parseLine
+
+	self isCustomerLine ifTrue: [ self createCustomerFromRecord ].
+	self isAddressLine ifTrue: [ self createAddressFromRecord ]! !
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 19:23:48' prior: 50626158!
+parseLine
+
+	self isCustomerLine ifTrue: [ self createCustomerFromRecord ].
+	self isAddressLine ifTrue: [ self createAddressFromRecord ].! !
+
+----QUIT----(28 June 2023 19:24:16) CustomerImporter-it2v2.image priorSource: 9370156!
+
+----STARTUP---- (28 June 2023 19:28:19) as /home/jt/files/cuis-university/images/CustomerImporter-it2v2.image!
+
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:35:40'!
+test04ImportDataCannotStartWithAddressLine
+	
+	self should: [ CustomerImporter valueFrom: self importDataStartingWithAddress into: session. ]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter streamCannotStartWithAddressErrorDescription.! !
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:35:43'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:35:43'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:35:48'!
+streamCannotStartWithAddressErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:35:58' prior: 50626197!
+streamCannotStartWithAddressErrorDescription
+	^ 'Stream cannot start with address'! !
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:35:59'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:35:59'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:36:06'!
+importDataStartingWithAddress
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:36:27' prior: 50626215!
+importDataStartingWithAddress
+	^ ReadStream on: 'A,San Martin,3322,Olivos,1636,BsAs'! !
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:36:29'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:36:29'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:36:32'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:36:32'!
+ERROR!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:37:08' prior: 50626000!
+createAddressFromRecord
+
+	newAddress := Address new.
+			newAddress streetName: record second.
+			newAddress streetNumber: record third asNumber .
+			newAddress town: record fourth.
+			newAddress zipCode: record fifth asNumber .
+			newAddress province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:37:12' prior: 50626240!
+createAddressFromRecord
+
+	newAddress := Address new.
+	newAddress streetName: record second.
+	newAddress streetNumber: record third asNumber .
+	newAddress town: record fourth.
+	newAddress zipCode: record fifth asNumber .
+	newAddress province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:37:46' prior: 50626253!
+createAddressFromRecord
+
+	newAddress := Address streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:37:58'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:37:58'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:37:58'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:37:58'!
+ERROR!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:38:00'!
+ERROR!
+!Address class methodsFor: 'instance creation' stamp: 'JT 6/28/2023 19:38:06'!
+streetName: aString streetNumber: aSmallInteger town: aString3 zipCode: aSmallInteger4 province: aString5 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeStreetName: aString streetNumber: aSmallInteger town: aString3 zipCode: aSmallInteger4 province: aString5 ! !
+!Address class methodsFor: 'instance creation' stamp: 'JT 6/28/2023 19:38:34' prior: 50626291!
+streetName: aStreetName streetNumber: aStreetNumber town: aTown zipCode: aZipCode province: aProvince 
+	^self new initializeStreetName: aStreetName streetNumber: aStreetNumber town: aTown zipCode: aZipCode province: aProvince ! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:38:37'!
+ERROR!
+!Address methodsFor: 'initialization' stamp: 'JT 6/28/2023 19:38:44'!
+initializeStreetName: aStreetName streetNumber: aStreetNumber town: aTown zipCode: aZipCode province: aProvince 
+	self shouldBeImplemented.
+	streetName := aStreetName.
+	streetNumber := aStreetNumber.
+	town := aTown.
+	zipCode := aZipCode.
+	province := aProvince.! !
+!Address methodsFor: 'initialization' stamp: 'JT 6/28/2023 19:38:46' prior: 50626317!
+initializeStreetName: aStreetName streetNumber: aStreetNumber town: aTown zipCode: aZipCode province: aProvince 
+	streetName := aStreetName.
+	streetNumber := aStreetNumber.
+	town := aTown.
+	zipCode := aZipCode.
+	province := aProvince.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:38:50'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:38:50'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:38:50'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:38:50'!
+ERROR!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:38:50'!
+ERROR!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:39:01' prior: 50626266!
+createAddressFromRecord
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+		
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:39:02' prior: 50626355!
+createAddressFromRecord
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:39:25' prior: 50626366!
+createAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:39:28'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:39:28'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:39:28'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:39:28'!
+ERROR!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:39:58'!
+assertStreamStartsWithCustomer
+
+	newCustomer ifNil: [self error: self class streamCannotStartWithAddressErrorDescription]! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:40:00'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:40:01'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:40:01'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:40:01'!
+PASSED!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:40:11'!
+signalStreamCannotStartWithAddress
+
+	^ self error: self class streamCannotStartWithAddressErrorDescription! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:40:11' prior: 50626401!
+assertStreamStartsWithCustomer
+
+	newCustomer ifNil: [self signalStreamCannotStartWithAddress]! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:40:13'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:40:13'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:40:13'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:40:13'!
+PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:41:08'!
+test05CustomerLineShouldHave5Items
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith4Items into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter customerLineShouldHave5ItemsErrorDescription! !
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:12'!
+ERROR!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:12'!
+ERROR!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:14'!
+ERROR!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:14'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:41:19'!
+customerLineShouldHave5ItemsErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:41:28' prior: 50626469!
+customerLineShouldHave5ItemsErrorDescription
+	^ 'Customer line should have 5 items'! !
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:34'!
+ERROR!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:41:34'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:41:39'!
+importDataWithCustomerLineWith4Items
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:42:03' prior: 50626486!
+importDataWithCustomerLineWith4Items
+	ReadStream on: 'C,Pepe,Sanchez,D,22333444,invalid-field'! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:42:14' prior: 50626491!
+importDataWithCustomerLineWith4Items
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444,invalid-field'! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:42:19'!
+test05CustomerLineShouldHave5Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith4Items into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter customerLineShouldHave5ItemsErrorDescription! !
+
+!methodRemoval: ImportTest #test05CustomerLineShouldHave5Items stamp: 'JT 6/28/2023 19:42:19'!
+test05CustomerLineShouldHave5Items
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith4Items into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter customerLineShouldHave5ItemsErrorDescription!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:42:27'!
+importDataWithCustomerLineWith4Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444,invalid-field'! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:42:27' prior: 50626503!
+test05CustomerLineShouldHave5Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith4Fields into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter customerLineShouldHave5ItemsErrorDescription! !
+
+!methodRemoval: ImportTest #importDataWithCustomerLineWith4Items stamp: 'JT 6/28/2023 19:42:27'!
+importDataWithCustomerLineWith4Items
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444,invalid-field'!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:43:24' prior: 50626525!
+importDataWithCustomerLineWith4Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D,'! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:43:25' prior: 50626549!
+importDataWithCustomerLineWith4Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D'! !
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:43:33'!
+FAILURE!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:43:33'!
+FAILURE!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:45:57' prior: 50625940!
+createCustomerFromRecord
+
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:46:04'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:46:04'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:46:04'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:46:04'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:46:04'!
+FAILURE!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:46:08'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:46:08'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:46:09'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:46:09'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:46:09'!
+FAILURE!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:46:10'!
+ERROR!
+!Customer class methodsFor: 'instance creation' stamp: 'JT 6/28/2023 19:46:16'!
+firstName: aString lastName: aString2 idType: aString3 idNumber: aString4 
+	"DO NOT FORGET TO RENAME COLLABORATORS AND REMOVE THIS COMMENT!!!!"
+	self shouldBeImplemented.
+	^self new initializeFirstName: aString lastName: aString2 idType: aString3 idNumber: aString4 ! !
+!Customer class methodsFor: 'instance creation' stamp: 'JT 6/28/2023 19:46:43' prior: 50626609!
+firstName: aFirstName lastName: aLastName idType: anIdentificationType idNumber: anIdentificationNumber
+	^self new initializeFirstName: aFirstName lastName: aLastName idType: anIdentificationType idNumber: anIdentificationNumber ! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:46:45'!
+ERROR!
+!Customer methodsFor: 'initialization' stamp: 'JT 6/28/2023 19:46:50'!
+initializeFirstName: aFirstName lastName: aLastName idType: anIdentificationType idNumber: anIdentificationNumber 
+	self shouldBeImplemented.
+	firstName := aFirstName.
+	lastName := aLastName.
+	identificationType := anIdentificationType.
+	identificationNumber := anIdentificationNumber.! !
+!Customer methodsFor: 'initialization' stamp: 'JT 6/28/2023 19:46:52' prior: 50626633!
+initializeFirstName: aFirstName lastName: aLastName idType: anIdentificationType idNumber: anIdentificationNumber 
+	firstName := aFirstName.
+	lastName := aLastName.
+	identificationType := anIdentificationType.
+	identificationNumber := anIdentificationNumber.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:46:57'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:46:57'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:46:57'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:46:57'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:46:57'!
+FAILURE!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:46:57'!
+FAILURE!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:48:17' prior: 50626567!
+createCustomerFromRecord
+	self assertCustomerRecordHas5Fields.
+
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:48:19'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:48:19'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:48:19'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:48:19'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:48:19'!
+ERROR!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:48:21'!
+ERROR!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:48:27'!
+assertCustomerRecordHas5Fields
+	self shouldBeImplemented.! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:48:51' prior: 50626703!
+assertCustomerRecordHas5Fields
+	record size = 5 ifFalse: [self error: self class customerLineShouldHave5ItemsErrorDescription]! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:48:59'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:48:59'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:48:59'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:48:59'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:48:59'!
+PASSED!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:49:12' prior: 50626708!
+assertCustomerRecordHas5Fields
+
+	record size = 5 ifFalse: [self error: self class customerLineShouldHave5ItemsErrorDescription]! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:49:19'!
+signalCustomerLineShouldHave5Fields
+
+	^ self error: self class customerLineShouldHave5ItemsErrorDescription! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:49:19' prior: 50626731!
+assertCustomerRecordHas5Fields
+
+	record size = 5 ifFalse: [self signalCustomerLineShouldHave5Fields]! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:49:40'!
+recordHasFields
+
+	^ record size = 5! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:49:40' prior: 50626745!
+assertCustomerRecordHas5Fields
+
+	self recordHasFields ifFalse: [self signalCustomerLineShouldHave5Fields]! !
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:50:05'!
+recordHasFields: aNumberOfFields
+
+	^ record size = 5! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:50:05' prior: 50626756!
+assertCustomerRecordHas5Fields
+
+	self recordHasFields: 5 ifFalse: [self signalCustomerLineShouldHave5Fields]! !
+
+!methodRemoval: CustomerImporter #recordHasFields stamp: 'JT 6/28/2023 19:50:05'!
+recordHasFields
+
+	^ record size = 5!
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:50:05' prior: 50626762!
+recordHasFields: aNumberOfFields
+
+	^ record size =aNumberOfFields! !
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 19:50:10' prior: 50626778!
+recordHasFields: aNumberOfFields
+
+	^ record size = aNumberOfFields! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:50:19' prior: 50626767!
+assertCustomerRecordHas5Fields
+
+	(self recordHasFields: 5) ifFalse: [self signalCustomerLineShouldHave5Fields]! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:52:36'!
+test06AddressLineShouldHave6Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith5Fields into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter addressLineShouldHave6ItemsErrorDescription! !
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:52:40'!
+ERROR!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:52:40'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:52:46'!
+addressLineShouldHave6ItemsErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:52:57' prior: 50626813!
+addressLineShouldHave6ItemsErrorDescription
+	^ 'Address line should have 6 fields'! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:53:27' prior: 50626795!
+test06AddressLineShouldHave6Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith5Fields into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter addressLineShouldHave6FieldsErrorDescription! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:53:40'!
+addressLineShouldHave6FieldsErrorDescription
+	^ 'Address line should have 6 fields'! !
+
+!methodRemoval: CustomerImporter class #addressLineShouldHave6ItemsErrorDescription stamp: 'JT 6/28/2023 19:53:40'!
+addressLineShouldHave6ItemsErrorDescription
+	^ 'Address line should have 6 fields'!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 19:54:02'!
+customerLineShouldHave5FieldsErrorDescription
+	^ 'Customer line should have 5 items'! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:54:02' prior: 50626738!
+signalCustomerLineShouldHave5Fields
+
+	^ self error: self class customerLineShouldHave5FieldsErrorDescription! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:54:02' prior: 50626532!
+test05CustomerLineShouldHave5Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerLineWith4Fields into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter customerLineShouldHave5FieldsErrorDescription! !
+
+!methodRemoval: CustomerImporter class #customerLineShouldHave5ItemsErrorDescription stamp: 'JT 6/28/2023 19:54:02'!
+customerLineShouldHave5ItemsErrorDescription
+	^ 'Customer line should have 5 items'!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:54:14'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:54:19'!
+importDataWithCustomerLineWith5Fields
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:54:39' prior: 50626881!
+importDataWithCustomerLineWith5Fields
+	^ReadStream on: 'A,San Martin,3322,Olivos,1636'! !
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:54:42'!
+FAILURE!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:54:42'!
+FAILURE!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:55:12'!
+importDataWithAddressLineWith5Fields
+	^ReadStream on: 'A,San Martin,3322,Olivos,1636'! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 19:55:12' prior: 50626825!
+test06AddressLineShouldHave6Fields
+	
+	self should: [CustomerImporter valueFrom: self importDataWithAddressLineWith5Fields into: session]
+		 raise: Error - MessageNotUnderstood 
+		 withMessageText: CustomerImporter addressLineShouldHave6FieldsErrorDescription! !
+
+!methodRemoval: ImportTest #importDataWithCustomerLineWith5Fields stamp: 'JT 6/28/2023 19:55:12'!
+importDataWithCustomerLineWith5Fields
+	^ReadStream on: 'A,San Martin,3322,Olivos,1636'!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 19:55:15' prior: 50626898!
+importDataWithAddressLineWith5Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636'! !
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:55:19'!
+FAILURE!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:55:19'!
+FAILURE!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 19:55:42' prior: 50626377!
+createAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:55:45'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:55:45'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:55:45'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:55:45'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:55:45'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:55:45'!
+ERROR!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:55:47'!
+ERROR!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:55:53'!
+assertAddressLineHas6Fields
+	self shouldBeImplemented.! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 19:56:20' prior: 50626967!
+assertAddressLineHas6Fields
+	(self recordHasFields: 6) ifFalse: [self error: self class addressLineShouldHave6FieldsErrorDescription]! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:56:25'!
+PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 19:58:20'!
+test07
+	CustomerImporter valueFrom: (ReadStream on: 'CC,sadf,asdf,asdf,dd') into: session.! !
+
+!testRun: #ImportTest #test07 stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 19:58:22'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 19:58:23'!
+PASSED!
+
+!testRun: #ImportTest #test07 stamp: 'JT 6/28/2023 19:58:23'!
+PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:02:52'!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataCustomerNotExactlyC into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+
+!methodRemoval: ImportTest #test07 stamp: 'JT 6/28/2023 20:02:57'!
+test07
+	CustomerImporter valueFrom: (ReadStream on: 'CC,sadf,asdf,asdf,dd') into: session.!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:00'!
+ERROR!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:00'!
+ERROR!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:03:06'!
+exactlyCErrorDescription
+	self shouldBeImplemented.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:03:19' prior: 50627048!
+exactlyCErrorDescription
+	'Customer line should have C as its first field'! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:03:31' prior: 50627053!
+exactlyCErrorDescription
+	'Customer line should have "C" as its first field'! !
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:32'!
+ERROR!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:32'!
+ERROR!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:03:38'!
+importDataCustomerNotExactlyC
+	self shouldBeImplemented.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:03:52' prior: 50627071!
+importDataCustomerNotExactlyC
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'! !
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:54'!
+FAILURE!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:03:54'!
+FAILURE!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 20:04:52' prior: 50625769!
+assertLineIsValid
+	
+	line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	self lineHasInvalidPrefix ifTrue: [self signalLineDoesntHaveValidPrefix].
+	line = 'C' ifFalse: [self signalCustomerLineIsntExactlyC]! !
+!CustomerImporter methodsFor: 'error signaling' stamp: 'JT 6/28/2023 20:05:47'!
+signalCustomerLineIsntExactlyC
+
+	self error: self class exactlyCErrorDescription! !
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:06:15'!
+PASSED!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:07:10'!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataCustomerNotExactlyC into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:07:23'!
+importDataAddressNotExactlyA
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:07:23' prior: 50627108!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataAddressNotExactlyA into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:07:23' prior: 50627025!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataAddressNotExactlyA into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+
+!methodRemoval: ImportTest #importDataCustomerNotExactlyC stamp: 'JT 6/28/2023 20:07:23'!
+importDataCustomerNotExactlyC
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:08:06' prior: 50627124!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataAddressNotExactlyA into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyAErrorDescription.! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:08:36'!
+exactlyAErrorDescription
+	'Address line should have "A" as its first field'! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 20:10:54' prior: 50627089!
+assertLineIsValid
+	
+	line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	self lineHasInvalidPrefix ifTrue: [self signalLineDoesntHaveValidPrefix].
+	line = 'C' ifFalse: [self signalCustomerLineIsntExactlyC].
+	line = 'A' ifFalse: [self signalCustomerLineIsntExactlyA].! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 20:11:31'!
+signalCustomerLineIsntExactlyA
+
+	self error: self class exactlyAErrorDescription ! !
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 20:11:31' prior: 50627180!
+signalCustomerLineIsntExactlyA
+
+	self error: self class exactlyAErrorDescription! !
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:11:56'!
+PASSED!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:11:58'!
+ERROR!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:11:58'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:11:58'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:11:58'!
+FAILURE!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:11:58'!
+FAILURE!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:11:58'!
+FAILURE!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:11:58'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:11:58'!
+PASSED!
+!CustomerImporter methodsFor: 'assertions' stamp: 'JT 6/28/2023 20:14:44' prior: 50627168!
+assertLineIsValid
+	
+	line isEmpty ifTrue: [self signalStreamCannotHaveEmptyLine].
+	self lineHasInvalidPrefix ifTrue: [self signalLineDoesntHaveValidPrefix].! !
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 20:16:06' prior: 50626675!
+createCustomerFromRecord
+	self assertCustomerRecordHas5Fields.
+	record first = 'C' ifFalse: [self signalCustomerLineIsntExactlyC].
+	
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:16:21'!
+PASSED!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:16:59' prior: 50627118!
+importDataAddressNotExactlyA
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444
+A,San Martin,3322,Olivos,1636,BsAs'! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:17:28' prior: 50627135!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataAddressNotExactlyC into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:17:38'!
+importDataAddressNotExactlyC
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'! !
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:17:43' prior: 50627268!
+importDataAddressNotExactlyA
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444
+Address,San Martin,3322,Olivos,1636,BsAs'! !
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:17:47'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:17:55'!
+FAILURE!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:17:55'!
+FAILURE!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 20:19:59' prior: 50626934!
+createAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+	record first = 'A' ifFalse: [self error: self class exactlyAErrorDescription].
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:20:03'!
+PASSED!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:23:36' prior: 50626555!
+importDataWithCustomerLineWith4Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444,'! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:23:43'!
+FAILURE!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:23:43'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:23:43'!
+FAILURE!
+
+record size!
+
+	^ record size = aNumberOfFields!
+
+aNumberOfFields!
+
+record!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:25:58' prior: 50627349!
+importDataWithCustomerLineWith4Fields
+	^ReadStream on: 'C,Pepe,Sanchez,D'! !
+
+'a,b,c,d,' findTokens: ','!
+
+'a,b,c,,d' findTokens: ','!
+
+'a,,b,c,d' findTokens: ','!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:33:45'!
+importDataWithCustomerWithInvalidFirstField
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:33:45' prior: 50627274!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyCErrorDescription.! !
+
+!methodRemoval: ImportTest #importDataAddressNotExactlyC stamp: 'JT 6/28/2023 20:33:45'!
+importDataAddressNotExactlyC
+	^ReadStream on: 'Customer,Pepe,Sanchez,D,22333444'!
+!ImportTest methodsFor: 'test data' stamp: 'JT 6/28/2023 20:34:23'!
+importDataWithAddressWithInvalidFirstField
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444
+Address,San Martin,3322,Olivos,1636,BsAs'! !
+!ImportTest methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:34:23' prior: 50627151!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataWithAddressWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter exactlyAErrorDescription.! !
+
+!methodRemoval: ImportTest #importDataAddressNotExactlyA stamp: 'JT 6/28/2023 20:34:23'!
+importDataAddressNotExactlyA
+	^ReadStream on: 'C,Pepe,Sanchez,D,22333444
+Address,San Martin,3322,Olivos,1636,BsAs'!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:35:11'!
+addressShouldHaveExactlyAAsFirstFieldErrorDescription
+	'Address line should have "A" as its first field'! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:35:11' prior: 50627308!
+createAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+	record first = 'A' ifFalse: [self error: self class addressShouldHaveExactlyAAsFirstFieldErrorDescription].
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:35:11' prior: 50627186!
+signalCustomerLineIsntExactlyA
+
+	self error: self class addressShouldHaveExactlyAAsFirstFieldErrorDescription! !
+
+!methodRemoval: CustomerImporter class #exactlyAErrorDescription stamp: 'JT 6/28/2023 20:35:11'!
+exactlyAErrorDescription
+	'Address line should have "A" as its first field'!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:35:33'!
+customerShouldHaveExactlyCAsFirstFieldErrorDescription
+	'Customer line should have "C" as its first field'! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:35:33' prior: 50627099!
+signalCustomerLineIsntExactlyC
+
+	self error: self class customerShouldHaveExactlyCAsFirstFieldErrorDescription! !
+
+!methodRemoval: CustomerImporter class #exactlyCErrorDescription stamp: 'JT 6/28/2023 20:35:33'!
+exactlyCErrorDescription
+	'Customer line should have "C" as its first field'!
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:38:07' prior: 50627443!
+addressShouldHaveExactlyAAsFirstFieldErrorDescription
+	^ 'Address line should have "A" as its first field'! !
+!CustomerImporter class methodsFor: 'error descriptions' stamp: 'JT 6/28/2023 20:38:12' prior: 50627479!
+customerShouldHaveExactlyCAsFirstFieldErrorDescription
+	^ 'Customer line should have "C" as its first field'! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:38:28'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:38:28'!
+ERROR!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:38:28'!
+ERROR!
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:38:42' prior: 50627401!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter customerShouldHaveExactlyCAsFirstFieldErrorDescription .! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:38:43' prior: 50627538!
+test07FirstFieldOfCustomerLineShouldBeExactlyC
+
+	self should: [CustomerImporter valueFrom: self importDataWithCustomerWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter customerShouldHaveExactlyCAsFirstFieldErrorDescription.! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:38:50' prior: 50627425!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataWithAddressWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter addressShouldHaveExactlyAAsFirstFieldErrorDescription .! !
+!ImportTest methodsFor: 'tests' stamp: 'JT 6/28/2023 20:38:51' prior: 50627562!
+test08FirstFieldOfAddressLineShouldBeExactlyA
+
+	self should: [CustomerImporter valueFrom: self importDataWithAddressWithInvalidFirstField into: session]
+		 raise: Error - MessageNotUnderstood
+		 withMessageText: CustomerImporter addressShouldHaveExactlyAAsFirstFieldErrorDescription.! !
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:38:58'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:38:59'!
+PASSED!
+
+!testRun: #ImportTest #test01Import stamp: 'JT 6/28/2023 20:39:24'!
+PASSED!
+
+!testRun: #ImportTest #test02ImportDataCannotHaveEmptyLine stamp: 'JT 6/28/2023 20:39:24'!
+PASSED!
+
+!testRun: #ImportTest #test03ImportDataCannotHaveLinesWithInvalidPrefix stamp: 'JT 6/28/2023 20:39:24'!
+PASSED!
+
+!testRun: #ImportTest #test04ImportDataCannotStartWithAddressLine stamp: 'JT 6/28/2023 20:39:24'!
+PASSED!
+
+!testRun: #ImportTest #test05CustomerLineShouldHave5Fields stamp: 'JT 6/28/2023 20:39:25'!
+PASSED!
+
+!testRun: #ImportTest #test06AddressLineShouldHave6Fields stamp: 'JT 6/28/2023 20:39:25'!
+PASSED!
+
+!testRun: #ImportTest #test07FirstFieldOfCustomerLineShouldBeExactlyC stamp: 'JT 6/28/2023 20:39:25'!
+PASSED!
+
+!testRun: #ImportTest #test08FirstFieldOfAddressLineShouldBeExactlyA stamp: 'JT 6/28/2023 20:39:25'!
+PASSED!
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 20:40:45'!
+isCustomerRecord
+
+	^ line beginsWith: 'C'! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:40:45' prior: 50626152!
+lineHasInvalidPrefix
+	^ ((self isCustomerRecord) or: [self isAddressLine]) not! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:40:45' prior: 50626166!
+parseLine
+
+	self isCustomerRecord ifTrue: [ self createCustomerFromRecord ].
+	self isAddressLine ifTrue: [ self createAddressFromRecord ].! !
+
+!methodRemoval: CustomerImporter #isCustomerLine stamp: 'JT 6/28/2023 20:40:45'!
+isCustomerLine
+
+	^ line beginsWith: 'C'!
+!CustomerImporter methodsFor: 'testing' stamp: 'JT 6/28/2023 20:40:53'!
+isAddressRecord
+
+	^ line beginsWith: 'A'! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:40:53' prior: 50627642!
+lineHasInvalidPrefix
+	^ ((self isCustomerRecord) or: [self isAddressRecord]) not! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:40:53' prior: 50627648!
+parseLine
+
+	self isCustomerRecord ifTrue: [ self createCustomerFromRecord ].
+	self isAddressRecord ifTrue: [ self createAddressFromRecord ].! !
+
+!methodRemoval: CustomerImporter #isAddressLine stamp: 'JT 6/28/2023 20:40:53'!
+isAddressLine
+
+	^ line beginsWith: 'A'!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 20:42:11'!
+importCustomerFromRecord
+	self assertCustomerRecordHas5Fields.
+	record first = 'C' ifFalse: [self signalCustomerLineIsntExactlyC].
+	
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:42:11' prior: 50627670!
+parseLine
+
+	self isCustomerRecord ifTrue: [ self importCustomerFromRecord ].
+	self isAddressRecord ifTrue: [ self createAddressFromRecord ].! !
+
+!methodRemoval: CustomerImporter #createCustomerFromRecord stamp: 'JT 6/28/2023 20:42:11'!
+createCustomerFromRecord
+	self assertCustomerRecordHas5Fields.
+	record first = 'C' ifFalse: [self signalCustomerLineIsntExactlyC].
+	
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer!
+!CustomerImporter methodsFor: 'create from record' stamp: 'JT 6/28/2023 20:42:21'!
+importAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+	record first = 'A' ifFalse: [self error: self class addressShouldHaveExactlyAAsFirstFieldErrorDescription].
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:42:21' prior: 50627694!
+parseLine
+
+	self isCustomerRecord ifTrue: [ self importCustomerFromRecord ].
+	self isAddressRecord ifTrue: [ self importAddressFromRecord ].! !
+
+!methodRemoval: CustomerImporter #createAddressFromRecord stamp: 'JT 6/28/2023 20:42:21'!
+createAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+	record first = 'A' ifFalse: [self error: self class addressShouldHaveExactlyAAsFirstFieldErrorDescription].
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.!
+!CustomerImporter methodsFor: 'parsing' stamp: 'JT 6/28/2023 20:42:30'!
+importRecord
+
+	self isCustomerRecord ifTrue: [ self importCustomerFromRecord ].
+	self isAddressRecord ifTrue: [ self importAddressFromRecord ].! !
+!CustomerImporter methodsFor: 'as yet unclassified' stamp: 'JT 6/28/2023 20:42:30' prior: 50626080 overrides: 16902254!
+value
+
+	[ self nextLineIsNotEmpty ] whileTrue: [  
+		self assertLineIsValid.
+		self createRecord.
+		self importRecord.
+	].
+
+	! !
+
+!methodRemoval: CustomerImporter #parseLine stamp: 'JT 6/28/2023 20:42:30'!
+parseLine
+
+	self isCustomerRecord ifTrue: [ self importCustomerFromRecord ].
+	self isAddressRecord ifTrue: [ self importAddressFromRecord ].!
+!CustomerImporter methodsFor: 'importing' stamp: 'JT 6/28/2023 20:44:40'!
+assertIsAddressRecord
+
+	^ record first = 'A' ifFalse: [self error: self class addressShouldHaveExactlyAAsFirstFieldErrorDescription]! !
+!CustomerImporter methodsFor: 'importing' stamp: 'JT 6/28/2023 20:44:40' prior: 50627714!
+importAddressFromRecord
+
+	self assertStreamStartsWithCustomer.
+	self assertAddressLineHas6Fields.
+	self assertIsAddressRecord.
+
+	newAddress := Address
+		streetName: record second
+		streetNumber: record third asNumber 
+		town: record fourth
+		zipCode: record fifth asNumber
+		province: record sixth.
+	newCustomer addAddress: newAddress.! !
+!CustomerImporter methodsFor: 'importing' stamp: 'JT 6/28/2023 20:45:00'!
+assertIsCustomerRecord
+
+	^ record first = 'C' ifFalse: [self signalCustomerLineIsntExactlyC]! !
+!CustomerImporter methodsFor: 'importing' stamp: 'JT 6/28/2023 20:45:00' prior: 50627681!
+importCustomerFromRecord
+	self assertCustomerRecordHas5Fields.
+	self assertIsCustomerRecord.
+	
+	newCustomer := Customer
+		firstName: record second
+		lastName: record third
+		idType: record fourth
+		idNumber: record fifth.
+			
+	session persist: newCustomer! !
+
+----SNAPSHOT----(28 June 2023 20:46:07) CustomerImporter-it2v2.image priorSource: 9424715!
