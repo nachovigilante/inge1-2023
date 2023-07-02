@@ -424,7 +424,7 @@ assertValidCustomerRecord
 
 	^ record size ~= 5 ifTrue: [ self error: self class invalidCustomerRecordErrorDescription ]! !
 
-!CustomerImporter methodsFor: 'customer' stamp: 'JT 6/29/2023 20:32:30'!
+!CustomerImporter methodsFor: 'customer' stamp: 'JT 7/2/2023 18:55:11'!
 importCustomer
 
 	self assertValidCustomerRecord.
@@ -434,7 +434,7 @@ importCustomer
 	newCustomer lastName: record third.
 	newCustomer identificationType: record fourth.
 	newCustomer identificationNumber: record fifth.
-	customerSystem persist: newCustomer! !
+	customerSystem addCustomer: newCustomer! !
 
 !CustomerImporter methodsFor: 'customer' stamp: 'HAW 5/22/2022 19:23:55'!
 isCustomerRecord
@@ -545,13 +545,19 @@ Object subclass: #CustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!CustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:40'!
-beginTransaction
+!CustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:35:52'!
+close
 
 	self subclassResponsibility! !
 
-!CustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:52'!
-close
+!CustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:43:37'!
+start
+
+	self subclassResponsibility! !
+
+
+!CustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:40'!
+beginTransaction
 
 	self subclassResponsibility! !
 
@@ -560,16 +566,11 @@ commit
 
 	self subclassResponsibility! !
 
-!CustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:13'!
-persist: aCustomer
+
+!CustomerSystem methodsFor: 'customers' stamp: 'JT 7/2/2023 18:54:02'!
+addCustomer: aCustomer
 
 	self subclassResponsibility! !
-
-!CustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:43:37'!
-start
-
-	self subclassResponsibility! !
-
 
 !CustomerSystem methodsFor: 'customers' stamp: 'JT 6/29/2023 20:35:59'!
 customerWithIdentificationType: anIdType number: anIdNumber
@@ -589,31 +590,32 @@ CustomerSystem subclass: #PersistentCustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
+!PersistentCustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:35:52'!
+close
+
+	session close! !
+
+!PersistentCustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:45:37'!
+start
+
+	session := DataBaseSession for: (Array with: Address with: Customer).! !
+
+
 !PersistentCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:40'!
 beginTransaction
 
 	session beginTransaction ! !
-
-!PersistentCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:52'!
-close
-
-	session close! !
 
 !PersistentCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:35:56'!
 commit
 
 	session commit! !
 
-!PersistentCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:13'!
-persist: aCustomer
+
+!PersistentCustomerSystem methodsFor: 'customers' stamp: 'JT 7/2/2023 18:56:14'!
+addCustomer: aCustomer
 
 	^session persist: aCustomer! !
-
-!PersistentCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:45:37'!
-start
-
-	session := DataBaseSession for: (Array with: Address with: Customer).! !
-
 
 !PersistentCustomerSystem methodsFor: 'customers' stamp: 'JT 6/29/2023 20:35:59'!
 customerWithIdentificationType: anIdType number: anIdNumber
@@ -635,27 +637,28 @@ CustomerSystem subclass: #TransientCustomerSystem
 	poolDictionaries: ''
 	category: 'CustomerImporter'!
 
-!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:44'!
-beginTransaction! !
-
-!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:42:27'!
+!TransientCustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:42:27'!
 close
 
 	customers := nil.! !
 
-!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:52'!
-commit! !
-
-!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:37:03'!
-persist: aCustomer
-
-	^customers add: aCustomer! !
-
-!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:42:38'!
+!TransientCustomerSystem methodsFor: 'startup/shutdown' stamp: 'JT 6/29/2023 20:42:38'!
 start
 
 	customers := OrderedCollection new.! !
 
+
+!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:44'!
+beginTransaction! !
+
+!TransientCustomerSystem methodsFor: 'transactions' stamp: 'JT 6/29/2023 20:36:52'!
+commit! !
+
+
+!TransientCustomerSystem methodsFor: 'customers' stamp: 'JT 7/2/2023 18:54:31'!
+addCustomer: aCustomer
+
+	^customers add: aCustomer! !
 
 !TransientCustomerSystem methodsFor: 'customers' stamp: 'JT 6/29/2023 20:38:40'!
 customerWithIdentificationType: anIdType number: anIdNumber
@@ -793,7 +796,7 @@ current
 	^ (self subclasses detect: [:anEnvironmentClass | anEnvironmentClass isDescribedBy: self currentEnvironmentName]) new! !
 
 
-!Environment class methodsFor: 'name' stamp: 'JT 6/29/2023 21:04:22'!
+!Environment class methodsFor: 'name' stamp: 'JT 7/2/2023 18:56:29'!
 currentEnvironmentName
 	^ 'DEV'! !
 
